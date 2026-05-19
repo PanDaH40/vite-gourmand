@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mon profil - Vite & Gourmand</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="asset/CSS/Profil.css">
+</head>
+
+<body>
+
+<header>
+  <div class="container header-content">
+
+    <h1 class="logo">Vite & Gourmand</h1>
+
+    <nav>
+      <a href="PagePrincipale.html">Accueil</a>
+      <a href="Menu.html">Menus</a>
+      <a href="MesCommandes.html">Mes commandes</a>
+      <a href="Profil.html" class="active">Mon profil</a>
+      <a href="Contact.html">Contact</a>
+      <a href="Connection.html">Connexion</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="page-title">
+
+    <h2>Mon profil</h2>
+
+    <p>
+      Consultez et modifiez vos informations personnelles.
+    </p>
+
+  </section>
+
+  <section class="profile-layout">
+
+    <!-- Informations personnelles -->
+
+    <article class="profile-card">
+
+      <h3>Informations personnelles</h3>
+
+      <form class="profile-form" action="#" method="post">
+
+        <div class="form-group">
+          <label for="prenom">Prénom</label>
+
+          <input
+            type="text"
+            id="prenom"
+            name="prenom"
+            value="Julie"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="nom">Nom</label>
+
+          <input
+            type="text"
+            id="nom"
+            name="nom"
+            value="Martin"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Adresse mail</label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="julie@mail.com"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="telephone">Téléphone</label>
+
+          <input
+            type="tel"
+            id="telephone"
+            name="telephone"
+            value="0600000000"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="adresse">Adresse postale</label>
+
+          <input
+            type="text"
+            id="adresse"
+            name="adresse"
+            value="12 rue des fleurs"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="ville">Ville</label>
+
+          <input
+            type="text"
+            id="ville"
+            name="ville"
+            value="Bordeaux"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="pays">Pays</label>
+
+          <input
+            type="text"
+            id="pays"
+            name="pays"
+            value="France"
+          >
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Enregistrer les modifications
+        </button>
+
+      </form>
+
+    </article>
+
+    <!-- Sécurité -->
+
+    <article class="profile-card">
+
+      <h3>Sécurité</h3>
+
+      <form class="profile-form" action="#" method="post">
+
+        <div class="form-group">
+          <label for="current-password">
+            Mot de passe actuel
+          </label>
+
+          <input
+            type="password"
+            id="current-password"
+            name="current-password"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="new-password">
+            Nouveau mot de passe
+          </label>
+
+          <input
+            type="password"
+            id="new-password"
+            name="new-password"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">
+            Confirmer le mot de passe
+          </label>
+
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+          >
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Modifier le mot de passe
+        </button>
+
+      </form>
+
+    </article>
+
+  </section>
+
+</main>
+
+<footer>
+
+  <div class="container footer-content">
+
+    <div>
+      <strong>Horaires</strong>
+      <p>Lundi - Dimanche : 08h00 - 20h00</p>
+    </div>
+
+    <div>
+      <a href="MentionLegale.html">Mentions légales</a> |
+      <a href="CGV.html">CGV</a>
+    </div>
+
+  </div>
+
+  <script src="asset/JS/Profil.js"></script>
+  <script src="asset/JS/SessionFront.js"></script>
+</footer>
+
+</body>
+</html>

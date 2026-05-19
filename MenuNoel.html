@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vite & Gourmand - Menu Noël</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="asset/CSS/MenuNoel.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
+        <nav>
+          <a href="PagePrincipale.html">Accueil</a>
+          <a href="Menu.html" class="active">Menus</a>
+          <a href="Contact.html">Contact</a>
+          <a href="Connection.html">Connexion</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="breadcrumb">
+        <a href="Menu.html">← Retour à la liste des menus</a>
+      </section>
+
+      <section class="menu-detail">
+        <div class="menu-detail-header">
+          <div>
+            <h2>Menu Noël</h2>
+            <p class="muted">Thème : Noël • Régime : Classique</p>
+
+            <p class="muted small">
+              Option végétarienne disponible sur demande
+            </p>
+          </div>
+
+          <div class="menu-price-box">
+            <p><strong>Minimum :</strong> 4 personnes</p>
+            <p><strong>Prix minimum :</strong> 120 €</p>
+            <p class="muted small">Stock restant : 6</p>
+          </div>
+        </div>
+
+        <section class="gallery">
+          <img
+            src="asset/Images/foie_gras.jpg"
+            alt="Entrée du menu Pâques"
+            class="gallery-item"
+          />
+
+          <img
+            src="asset/Images/dinde.jpg"
+            alt="Plat du menu Pâques"
+            class="gallery-item"
+          />
+
+          <img
+            src="asset/Images/buche.jpg"
+            alt="Dessert du menu Pâques"
+            class="gallery-item"
+          />
+        </section>
+
+        <section class="menu-description">
+          <h3>Description</h3>
+          <p>
+            Un menu spécial fêtes de fin d'année avec des produits raffinés pour
+            un repas convivial en famille ou entre amis.
+          </p>
+        </section>
+
+        <section class="menu-dishes">
+          <h3>Plats proposés</h3>
+
+          <div class="dishes-grid">
+            <article class="dish">
+              <h4>Entrée</h4>
+              <p>Foie gras maison, pain toasté</p>
+              <p class="muted small"><strong>Allergènes :</strong> gluten</p>
+            </article>
+
+            <article class="dish">
+              <h4>Plat</h4>
+              <p>Dinde rôtie, pommes grenailles</p>
+              <p class="muted small"><strong>Allergènes :</strong> aucun</p>
+            </article>
+
+            <article class="dish">
+              <h4>Dessert</h4>
+              <p>Bûche chocolat praliné</p>
+              <p class="muted small">
+                <strong>Allergènes :</strong> lait, œufs
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="menu-conditions">
+          <h3>Conditions importantes</h3>
+          <div class="conditions-box">
+            <ul>
+              <li>Commande minimum 7 jours avant la prestation.</li>
+              <li>Conservation au frais obligatoire après livraison.</li>
+              <li>Retour de matériel possible selon prestation.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="menu-actions">
+          <a href="php/Commande.php" class="btn-primary">Commander ce menu</a>
+          <p class="muted small">
+            Si vous n'êtes pas connecté, vous devrez vous connecter ou créer un
+            compte.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <div>
+          <strong>Horaires</strong>
+          <p>Lundi - Dimanche : 08h00 - 20h00</p>
+        </div>
+        <div>
+          <a href="MentionLegale.html">Mentions légales</a> |
+          <a href="CGV.html">CGV</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="asset/JS/SessionFront.js"></script>
+  </body>
+</html>

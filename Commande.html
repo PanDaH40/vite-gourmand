@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Commander un menu - Vite & Gourmand</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="asset/CSS/Commande.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
+
+        <nav>
+          <a href="PagePrincipale.html">Accueil</a>
+          <a href="Menu.html">Menus</a>
+          <a href="Contact.html">Contact</a>
+          <a href="Connection.html">Connexion</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h2>Commander un menu</h2>
+
+      <form
+        class="commande-form"
+        action="php/Traitement_Commande.php"
+        method="post"
+      >
+        <div class="form-group">
+          <label>Menu choisi</label>
+
+          <select id="menuSelect" name="menu_id">
+            <option value="1" data-min="6" data-prix="30">Menu Pâques</option>
+            <option value="2" data-min="4" data-prix="30">Menu Noël</option>
+            <option value="3" data-min="8" data-prix="30">Menu Classique</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Nombre de personnes</label>
+          <input
+            type="number"
+            id="nbPersonnes"
+            name="nombre_personne"
+            min="1"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Date de prestation</label>
+          <input type="date" name="date_prestation" />
+        </div>
+
+        <div class="form-group">
+          <label>Heure de livraison</label>
+          <input type="time" name="heure_livraison" />
+        </div>
+
+        <div class="form-group">
+          <label>Adresse de livraison</label>
+          <input
+            type="text"
+            name="adresse_livraison"
+            placeholder="Adresse complète"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Ville</label>
+          <input type="text" id="ville" name="ville" />
+        </div>
+
+        <div class="form-group">
+          <label>Menus adaptés</label>
+
+          <label>Nombre de menus végétariens</label>
+          <input
+            type="number"
+            id="nbVegetarien"
+            name="nombre_vegetarien"
+            min="0"
+            value="0"
+          />
+
+          <label>Nombre de menus vegan</label>
+          <input
+            type="number"
+            id="nbVegan"
+            name="nombre_vegan"
+            min="0"
+            value="0"
+          />
+
+          <p class="muted small" id="adapteInfo">
+            Tous les autres menus seront servis en version classique.
+          </p>
+        </div>
+
+        <div class="price-box">
+          <div class="form-group">
+            <label>Location de matériel</label>
+
+            <label class="checkbox">
+              <input type="checkbox" name="pret_materiel" />
+              Je souhaite emprunter du matériel (plateaux, plats, etc.)
+            </label>
+
+            <p class="muted small">
+              Le matériel devra être restitué dans un délai de 10 jours ouvrés.
+              En cas de non restitution, des frais de 600€ pourront être
+              appliqués.
+            </p>
+          </div>
+
+          <h3>Récapitulatif</h3>
+
+          <p>Prix menu : <span id="prixMenu">0</span> €</p>
+          <p>Réduction : <span id="reduction">0</span> €</p>
+          <p>Livraison : <span id="prixLivraison">0</span> €</p>
+
+          <hr />
+
+          <p class="total">Total : <span id="total">0</span> €</p>
+        </div>
+
+        <button type="submit" class="btn-primary">Valider la commande</button>
+      </form>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <div>
+          <strong>Horaires</strong>
+          <p>Lundi - Dimanche : 08h00 - 20h00</p>
+        </div>
+
+        <div>
+          <a href="MentionLegale.html">Mentions légales</a> |
+          <a href="CGV.html">CGV</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="asset/JS/Commande.js"></script>
+    <script src="asset/JS/SessionFront.js"></script>
+  </body>
+</html>

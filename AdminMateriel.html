@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Matériel | Vite & Gourmand</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="asset/CSS/Admin.css">
+</head>
+
+<body>
+
+<header class="admin-header">
+  <div class="container header-content">
+
+    <h1 class="logo">Vite & Gourmand</h1>
+
+    <nav aria-label="Navigation administrateur">
+      <a href="AdminDashboard.html">Tableau de bord</a>
+      <a href="AdminCommandes.html">Commandes</a>
+      <a href="AdminMenus.html">Menus</a>
+      <a href="AdminUtilisateurs.html">Utilisateurs</a>
+      <a href="AdminMateriel.html" class="active">Matériel</a>
+      <a href="PagePrincipale.html">Retour au site</a>
+    </nav>
+
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="page-title">
+    <h2>Gestion du matériel</h2>
+
+    <p>
+      Suivi des prêts de matériel et des retours clients.
+    </p>
+  </section>
+
+  <section class="stats-grid" aria-label="Résumé matériel">
+
+    <article class="stat-card">
+      <h3>Prêts en cours</h3>
+      <p class="stat-number">4</p>
+    </article>
+
+    <article class="stat-card">
+      <h3>Retours en attente</h3>
+      <p class="stat-number">2</p>
+    </article>
+
+    <article class="stat-card">
+      <h3>Matériel disponible</h3>
+      <p class="stat-number">18</p>
+    </article>
+
+    <article class="stat-card">
+      <h3>Retards signalés</h3>
+      <p class="stat-number">1</p>
+    </article>
+
+  </section>
+
+  <section class="admin-section">
+
+    <h2>Matériel prêté</h2>
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Commande</th>
+            <th>Client</th>
+            <th>Matériel</th>
+            <th>Date prêt</th>
+            <th>Date limite retour</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>CMD-2026-0001</td>
+            <td>Julie Martin</td>
+            <td>Plateaux + plats inox</td>
+            <td>10/03/2026</td>
+            <td>20/03/2026</td>
+            <td>
+              <span class="badge pending">En attente retour</span>
+            </td>
+
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">
+                  Retour effectué
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>CMD-2026-0002</td>
+            <td>Marc Dupont</td>
+            <td>Plats de service</td>
+            <td>18/12/2026</td>
+            <td>28/12/2026</td>
+
+            <td>
+              <span class="badge accepted">Restitué</span>
+            </td>
+
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">
+                  Voir
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>CMD-2026-0003</td>
+            <td>Sophie Leroy</td>
+            <td>Plateaux buffet</td>
+            <td>22/04/2026</td>
+            <td>02/05/2026</td>
+
+            <td>
+              <span class="badge late">En retard</span>
+            </td>
+
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small btn-danger">
+                  Relancer client
+                </button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+  <section class="admin-section">
+
+    <h2>Conditions importantes</h2>
+
+    <div class="conditions-box">
+
+      <ul>
+        <li>
+          Le matériel doit être restitué sous 10 jours ouvrés.
+        </li>
+
+        <li>
+          Tout matériel perdu ou non restitué peut être facturé.
+        </li>
+
+        <li>
+          Une relance peut être effectuée après dépassement du délai.
+        </li>
+      </ul>
+
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+
+  <div class="container footer-content">
+    <p>Interface administrateur - Gestion du matériel</p>
+  </div>
+
+  <script src="asset/JS/Admin.js"></script>
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/AdminAccess.js"></script>
+</footer>
+
+</body>
+</html>

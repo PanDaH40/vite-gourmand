@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vite & Gourmand - Nos menus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="asset/CSS/Menu.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
+        <nav>
+          <a href="PagePrincipale.html">Accueil</a>
+          <a href="Menu.html" class="active">Menus</a>
+          <a href="Contact.html">Contact</a>
+          <a href="Connection.html">Connexion</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="page-title">
+        <h2>Nos menus</h2>
+        <p class="muted">Découvrez nos propositions pour vos événements.</p>
+      </section>
+
+      <!-- Filtres simples -->
+      <section class="filters">
+        <h3>Filtres</h3>
+
+        <form class="filters-form">
+          <div class="field">
+            <label for="prix-min">Prix minimum (€)</label>
+            <input type="number" id="prix-min" placeholder="Ex : 100" />
+          </div>
+
+          <div class="field">
+            <label for="prix-max">Prix maximum (€)</label>
+            <input type="number" id="prix-max" placeholder="Ex : 300" />
+          </div>
+
+          <div class="field">
+            <label for="theme">Thème</label>
+            <select id="theme">
+              <option value="">Tous</option>
+              <option>Pâques</option>
+              <option>Noël</option>
+              <option>Classique</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="regime">Régime</label>
+            <select id="regime">
+              <option value="">Tous</option>
+              <option>Classique</option>
+              <option>Végétarien</option>
+              <option>Vegan</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="nb-min">Nombre de personnes minimum</label>
+            <input type="number" id="nb-min" placeholder="Ex : 6" />
+          </div>
+        </form>
+      </section>
+
+      <!-- Résultats -->
+      <section class="results">
+        <p id="result-count" class="muted">3 menus affichés</p>
+
+        <div class="cards">
+          <article
+            class="card"
+            data-theme="Pâques"
+            data-regime="Classique"
+            data-min="6"
+            data-price="180"
+          >
+            <h3>Menu Pâques</h3>
+            <p class="description">
+              Un menu festif avec entrée, plat et dessert.
+            </p>
+
+            <div class="meta">
+              <span>Minimum : 6 pers.</span>
+              <span>180 €</span>
+            </div>
+
+            <a href="MenuPaque.html" class="btn-outline">Voir le détail</a>
+          </article>
+
+          <article
+            class="card"
+            data-theme="Noël"
+            data-regime="Classique"
+            data-min="4"
+            data-price="120"
+          >
+            <h3>Menu Noël</h3>
+            <p class="description">Saveurs traditionnelles pour vos fêtes.</p>
+
+            <div class="meta">
+              <span>Minimum : 4 pers.</span>
+              <span>120 €</span>
+            </div>
+
+            <a href="MenuNoel.html" class="btn-outline">Voir le détail</a>
+          </article>
+
+          <article
+            class="card"
+            data-theme="Classique"
+            data-regime="Végétarien"
+            data-min="8"
+            data-price="240"
+          >
+            <h3>Menu Classique</h3>
+            <p class="description">Idéal pour un repas convivial.</p>
+
+            <div class="meta">
+              <span>Minimum : 8 pers.</span>
+              <span>240 €</span>
+            </div>
+
+            <a href="MenuClassique.html" class="btn-outline">Voir le détail</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <div>
+          <strong>Horaires</strong>
+          <p>Lundi - Dimanche : 08h00 - 20h00</p>
+        </div>
+        <div>
+          <a href="MentionLegale.html">Mentions légales</a> |
+          <a href="CGV.html">CGV</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="asset/JS/Menu.js"></script>
+    <script src="asset/JS/SessionFront.js"></script>
+    <script src="asset/JS/MenuDynamique.js"></script>
+  </body>
+</html>

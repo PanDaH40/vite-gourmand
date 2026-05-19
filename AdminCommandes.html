@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Commandes | Vite & Gourmand</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="asset/CSS/Admin.css">
+</head>
+
+<body>
+
+<header class="admin-header">
+  <div class="container header-content">
+    <h1 class="logo">Vite & Gourmand</h1>
+
+    <nav aria-label="Navigation administrateur">
+      <a href="AdminDashboard.html">Tableau de bord</a>
+      <a href="AdminCommandes.html" class="active">Commandes</a>
+      <a href="AdminMenus.html">Menus</a>
+      <a href="AdminUtilisateurs.html">Utilisateurs</a>
+      <a href="AdminMateriel.html">Matériel</a>
+      <a href="PagePrincipale.html">Retour au site</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="page-title">
+    <h2>Gestion des commandes</h2>
+    <p>Consulter, accepter, refuser ou suivre les commandes clients.</p>
+  </section>
+
+  <section class="admin-section">
+    <h2>Filtres</h2>
+
+    <form class="filter-form" action="#" method="get">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="statut">Statut</label>
+          <select id="statut" name="statut">
+            <option value="">Tous</option>
+            <option value="en-attente">En attente</option>
+            <option value="acceptee">Acceptée</option>
+            <option value="refusee">Refusée</option>
+            <option value="terminee">Terminée</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date de prestation</label>
+          <input id="date" type="date" name="date_prestation">
+        </div>
+
+        <div class="form-group">
+          <label for="recherche">Recherche</label>
+          <input id="recherche" type="text" name="recherche" placeholder="Client ou numéro commande">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary">Filtrer</button>
+    </form>
+  </section>
+
+  <section class="admin-section">
+    <h2>Liste des commandes</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Client</th>
+            <th>Menu</th>
+            <th>Personnes</th>
+            <th>Date prestation</th>
+            <th>Total</th>
+            <th>Matériel</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>CMD-2026-0001</td>
+            <td>Julie Martin</td>
+            <td>Menu Pâques</td>
+            <td>8</td>
+            <td>10/03/2026</td>
+            <td>216 €</td>
+            <td>Oui</td>
+            <td><span class="badge pending">En attente</span></td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">Accepter</button>
+                <button type="button" class="btn-small btn-danger">Refuser</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>CMD-2026-0002</td>
+            <td>Marc Dupont</td>
+            <td>Menu Noël</td>
+            <td>4</td>
+            <td>18/12/2026</td>
+            <td>120 €</td>
+            <td>Non</td>
+            <td><span class="badge accepted">Acceptée</span></td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">Voir</button>
+                <button type="button" class="btn-small">Terminer</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>CMD-2026-0003</td>
+            <td>Sophie Leroy</td>
+            <td>Menu Classique</td>
+            <td>10</td>
+            <td>22/04/2026</td>
+            <td>270 €</td>
+            <td>Oui</td>
+            <td><span class="badge done">Terminée</span></td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">Voir</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <p>Interface administrateur - Gestion des commandes</p>
+  </div>
+
+  <script src="asset/JS/Admin.js"></script>
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/AdminAccess.js"></script>
+</footer>
+
+</body>
+</html>

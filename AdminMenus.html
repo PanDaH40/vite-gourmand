@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Menus | Vite & Gourmand</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="asset/CSS/Admin.css">
+</head>
+
+<body>
+
+<header class="admin-header">
+  <div class="container header-content">
+    <h1 class="logo">Vite & Gourmand</h1>
+
+    <nav aria-label="Navigation administrateur">
+      <a href="AdminDashboard.html">Tableau de bord</a>
+      <a href="AdminCommandes.html">Commandes</a>
+      <a href="AdminMenus.html" class="active">Menus</a>
+      <a href="AdminUtilisateurs.html">Utilisateurs</a>
+      <a href="AdminMateriel.html">Matériel</a>
+      <a href="PagePrincipale.html">Retour au site</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="page-title">
+    <h2>Gestion des menus</h2>
+    <p>Modifier les prix, les stocks et les informations des menus.</p>
+  </section>
+
+  <section class="admin-section">
+    <h2>Ajouter un menu</h2>
+
+    <form class="filter-form" action="php/AjouterMenu.php" method="post">
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label for="titre">Titre du menu</label>
+          <input type="text" id="titre" name="titre" placeholder="Nom du menu" required>
+        </div>
+
+        <div class="form-group">
+          <label for="prix">Prix par personne</label>
+          <input type="number" id="prix" name="prix" min="1" placeholder="Prix" required>
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock disponible</label>
+          <input type="number" id="stock" name="stock" min="0" placeholder="Quantité" required>
+        </div>
+
+      </div>
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label for="minimum">Nombre minimum de personnes</label>
+          <input type="number" id="minimum" name="minimum" min="1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="regime">Régime</label>
+          <select id="regime" name="regime" required>
+            <option value="Classique">Classique</option>
+            <option value="Végétarien">Végétarien</option>
+            <option value="Vegan">Vegan</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="theme">Thème</label>
+          <select id="theme" name="theme">
+            <option value="Pâques">Pâques</option>
+            <option value="Noël">Noël</option>
+            <option value="Classique">Classique</option>
+            <option value="Évènement">Évènement</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="5" placeholder="Description du menu" required></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary">Ajouter le menu</button>
+
+    </form>
+  </section>
+
+  <section class="admin-section">
+    <h2>Menus existants</h2>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Menu</th>
+            <th>Prix / pers.</th>
+            <th>Minimum</th>
+            <th>Stock</th>
+            <th>Régime</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Menu Pâques</td>
+            <td>30 €</td>
+            <td>6</td>
+            <td>5</td>
+            <td>Classique</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">Modifier</button>
+                <button type="button" class="btn-small btn-danger">Supprimer</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Menu Noël</td>
+            <td>30 €</td>
+            <td>4</td>
+            <td>6</td>
+            <td>Classique</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">Modifier</button>
+                <button type="button" class="btn-small btn-danger">Supprimer</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Menu Classique</td>
+            <td>30 €</td>
+            <td>8</td>
+            <td>8</td>
+            <td>Classique</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-small">Modifier</button>
+                <button type="button" class="btn-small btn-danger">Supprimer</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <p>Interface administrateur - Gestion des menus</p>
+  </div>
+</footer>
+
+<script src="asset/JS/Admin.js"></script>
+<script src="asset/JS/SessionFront.js"></script>
+<script src="asset/JS/AdminAccess.js"></script>
+<script src="asset/JS/AdminMenus.js"></script>
+
+</body>
+</html>

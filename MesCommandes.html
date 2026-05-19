@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mes commandes - Vite & Gourmand</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="asset/CSS/MesCommandes.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
+
+        <nav>
+          <a href="PagePrincipale.html">Accueil</a>
+          <a href="Menu.html">Menus</a>
+          <a href="MesCommandes.html" class="active">Mes commandes</a>
+          <a href="Contact.html">Contact</a>
+          <a href="Connection.html">Connexion</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="page-title">
+        <h2>Mes commandes</h2>
+        <p>Retrouvez ici le suivi de vos commandes passées.</p>
+      </section>
+
+      <section class="orders-list">
+        <article class="order-card">
+          <div class="order-header">
+            <div>
+              <h3>Commande CMD-2026-0001</h3>
+              <p class="muted">Menu Pâques • 8 personnes</p>
+            </div>
+
+            <span class="badge pending">En attente</span>
+          </div>
+
+          <div class="order-details">
+            <p><strong>Date prestation :</strong> 10/03/2026</p>
+            <p><strong>Heure livraison :</strong> 12:30</p>
+            <p><strong>Total :</strong> 216 €</p>
+            <p><strong>Matériel prêté :</strong> Oui</p>
+          </div>
+
+          <div class="order-actions">
+            <button type="button" class="btn-secondary">Modifier</button>
+            <button type="button" class="btn-danger">Annuler</button>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-header">
+            <div>
+              <h3>Commande CMD-2026-0002</h3>
+              <p class="muted">Menu Noël • 4 personnes</p>
+            </div>
+
+            <span class="badge accepted">Acceptée</span>
+          </div>
+
+          <div class="order-details">
+            <p><strong>Date prestation :</strong> 18/12/2026</p>
+            <p><strong>Heure livraison :</strong> 19:00</p>
+            <p><strong>Total :</strong> 120 €</p>
+            <p><strong>Matériel prêté :</strong> Non</p>
+          </div>
+
+          <div class="order-actions">
+            <button type="button" class="btn-secondary">Voir le détail</button>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-header">
+            <div>
+              <h3>Commande CMD-2026-0003</h3>
+              <p class="muted">Menu Classique • 10 personnes</p>
+            </div>
+
+            <span class="badge done">Terminée</span>
+          </div>
+
+          <div class="order-details">
+            <p><strong>Date prestation :</strong> 22/04/2026</p>
+            <p><strong>Heure livraison :</strong> 13:00</p>
+            <p><strong>Total :</strong> 270 €</p>
+            <p><strong>Matériel prêté :</strong> Oui</p>
+          </div>
+
+          <div class="order-actions">
+            <button type="button" class="btn-secondary">Laisser un avis</button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <div>
+          <strong>Horaires</strong>
+          <p>Lundi - Dimanche : 08h00 - 20h00</p>
+        </div>
+
+        <div>
+          <a href="MentionLegale.html">Mentions légales</a> |
+          <a href="CGV.html">CGV</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="asset/JS/SessionFront.js"></script>
+    <script src="asset/JS/MesCommandes.js"></script>
+  </body>
+</html>

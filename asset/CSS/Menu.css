@@ -1,0 +1,167 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #faf7f2;
+  color: #2b2b2b;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* Header */
+header {
+  background: white;
+  border-bottom: 1px solid #e3d9cc;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.logo {
+  margin: 0;
+  color: #7a5c3a;
+}
+
+nav a {
+  text-decoration: none;
+  margin-left: 15px;
+  color: #2b2b2b;
+  font-weight: 600;
+}
+
+nav a.active {
+  color: #7a5c3a;
+}
+
+nav a:hover {
+  color: #7a5c3a;
+}
+
+/* Page title */
+.page-title {
+  margin: 30px 0 15px;
+}
+
+.muted {
+  color: #6b6b6b;
+}
+
+/* Filters */
+.filters {
+  background: white;
+  padding: 20px;
+  border: 1px solid #e3d9cc;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.filters-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+input, select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #e3d9cc;
+}
+
+/* Cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e3d9cc;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card h3 {
+  margin: 0;
+}
+
+.description {
+  color: #6b6b6b;
+  font-size: 14px;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  background: #f3ede3;
+  padding: 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.btn-outline {
+  margin-top: auto;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #7a5c3a;
+  color: #7a5c3a;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  background: #7a5c3a;
+  color: white;
+}
+
+/* Footer */
+footer {
+  margin-top: 40px;
+  background: white;
+  border-top: 1px solid #e3d9cc;
+}
+
+.footer-content {
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+footer a {
+  text-decoration: none;
+  color: #7a5c3a;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vite & Gourmand - Menu Classique</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="asset/CSS/MenuClassique.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
+
+        <nav>
+          <a href="PagePrincipale.html">Accueil</a>
+          <a href="Menu.html" class="active">Menus</a>
+          <a href="Contact.html">Contact</a>
+          <a href="Connection.html">Connexion</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="breadcrumb">
+        <a href="Menu.html">← Retour à la liste des menus</a>
+      </section>
+
+      <section class="menu-detail">
+        <div class="menu-detail-header">
+          <div>
+            <h2>Menu Classique</h2>
+            <p class="muted">Thème : Classique • Régime : Traditionnel</p>
+
+            <p class="muted small">
+              Option végétarienne disponible sur demande
+            </p>
+          </div>
+
+          <div class="menu-price-box">
+            <p><strong>Minimum :</strong> 8 personnes</p>
+            <p><strong>Prix minimum :</strong> 240 €</p>
+            <p class="muted small">Stock restant : 8</p>
+          </div>
+        </div>
+
+        <!-- Galerie images -->
+
+        <section class="gallery">
+          <img
+            src="asset/Images/salade_saison_2.jpg"
+            alt="Entrée du menu Pâques"
+            class="gallery-item"
+          />
+
+          <img
+            src="asset/Images/boeuf_braisé.jpg"
+            alt="Plat du menu Pâques"
+            class="gallery-item"
+          />
+
+          <img
+            src="asset/Images/tarte_pomme.jpg"
+            alt="Dessert du menu Pâques"
+            class="gallery-item"
+          />
+        </section>
+
+        <section class="menu-description">
+          <h3>Description</h3>
+
+          <p>
+            Le menu classique est idéal pour les repas conviviaux et les
+            événements familiaux. Il propose des plats traditionnels préparés
+            avec des produits frais et de saison.
+          </p>
+        </section>
+
+        <section class="menu-dishes">
+          <h3>Plats proposés</h3>
+
+          <div class="dishes-grid">
+            <article class="dish">
+              <h4>Entrée</h4>
+              <p>Salade de saison, vinaigrette maison</p>
+              <p class="muted small"><strong>Allergènes :</strong> moutarde</p>
+            </article>
+
+            <article class="dish">
+              <h4>Plat</h4>
+              <p>Bœuf braisé accompagné de légumes rôtis</p>
+              <p class="muted small"><strong>Allergènes :</strong> aucun</p>
+            </article>
+
+            <article class="dish">
+              <h4>Dessert</h4>
+              <p>Tarte aux pommes maison</p>
+              <p class="muted small">
+                <strong>Allergènes :</strong> gluten, œufs
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="menu-conditions">
+          <h3>Conditions importantes</h3>
+
+          <div class="conditions-box">
+            <ul>
+              <li>Commande minimum 5 jours avant la prestation.</li>
+              <li>Conservation au frais obligatoire après livraison.</li>
+              <li>Retour de matériel possible selon prestation.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="menu-actions">
+          <a href="php/Commande.php" class="btn-primary">Commander ce menu</a>
+
+          <p class="muted small">
+            Si vous n'êtes pas connecté, vous devrez vous connecter ou créer un
+            compte.
+          </p>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <div>
+          <strong>Horaires</strong>
+          <p>Lundi - Dimanche : 08h00 - 20h00</p>
+        </div>
+
+        <div>
+          <a href="MentionLegale.html">Mentions légales</a> |
+          <a href="CGV.html">CGV</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

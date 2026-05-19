@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin - Tableau de bord | Vite & Gourmand</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="asset/CSS/Admin.css" />
+  </head>
+
+  <body>
+    <header class="admin-header">
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
+
+        <nav aria-label="Navigation administrateur">
+          <a href="AdminDashboard.html" class="active">Tableau de bord</a>
+          <a href="AdminCommandes.html">Commandes</a>
+          <a href="AdminMenus.html">Menus</a>
+          <a href="AdminUtilisateurs.html">Utilisateurs</a>
+          <a href="AdminMateriel.html">Matériel</a>
+          <a href="PagePrincipale.html">Retour au site</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="page-title">
+        <h2>Tableau de bord administrateur</h2>
+        <p>Vue d’ensemble de l’activité de Vite & Gourmand.</p>
+      </section>
+
+      <section class="stats-grid" aria-label="Statistiques principales">
+        <article class="stat-card">
+          <h3>Commandes en attente</h3>
+          <p class="stat-number" id="commandesAttente">0</p>
+        </article>
+
+        <article class="stat-card">
+          <h3>Commandes acceptées</h3>
+          <p class="stat-number" id="commandesAcceptees">0</p>
+        </article>
+
+        <article class="stat-card">
+          <h3>Menus disponibles</h3>
+          <p class="stat-number" id="menusDisponibles">0</p>
+        </article>
+
+        <article class="stat-card">
+          <h3>Matériel à récupérer</h3>
+          <p class="stat-number" id="materielRecuperer">0</p>
+        </article>
+      </section>
+
+      <section class="admin-section">
+        <h2>Accès rapides</h2>
+
+        <div class="quick-actions">
+          <a href="AdminCommandes.html" class="action-card">
+            <h3>Gérer les commandes</h3>
+            <p>Accepter, refuser ou modifier le statut des commandes.</p>
+          </a>
+
+          <a href="AdminMenus.html" class="action-card">
+            <h3>Gérer les menus</h3>
+            <p>Modifier les prix, les stocks et les informations des menus.</p>
+          </a>
+
+          <a href="AdminMateriel.html" class="action-card">
+            <h3>Suivre le matériel</h3>
+            <p>Contrôler les prêts et les retours de matériel.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="admin-section">
+        <h2>Dernières commandes</h2>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Numéro</th>
+                <th>Client</th>
+                <th>Menu</th>
+                <th>Date prestation</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>CMD-2026-0001</td>
+                <td>Julie Martin</td>
+                <td>Menu Pâques</td>
+                <td>10/03/2026</td>
+                <td><span class="badge pending">En attente</span></td>
+              </tr>
+
+              <tr>
+                <td>CMD-2026-0002</td>
+                <td>Marc Dupont</td>
+                <td>Menu Noël</td>
+                <td>18/12/2026</td>
+                <td><span class="badge accepted">Acceptée</span></td>
+              </tr>
+
+              <tr>
+                <td>CMD-2026-0003</td>
+                <td>Sophie Leroy</td>
+                <td>Menu Classique</td>
+                <td>22/04/2026</td>
+                <td><span class="badge done">Terminée</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <p>Interface administrateur - Vite & Gourmand</p>
+      </div>
+    </footer>
+
+    <script src="asset/JS/Admin.js"></script>
+    <script src="asset/JS/SessionFront.js"></script>
+    <script src="asset/JS/AdminAccess.js"></script>
+    <script src="asset/JS/AdminDashboard.js"></script>
+  </body>
+</html>

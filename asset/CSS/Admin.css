@@ -1,0 +1,296 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f7f2ea;
+  color: #333;
+}
+
+.container {
+  max-width: 1150px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* HEADER */
+
+.admin-header {
+  background: white;
+  border-bottom: 1px solid #e3d9cc;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  margin: 0;
+  color: #7a5c3a;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+nav a.active,
+nav a:hover {
+  color: #7a5c3a;
+}
+
+/* TITRE */
+
+.page-title {
+  margin-top: 20px;
+}
+
+.page-title h2 {
+  margin-bottom: 5px;
+}
+
+.page-title p {
+  color: #6b6b6b;
+}
+
+/* STATS */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #e3d9cc;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.stat-card h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #7a5c3a;
+}
+
+.stat-number {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* SECTIONS */
+
+.admin-section {
+  margin-top: 35px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.action-card {
+  display: block;
+  background: white;
+  border: 1px solid #e3d9cc;
+  border-radius: 10px;
+  padding: 20px;
+  text-decoration: none;
+  color: #333;
+}
+
+.action-card h3 {
+  margin-top: 0;
+  color: #7a5c3a;
+}
+
+.action-card:hover {
+  filter: brightness(0.98);
+}
+
+/* TABLE */
+
+.table-wrapper {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid #e3d9cc;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid #e3d9cc;
+  text-align: left;
+}
+
+th {
+  background: #f3ede3;
+  color: #333;
+}
+
+.badge {
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pending {
+  background: #fff4e5;
+  color: #8a5a00;
+}
+
+.accepted {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.done {
+  background: #eeeeee;
+  color: #555;
+}
+
+/* FOOTER */
+
+footer {
+  background: white;
+  border-top: 1px solid #e3d9cc;
+  margin-top: 40px;
+}
+
+.footer-content {
+  color: #6b6b6b;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .stats-grid,
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+}
+/* FORMULAIRES ADMIN */
+
+.filter-form {
+  background: white;
+  border: 1px solid #e3d9cc;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  padding: 9px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.btn-primary {
+  margin-top: 15px;
+  background: #7a5c3a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  background: #7a5c3a;
+  color: white;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-danger {
+  background: #9b3b30;
+}
+
+@media (max-width: 900px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.late {
+  background: #fdecea;
+  color: #b42318;
+}
+
+.conditions-box {
+  background: white;
+  border: 1px solid #e3d9cc;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.conditions-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.conditions-box li {
+  margin-bottom: 10px;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+}
