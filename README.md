@@ -56,6 +56,7 @@ Vérification des rôles administrateurs
 Requêtes SQL préparées avec PDO
 Validation des formulaires côté front-end et back-end
 Contrôle des accès aux pages administrateur
+
 Installation du projet
 1. Cloner le projet
 git clone https://github.com/VOTRE-UTILISATEUR/vite-gourmand.git
