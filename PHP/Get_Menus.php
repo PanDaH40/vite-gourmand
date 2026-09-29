@@ -1,7 +1,8 @@
 <?php
+
 require __DIR__ . "/db.php";
 
-header("Content-Type: application/json");
+header("Content-Type: application/json; charset=utf-8");
 
 $sql = "SELECT menu_id, titre, nombre_personne_minimum, prix_par_personne, regime, description, quantite_restante
         FROM menu
@@ -10,4 +11,4 @@ $sql = "SELECT menu_id, titre, nombre_personne_minimum, prix_par_personne, regim
 $stmt = $pdo->query($sql);
 $menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo json_encode($menus);
+echo json_encode($menus, JSON_UNESCAPED_UNICODE);

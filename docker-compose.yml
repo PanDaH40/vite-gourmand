@@ -1,0 +1,31 @@
+services:
+
+  web:
+    build: .
+    container_name: vite_gourmand_web
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_NAME: vite_gourmand
+      DB_USER: root
+      DB_PASSWORD: root
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.4
+    container_name: vite_gourmand_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./SQL/table.sql:/docker-entrypoint-initdb.d/01-table.sql:ro
+
+volumes:
+  mysql_data:
