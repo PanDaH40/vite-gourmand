@@ -176,7 +176,13 @@ ALTER TABLE menu
   FOREIGN KEY (regime)
   REFERENCES regime(libelle);
 
-  INSERT INTO regime (libelle) VALUES
+INSERT INTO role (role_id, libelle)
+VALUES
+(1, 'Administrateur'),
+(2, 'Utilisateur');
+
+  INSERT INTO regime (libelle) 
+  VALUES
 ('Classique'),
 ('Végétarien'),
 ('Vegan');

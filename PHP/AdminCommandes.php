@@ -8,14 +8,53 @@ header("Content-Type: application/json; charset=utf-8");
 
 
 /*
- * L'utilisateur doit être connecté.
+ * Vérification de la connexion.
  */
 if (!isset($_SESSION["utilisateur_id"])) {
 
     http_response_code(401);
 
     echo json_encode(
-        ["error" => "Utilisateur non connecté."],
+        ["erreur" => "Non connecté"],
+        JSON_UNESCAPED_UNICODE
+    );
+
+    exit;
+}
+
+$utilisateur_id = (int) $_SESSION["utilisateur_id"];
+
+
+/*
+ * Vérification du rôle administrateur.
+ */
+$sqlRole = "
+    SELECT role.libelle
+    FROM possede_utilisateur_role
+
+    INNER JOIN role
+        ON possede_utilisateur_role.role_id = role.role_id
+
+    WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
+
+    LIMIT 1
+";
+
+$stmtRole = $pdo->prepare($sqlRole);
+
+$stmtRole->execute([
+    "utilisateur_id" => $utilisateur_id
+]);
+
+$role = $stmtRole->fetch(PDO::FETCH_ASSOC);
+
+
+if (!$role || $role["libelle"] !== "Administrateur") {
+
+    http_response_code(403);
+
+    echo json_encode(
+        ["erreur" => "Accès refusé"],
         JSON_UNESCAPED_UNICODE
     );
 
@@ -23,12 +62,8 @@ if (!isset($_SESSION["utilisateur_id"])) {
 }
 
 
-$utilisateur_id = (int) $_SESSION["utilisateur_id"];
-
-
 /*
- * Récupération uniquement des commandes
- * appartenant à l'utilisateur connecté.
+ * Récupération de toutes les commandes.
  */
 $sql = "
     SELECT
@@ -41,6 +76,13 @@ $sql = "
         commande.nombre_personne,
         commande.statut,
         commande.pret_materiel,
+        commande.restitution_materiel,
+
+        utilisateur.utilisateur_id,
+        utilisateur.prenom,
+        utilisateur.email,
+
+        menu.menu_id,
         menu.titre
 
     FROM commande
@@ -48,6 +90,10 @@ $sql = "
     INNER JOIN commande_utilisateur
         ON commande.numero_commande =
            commande_utilisateur.numero_commande
+
+    INNER JOIN utilisateur
+        ON commande_utilisateur.utilisateur_id =
+           utilisateur.utilisateur_id
 
     INNER JOIN commande_menu
         ON commande.numero_commande =
@@ -57,21 +103,13 @@ $sql = "
         ON commande_menu.menu_id =
            menu.menu_id
 
-    WHERE commande_utilisateur.utilisateur_id =
-          :utilisateur_id
-
     ORDER BY
         commande.date_commande DESC,
         commande.numero_commande DESC
 ";
 
 
-$stmt = $pdo->prepare($sql);
-
-$stmt->execute([
-    "utilisateur_id" => $utilisateur_id
-]);
-
+$stmt = $pdo->query($sql);
 
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

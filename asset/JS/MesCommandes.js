@@ -1,60 +1,167 @@
 const commandesContainer = document.querySelector(".orders-list");
 
+
+/**
+ * Transforme une date SQL (2026-10-23)
+ * en date française (23/10/2026).
+ */
+function formaterDate(dateSQL) {
+
+  if (!dateSQL) {
+    return "";
+  }
+
+  const morceaux = dateSQL.split("-");
+
+  if (morceaux.length !== 3) {
+    return dateSQL;
+  }
+
+  return morceaux[2] + "/" + morceaux[1] + "/" + morceaux[0];
+}
+
+
+/**
+ * Charge les commandes de l'utilisateur connecté.
+ */
 fetch("PHP/Mes_Commandes.php")
+
   .then(function (response) {
+
+    if (response.status === 401) {
+      window.location.href = "Connection.html";
+      throw new Error("Utilisateur non connecté.");
+    }
+
+    if (!response.ok) {
+      throw new Error("Erreur lors du chargement des commandes.");
+    }
+
     return response.json();
   })
+
   .then(function (commandes) {
+
     commandesContainer.innerHTML = "";
 
+
+    /**
+     * Aucune commande.
+     */
     if (commandes.length === 0) {
-      commandesContainer.innerHTML = "<p>Aucune commande trouvée.</p>";
+
+      commandesContainer.innerHTML =
+        "<p>Aucune commande trouvée.</p>";
+
       return;
     }
 
+
+    /**
+     * Création d'une carte pour chaque commande.
+     */
     commandes.forEach(function (commande) {
+
       const article = document.createElement("article");
+
       article.classList.add("order-card");
 
+
+      /**
+       * Gestion de la couleur du statut.
+       */
       let badgeClass = "pending";
 
-      if (commande.statut === "acceptée") {
+      const statut = commande.statut.toLowerCase();
+
+      if (
+        statut === "acceptée" ||
+        statut === "acceptee" ||
+        statut === "accepté" ||
+        statut === "accepte"
+      ) {
         badgeClass = "accepted";
       }
 
-      if (commande.statut === "terminée") {
+      if (
+        statut === "terminée" ||
+        statut === "terminee" ||
+        statut === "terminé" ||
+        statut === "termine"
+      ) {
         badgeClass = "done";
       }
 
-      const materiel = commande.pret_materiel == 1 ? "Oui" : "Non";
+
+      /**
+       * Matériel prêté.
+       */
+      const materiel =
+        commande.pret_materiel == 1
+          ? "Oui"
+          : "Non";
+
+
+      /**
+       * Calcul du total.
+       */
+      const prixMenu =
+        parseFloat(commande.prix_menu) || 0;
+
+      const livraison =
+        parseFloat(commande.prix_livraison) || 0;
 
       const total =
-        parseFloat(commande.prix_menu) + parseFloat(commande.prix_livraison);
+        prixMenu + livraison;
 
+
+      /**
+       * Création de la carte.
+       */
       article.innerHTML =
         '<div class="order-header">' +
+
           "<div>" +
-            "<h3>Commande " + commande.numero_commande + "</h3>" +
+
+            "<h3>Commande " +
+              commande.numero_commande +
+            "</h3>" +
+
             '<p class="muted">' +
               commande.titre +
               " • " +
               commande.nombre_personne +
               " personnes" +
             "</p>" +
+
           "</div>" +
-          '<span class="badge ' + badgeClass + '">' +
+
+          '<span class="badge ' +
+            badgeClass +
+          '">' +
             commande.statut +
           "</span>" +
+
         "</div>" +
 
+
         '<div class="order-details">' +
+
           "<p><strong>Date prestation :</strong> " +
-            commande.date_prestation +
+            formaterDate(commande.date_prestation) +
           "</p>" +
 
           "<p><strong>Heure livraison :</strong> " +
             commande.heure_livraison +
           "</p>" +
+
+          "<p><strong>Prix menu :</strong> " +
+            prixMenu.toFixed(2) +
+          " €</p>" +
+
+          "<p><strong>Livraison :</strong> " +
+            livraison.toFixed(2) +
+          " €</p>" +
 
           "<p><strong>Total :</strong> " +
             total.toFixed(2) +
@@ -63,17 +170,36 @@ fetch("PHP/Mes_Commandes.php")
           "<p><strong>Matériel prêté :</strong> " +
             materiel +
           "</p>" +
+
         "</div>" +
 
+
         '<div class="order-actions">' +
+
           '<a class="btn-secondary" href="DetailCommande.html?numero=' +
-            commande.numero_commande + '">Voir le détail </a>'
+            encodeURIComponent(commande.numero_commande) +
+          '">' +
+            "Voir le détail" +
+          "</a>" +
+
         "</div>";
 
+
       commandesContainer.appendChild(article);
+
     });
+
   })
-  .catch(function () {
-    commandesContainer.innerHTML =
-      "<p>Impossible de charger les commandes.</p>";
+
+  .catch(function (error) {
+
+    console.error(error);
+
+    if (
+      !error.message.includes("Utilisateur non connecté")
+    ) {
+      commandesContainer.innerHTML =
+        "<p>Impossible de charger les commandes.</p>";
+    }
+
   });

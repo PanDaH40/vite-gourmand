@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Vite & Gourmand - Détail du menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- On réutilise le CSS de tes anciennes fiches -->
+    <link rel="stylesheet" href="asset/CSS/MenuClassique.css">
+</head>
+
+<body>
+
+<header>
+    <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
+
+        <nav>
+            <a href="PagePrincipale.html">Accueil</a>
+            <a href="Menu.html" class="active">Menus</a>
+            <a href="Contact.html">Contact</a>
+            <a href="Connection.html">Connexion</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="breadcrumb">
+        <a href="Menu.html">← Retour à la liste des menus</a>
+    </section>
+
+    <section class="menu-detail">
+
+        <div class="menu-detail-header">
+
+            <div>
+                <h2 id="menu-titre">Chargement...</h2>
+
+                <p class="muted" id="menu-infos"></p>
+
+                <p class="muted small">
+                    Option végétarienne disponible sur demande
+                </p>
+            </div>
+
+            <div class="menu-price-box">
+                <p>
+                    <strong>Minimum :</strong>
+                    <span id="menu-minimum"></span>
+                </p>
+
+                <p>
+                    <strong>Prix minimum :</strong>
+                    <span id="menu-prix-minimum"></span>
+                </p>
+
+                <p class="muted small">
+                    Stock restant :
+                    <span id="menu-stock"></span>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Galerie -->
+        <section class="gallery" id="menu-gallery"></section>
+
+        <!-- Description -->
+        <section class="menu-description">
+            <h3>Description</h3>
+            <p id="menu-description"></p>
+        </section>
+
+        <!-- Plats -->
+        <section class="menu-dishes">
+            <h3>Plats proposés</h3>
+
+            <div class="dishes-grid" id="menu-plats"></div>
+        </section>
+
+        <!-- Conditions -->
+        <section class="menu-conditions">
+            <h3>Conditions importantes</h3>
+
+            <div class="conditions-box">
+                <ul id="menu-conditions"></ul>
+            </div>
+        </section>
+
+        <!-- Commander -->
+        <section class="menu-actions">
+
+            <a id="commander-menu"
+               href="Commande.html"
+               class="btn-primary">
+                Commander ce menu
+            </a>
+
+            <p class="muted small">
+                Si vous n'êtes pas connecté, vous devrez vous connecter
+                ou créer un compte.
+            </p>
+
+        </section>
+
+    </section>
+
+</main>
+
+<footer>
+    <div class="container footer-content">
+
+        <div>
+            <strong>Horaires</strong>
+            <p>Lundi - Dimanche : 08h00 - 20h00</p>
+        </div>
+
+        <div>
+            <a href="MentionLegale.html">Mentions légales</a> |
+            <a href="CGV.html">CGV</a>
+        </div>
+
+    </div>
+</footer>
+
+<script src="asset/JS/SessionFront.js"></script>
+<script src="asset/JS/DetailMenu.js"></script>
+
+</body>
+</html>

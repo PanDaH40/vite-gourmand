@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <title>Admin - Menus | Vite & Gourmand</title>
@@ -11,6 +12,7 @@
 
 <header class="admin-header">
   <div class="container header-content">
+
     <h1 class="logo">Vite & Gourmand</h1>
 
     <nav aria-label="Navigation administrateur">
@@ -21,83 +23,203 @@
       <a href="AdminMateriel.html">Matériel</a>
       <a href="PagePrincipale.html">Retour au site</a>
     </nav>
+
   </div>
 </header>
+
 
 <main class="container">
 
   <section class="page-title">
     <h2>Gestion des menus</h2>
-    <p>Modifier les prix, les stocks et les informations des menus.</p>
+    <p>Ajouter, modifier ou supprimer les menus.</p>
   </section>
 
-  <section class="admin-section">
-    <h2>Ajouter un menu</h2>
 
-    <form class="filter-form" action="php/AjouterMenu.php" method="post">
+  <!-- AJOUT / MODIFICATION -->
+
+  <section class="admin-section">
+
+    <h2 id="formTitre">Ajouter un menu</h2>
+
+    <form
+      class="filter-form"
+      id="menuForm"
+      action="PHP/AjouterMenu.php"
+      method="post"
+    >
+
+      <input
+        type="hidden"
+        id="menuId"
+        name="menu_id"
+        value=""
+      >
 
       <div class="form-row">
 
         <div class="form-group">
           <label for="titre">Titre du menu</label>
-          <input type="text" id="titre" name="titre" placeholder="Nom du menu" required>
+
+          <input
+            type="text"
+            id="titre"
+            name="titre"
+            placeholder="Nom du menu"
+            required
+          >
         </div>
+
 
         <div class="form-group">
           <label for="prix">Prix par personne</label>
-          <input type="number" id="prix" name="prix" min="1" placeholder="Prix" required>
+
+          <input
+            type="number"
+            id="prix"
+            name="prix"
+            min="1"
+            step="0.01"
+            placeholder="Prix"
+            required
+          >
         </div>
+
 
         <div class="form-group">
           <label for="stock">Stock disponible</label>
-          <input type="number" id="stock" name="stock" min="0" placeholder="Quantité" required>
+
+          <input
+            type="number"
+            id="stock"
+            name="stock"
+            min="0"
+            placeholder="Quantité"
+            required
+          >
         </div>
 
       </div>
+
 
       <div class="form-row">
 
         <div class="form-group">
-          <label for="minimum">Nombre minimum de personnes</label>
-          <input type="number" id="minimum" name="minimum" min="1" required>
+          <label for="minimum">
+            Nombre minimum de personnes
+          </label>
+
+          <input
+            type="number"
+            id="minimum"
+            name="minimum"
+            min="1"
+            required
+          >
         </div>
+
 
         <div class="form-group">
           <label for="regime">Régime</label>
-          <select id="regime" name="regime" required>
-            <option value="Classique">Classique</option>
-            <option value="Végétarien">Végétarien</option>
-            <option value="Vegan">Vegan</option>
+
+          <select
+            id="regime"
+            name="regime"
+            required
+          >
+            <option value="Classique">
+              Classique
+            </option>
+
+            <option value="Végétarien">
+              Végétarien
+            </option>
+
+            <option value="Vegan">
+              Vegan
+            </option>
           </select>
         </div>
+
 
         <div class="form-group">
           <label for="theme">Thème</label>
-          <select id="theme" name="theme">
-            <option value="Pâques">Pâques</option>
-            <option value="Noël">Noël</option>
-            <option value="Classique">Classique</option>
-            <option value="Évènement">Évènement</option>
+
+          <select
+            id="theme"
+            name="theme"
+          >
+            <option value="Pâques">
+              Pâques
+            </option>
+
+            <option value="Noël">
+              Noël
+            </option>
+
+            <option value="Classique">
+              Classique
+            </option>
+
+            <option value="Évènement">
+              Évènement
+            </option>
           </select>
         </div>
 
       </div>
 
+
       <div class="form-group">
-        <label for="description">Description</label>
-        <textarea id="description" name="description" rows="5" placeholder="Description du menu" required></textarea>
+
+        <label for="description">
+          Description
+        </label>
+
+        <textarea
+          id="description"
+          name="description"
+          rows="5"
+          placeholder="Description du menu"
+          required
+        ></textarea>
+
       </div>
 
-      <button type="submit" class="btn-primary">Ajouter le menu</button>
+
+      <button
+        type="submit"
+        class="btn-primary"
+        id="btnEnregistrer"
+      >
+        Ajouter le menu
+      </button>
+
+
+      <button
+        type="button"
+        class="btn-small"
+        id="btnAnnulerModification"
+        hidden
+      >
+        Annuler la modification
+      </button>
 
     </form>
+
   </section>
 
+
+  <!-- MENUS -->
+
   <section class="admin-section">
+
     <h2>Menus existants</h2>
 
     <div class="table-wrapper">
+
       <table>
+
         <thead>
           <tr>
             <th>Menu</th>
@@ -109,60 +231,35 @@
           </tr>
         </thead>
 
-        <tbody>
+        <tbody id="menusTableBody">
+
           <tr>
-            <td>Menu Pâques</td>
-            <td>30 €</td>
-            <td>6</td>
-            <td>5</td>
-            <td>Classique</td>
-            <td>
-              <div class="table-actions">
-                <button type="button" class="btn-small">Modifier</button>
-                <button type="button" class="btn-small btn-danger">Supprimer</button>
-              </div>
+            <td colspan="6">
+              Chargement des menus...
             </td>
           </tr>
 
-          <tr>
-            <td>Menu Noël</td>
-            <td>30 €</td>
-            <td>4</td>
-            <td>6</td>
-            <td>Classique</td>
-            <td>
-              <div class="table-actions">
-                <button type="button" class="btn-small">Modifier</button>
-                <button type="button" class="btn-small btn-danger">Supprimer</button>
-              </div>
-            </td>
-          </tr>
-
-          <tr>
-            <td>Menu Classique</td>
-            <td>30 €</td>
-            <td>8</td>
-            <td>8</td>
-            <td>Classique</td>
-            <td>
-              <div class="table-actions">
-                <button type="button" class="btn-small">Modifier</button>
-                <button type="button" class="btn-small btn-danger">Supprimer</button>
-              </div>
-            </td>
-          </tr>
         </tbody>
+
       </table>
+
     </div>
+
   </section>
 
 </main>
 
+
 <footer>
+
   <div class="container footer-content">
-    <p>Interface administrateur - Gestion des menus</p>
+    <p>
+      Interface administrateur - Gestion des menus
+    </p>
   </div>
+
 </footer>
+
 
 <script src="asset/JS/Admin.js"></script>
 <script src="asset/JS/SessionFront.js"></script>

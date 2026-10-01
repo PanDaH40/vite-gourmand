@@ -4,8 +4,7 @@ const theme = document.getElementById("theme");
 const regime = document.getElementById("regime");
 const nbMin = document.getElementById("nb-min");
 
-const cards = document.querySelectorAll(".card");
-const resultCount = document.getElementById("result-count");
+const dynamicResultCount = document.getElementById("result-count");
 
 function filtrerMenus() {
   const valeurPrixMin = parseInt(prixMin.value);
@@ -13,6 +12,8 @@ function filtrerMenus() {
   const valeurTheme = theme.value.toLowerCase();
   const valeurRegime = regime.value.toLowerCase();
   const valeurNbMin = parseInt(nbMin.value);
+
+const cards = document.querySelectorAll(".cards .card");
 
   let totalVisible = 0;
 
@@ -52,7 +53,7 @@ function filtrerMenus() {
     }
   });
 
-  resultCount.textContent = totalVisible + " menu(s) affiché(s)";
+  dynamicResultCount.textContent = totalVisible + " menu(s) affiché(s)";
 }
 
 prixMin.addEventListener("input", filtrerMenus);

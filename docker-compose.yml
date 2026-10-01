@@ -27,5 +27,17 @@ services:
       - mysql_data:/var/lib/mysql
       - ./SQL/table.sql:/docker-entrypoint-initdb.d/01-table.sql:ro
 
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: vite_gourmand_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    depends_on:
+      - mysql
+
 volumes:
   mysql_data:
