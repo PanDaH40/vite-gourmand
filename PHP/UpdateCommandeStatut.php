@@ -3,11 +3,12 @@
 session_start();
 
 require __DIR__ . "/db.php";
+require __DIR__ . "/MongoDb.php";
 
 header("Content-Type: application/json; charset=utf-8");
 
 
-/*
+/**
  * Vérification de la connexion
  */
 if (!isset($_SESSION["utilisateur_id"])) {
@@ -23,19 +24,15 @@ if (!isset($_SESSION["utilisateur_id"])) {
 }
 
 
-/*
+/**
  * Vérification du rôle administrateur
  */
 $sqlRole = "
     SELECT role.libelle
-
     FROM possede_utilisateur_role
-
     INNER JOIN role
         ON possede_utilisateur_role.role_id = role.role_id
-
     WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
-
     LIMIT 1
 ";
 
@@ -64,9 +61,8 @@ if (
 }
 
 
-/*
- * Seules les requêtes POST
- * sont autorisées.
+/**
+ * Seules les requêtes POST sont autorisées.
  */
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
@@ -81,15 +77,13 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 }
 
 
-/*
- * Récupération du JSON envoyé
- * par JavaScript.
+/**
+ * Récupération du JSON envoyé par JavaScript.
  */
 $donnees = json_decode(
     file_get_contents("php://input"),
     true
 );
-
 
 $numeroCommande =
     trim($donnees["numero_commande"] ?? "");
@@ -98,7 +92,7 @@ $nouveauStatut =
     trim($donnees["statut"] ?? "");
 
 
-/*
+/**
  * Vérification des données.
  */
 if (
@@ -117,11 +111,8 @@ if (
 }
 
 
-/*
+/**
  * Liste des statuts autorisés.
- *
- * Cela empêche d'enregistrer
- * n'importe quelle valeur.
  */
 $statutsAutorises = [
     "en attente",
@@ -150,21 +141,17 @@ if (!in_array(
 
 try {
 
-    /*
+    /**
      * Vérifie que la commande existe.
      */
     $sqlCommande = "
         SELECT numero_commande
-
         FROM commande
-
         WHERE numero_commande = :numero_commande
-
         LIMIT 1
     ";
 
-    $stmtCommande =
-        $pdo->prepare($sqlCommande);
+    $stmtCommande = $pdo->prepare($sqlCommande);
 
     $stmtCommande->execute([
         "numero_commande" => $numeroCommande
@@ -184,29 +171,214 @@ try {
     }
 
 
-    /*
-     * Modification réelle du statut.
+    /**
+     * Modification du statut dans MySQL.
      */
     $sqlUpdate = "
         UPDATE commande
-
         SET statut = :statut
-
         WHERE numero_commande = :numero_commande
     ";
 
-    $stmtUpdate =
-        $pdo->prepare($sqlUpdate);
+    $stmtUpdate = $pdo->prepare($sqlUpdate);
 
     $stmtUpdate->execute([
-
-        "statut" =>
-            $nouveauStatut,
-
-        "numero_commande" =>
-            $numeroCommande
-
+        "statut" => $nouveauStatut,
+        "numero_commande" => $numeroCommande
     ]);
+
+
+    /**
+     * Synchronisation MongoDB.
+     *
+     * On synchronise les commandes acceptées
+     * ou terminées pour les statistiques.
+     *
+     * MySQL reste la base principale.
+     */
+    if (
+        $mongo !== null &&
+        in_array($nouveauStatut, ["acceptée", "terminée"], true)
+    ) {
+
+        try {
+
+            /**
+             * Récupération des informations nécessaires
+             * depuis la base MySQL.
+             */
+            $sqlMongo = "
+                SELECT
+                    c.numero_commande,
+                    c.date_commande,
+                    c.date_prestation,
+                    c.heure_livraison,
+                    c.prix_menu,
+                    c.nombre_personne,
+                    c.prix_livraison,
+                    c.statut,
+
+                    u.utilisateur_id,
+                    u.prenom,
+                    u.email,
+                    u.telephone,
+                    u.ville,
+
+                    m.menu_id,
+                    m.titre AS menu_titre,
+                    m.regime
+
+                FROM commande c
+
+                INNER JOIN commande_utilisateur cu
+                    ON c.numero_commande = cu.numero_commande
+
+                INNER JOIN utilisateur u
+                    ON cu.utilisateur_id = u.utilisateur_id
+
+                INNER JOIN commande_menu cm
+                    ON c.numero_commande = cm.numero_commande
+
+                INNER JOIN menu m
+                    ON cm.menu_id = m.menu_id
+
+                WHERE c.numero_commande = :numero_commande
+
+                LIMIT 1
+            ";
+
+            $stmtMongo = $pdo->prepare($sqlMongo);
+
+            $stmtMongo->execute([
+                "numero_commande" => $numeroCommande
+            ]);
+
+            $commandeMongo =
+                $stmtMongo->fetch(PDO::FETCH_ASSOC);
+
+
+            if ($commandeMongo) {
+
+                /**
+                 * Document NoSQL.
+                 */
+                $document = [
+
+                    "orderNumber" =>
+                        $commandeMongo["numero_commande"],
+
+                    "orderedAt" =>
+                        $commandeMongo["date_commande"],
+
+                    "prestationDate" =>
+                        $commandeMongo["date_prestation"],
+
+                    "status" =>
+                        $commandeMongo["statut"],
+
+
+                    "customer" => [
+
+                        "userId" =>
+                            (int) $commandeMongo["utilisateur_id"],
+
+                        "firstName" =>
+                            $commandeMongo["prenom"],
+
+                        "email" =>
+                            $commandeMongo["email"],
+
+                        "phone" =>
+                            $commandeMongo["telephone"]
+                    ],
+
+
+                    "menu" => [
+
+                        "menuId" =>
+                            (int) $commandeMongo["menu_id"],
+
+                        "title" =>
+                            $commandeMongo["menu_titre"],
+
+                        "regime" =>
+                            $commandeMongo["regime"]
+                    ],
+
+
+                    "order" => [
+
+                        "nbPersons" =>
+                            (int) $commandeMongo["nombre_personne"],
+
+                        "menuPrice" =>
+                            (float) $commandeMongo["prix_menu"],
+
+                        "deliveryPrice" =>
+                            (float) $commandeMongo["prix_livraison"],
+
+                        "total" =>
+                            (float) $commandeMongo["prix_menu"]
+                            +
+                            (float) $commandeMongo["prix_livraison"]
+                    ],
+
+
+                    "delivery" => [
+
+                        "city" =>
+                            $commandeMongo["ville"],
+
+                        "time" =>
+                            $commandeMongo["heure_livraison"]
+                    ]
+                ];
+
+
+                /**
+                 * Upsert MongoDB :
+                 *
+                 * si la commande existe déjà -> mise à jour
+                 * sinon -> création.
+                 */
+                $bulk =
+                    new MongoDB\Driver\BulkWrite();
+
+                $bulk->update(
+
+                    [
+                        "orderNumber" =>
+                            $numeroCommande
+                    ],
+
+                    [
+                        '$set' => $document
+                    ],
+
+                    [
+                        "upsert" => true
+                    ]
+                );
+
+
+                $mongo->executeBulkWrite(
+                    $mongoDatabase . ".orders_analytics",
+                    $bulk
+                );
+            }
+
+        } catch (Throwable $mongoErreur) {
+
+            /**
+             * Une erreur MongoDB ne doit pas
+             * annuler la modification MySQL.
+             */
+            error_log(
+                "Erreur synchronisation MongoDB : "
+                . $mongoErreur->getMessage()
+            );
+        }
+    }
 
 
     echo json_encode([

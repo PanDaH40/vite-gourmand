@@ -12,8 +12,15 @@ services:
       DB_NAME: vite_gourmand
       DB_USER: root
       DB_PASSWORD: root
+
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DB: vite_gourmand_analytics
+
     depends_on:
       - mysql
+      - mongodb
+
 
   mysql:
     image: mysql:8.4
@@ -27,6 +34,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./SQL/table.sql:/docker-entrypoint-initdb.d/01-table.sql:ro
 
+
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: vite_gourmand_phpmyadmin
@@ -39,5 +47,17 @@ services:
     depends_on:
       - mysql
 
+
+  mongodb:
+    image: mongo:8
+    container_name: vite_gourmand_mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+
 volumes:
   mysql_data:
+  mongodb_data:

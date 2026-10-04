@@ -1,71 +1,68 @@
 <?php
 
-require __DIR__ . "/db.php";
+require_once __DIR__ . "/db.php";
+require_once __DIR__ . "/Controllers/MenuController.php";
 
 header("Content-Type: application/json; charset=utf-8");
 
-if (isset($_GET["id"])) {
+try {
 
-    $menuId = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+    $controller = new MenuController($pdo);
 
-    if (!$menuId) {
-        http_response_code(400);
 
+    /**
+     * Récupération d'un seul menu
+     * Exemple : Get_Menus.php?id=1
+     */
+    if (isset($_GET["id"])) {
+
+        $menuId = (int) $_GET["id"];
+
+        $menu = $controller->getMenuById($menuId);
+
+        if (!$menu) {
+
+            http_response_code(404);
+
+            echo json_encode([
+                "error" => "Menu introuvable."
+            ], JSON_UNESCAPED_UNICODE);
+
+            exit;
+        }
+
+        // On retourne directement le menu
+        // pour conserver le fonctionnement existant.
         echo json_encode(
-            ["error" => "Identifiant du menu invalide."],
+            $menu,
             JSON_UNESCAPED_UNICODE
         );
 
         exit;
     }
 
-    $sql = "SELECT
-                menu_id,
-                titre,
-                nombre_personne_minimum,
-                prix_par_personne,
-                regime,
-                description,
-                quantite_restante
-            FROM menu
-            WHERE menu_id = :menu_id";
 
-    $stmt = $pdo->prepare($sql);
+    /**
+     * Récupération de tous les menus.
+     */
+    $menus = $controller->getAllMenus();
 
-    $stmt->execute([
-        "menu_id" => $menuId
-    ]);
+    // IMPORTANT :
+    // On retourne directement le tableau
+    // car les JS existants font menus.forEach().
+    echo json_encode(
+        $menus,
+        JSON_UNESCAPED_UNICODE
+    );
 
-    $menu = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$menu) {
-        http_response_code(404);
+} catch (PDOException $e) {
 
-        echo json_encode(
-            ["error" => "Menu introuvable."],
-            JSON_UNESCAPED_UNICODE
-        );
+    error_log($e->getMessage());
 
-        exit;
-    }
+    http_response_code(500);
 
-    echo json_encode($menu, JSON_UNESCAPED_UNICODE);
-    exit;
+    echo json_encode([
+        "error" => "Erreur lors de la récupération des menus."
+    ], JSON_UNESCAPED_UNICODE);
 }
-
-$sql = "SELECT
-            menu_id,
-            titre,
-            nombre_personne_minimum,
-            prix_par_personne,
-            regime,
-            description,
-            quantite_restante
-        FROM menu
-        ORDER BY menu_id DESC";
-
-$stmt = $pdo->query($sql);
-
-$menus = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-echo json_encode($menus, JSON_UNESCAPED_UNICODE);
