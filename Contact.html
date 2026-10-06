@@ -1,79 +1,124 @@
 <!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>Contact - Vite & Gourmand</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="asset/CSS/Contact.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
 
-<body>
+    <title>Contact - Vite & Gourmand</title>
 
-<header>
-  <div class="container header-content">
-    <h1 class="logo">Vite & Gourmand</h1>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <nav>
-      <a href="PagePrincipale.html">Accueil</a>
-      <a href="Menu.html">Menus</a>
-      <a href="Contact.html" class="active">Contact</a>
-      <a href="Connection.html">Connexion</a>
-    </nav>
-  </div>
-</header>
+    <link rel="stylesheet" href="asset/CSS/Contact.css" />
+  </head>
 
-<main class="container">
+  <body>
+    <header>
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
 
-  <h2>Nous contacter</h2>
+        <nav aria-label="Navigation principale">
+          <a href="PagePrincipale.html"> Accueil </a>
 
-  <section class="contact-card">
-    <p class="muted">
-      Une question ? Une demande particulière ? Envoyez-nous un message et nous vous répondrons par email.
-    </p>
+          <a href="Menu.html"> Menus </a>
 
-    <form class="contact-form" action="#" method="post">
+          <a href="Contact.html" class="active"> Contact </a>
 
-      <div class="form-group">
-        <label for="email">Votre email *</label>
-        <input id="email" type="email" name="email" placeholder="exemple@mail.com" required>
+          <a href="Connection.html"> Connexion </a>
+        </nav>
       </div>
+    </header>
 
-      <div class="form-group">
-        <label for="titre">Titre *</label>
-        <input id="titre" type="text" name="titre" placeholder="Objet de votre demande" required>
+    <main class="container">
+      <h2>Nous contacter</h2>
+
+      <section class="contact-card">
+        <p class="muted">
+          Une question ? Une demande particulière ? Envoyez-nous un message et
+          nous vous répondrons par email.
+        </p>
+
+        <form class="contact-form" id="contactForm">
+          <!-- EMAIL -->
+
+          <div class="form-group">
+            <label for="email"> Votre email * </label>
+
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="exemple@mail.com"
+              maxlength="100"
+              required
+            />
+          </div>
+
+          <!-- TITRE -->
+
+          <div class="form-group">
+            <label for="titre"> Titre * </label>
+
+            <input
+              id="titre"
+              type="text"
+              name="titre"
+              placeholder="Objet de votre demande"
+              maxlength="100"
+              required
+            />
+          </div>
+
+          <!-- MESSAGE -->
+
+          <div class="form-group">
+            <label for="message"> Description * </label>
+
+            <textarea
+              id="message"
+              name="message"
+              rows="6"
+              maxlength="2000"
+              placeholder="Expliquez votre demande..."
+              required
+            ></textarea>
+          </div>
+
+          <!-- BOUTON -->
+
+          <button type="submit" class="btn-primary">Envoyer</button>
+
+          <!-- RETOUR UTILISATEUR -->
+
+          <p
+            id="contactMessage"
+            class="muted small"
+            role="status"
+            aria-live="polite"
+          >
+            * Champs obligatoires.
+          </p>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-content">
+        <div>
+          <strong> Horaires </strong>
+
+          <p>Lundi - Dimanche : 08h00 - 20h00</p>
+        </div>
+
+        <div>
+          <a href="MentionLegale.html"> Mentions légales </a>
+
+          |
+
+          <a href="CGV.html"> CGV </a>
+        </div>
       </div>
+    </footer>
 
-      <div class="form-group">
-        <label for="message">Description *</label>
-        <textarea id="message" name="message" rows="6" placeholder="Expliquez votre demande..." required></textarea>
-      </div>
-
-      <button type="submit" class="btn-primary">Envoyer</button>
-
-      <p class="muted small">
-        * Champs obligatoires. (Envoi par email à l'entreprise : à implémenter plus tard en PHP)
-      </p>
-
-    </form>
-  </section>
-
-</main>
-
-<footer>
-  <div class="container footer-content">
-    <div>
-      <strong>Horaires</strong>
-      <p>Lundi - Dimanche : 08h00 - 20h00</p>
-    </div>
-
-    <div>
-      <a href="MentionLegale.html">Mentions légales</a> |
-      <a href="CGV.html">CGV</a>
-    </div>
-  </div>
-
-  <script src="asset/JS/SessionFront.js"></script>
-</footer>
-
-</body>
+    <script src="asset/JS/SessionFront.js"></script>
+    <script src="asset/JS/Contact.js"></script>
+  </body>
 </html>

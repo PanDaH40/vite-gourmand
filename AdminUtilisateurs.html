@@ -1,207 +1,134 @@
 <!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Admin - Utilisateurs | Vite & Gourmand</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="asset/CSS/Admin.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
 
-<body>
+    <title>Admin - Utilisateurs | Vite & Gourmand</title>
 
-<header class="admin-header">
-  <div class="container header-content">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <h1 class="logo">Vite & Gourmand</h1>
+    <link rel="stylesheet" href="asset/CSS/Admin.css" />
+  </head>
 
-    <nav aria-label="Navigation administrateur">
-      <a href="AdminDashboard.html">Tableau de bord</a>
-      <a href="AdminCommandes.html">Commandes</a>
-      <a href="AdminMenus.html">Menus</a>
-      <a href="AdminUtilisateurs.html" class="active">Utilisateurs</a>
-      <a href="AdminMateriel.html">Matériel</a>
-      <a href="PagePrincipale.html">Retour au site</a>
-    </nav>
+  <body>
+    <header class="admin-header">
+      <div class="container header-content">
+        <h1 class="logo">Vite & Gourmand</h1>
 
-  </div>
-</header>
+        <nav aria-label="Navigation administrateur">
+          <a href="AdminDashboard.html"> Tableau de bord </a>
 
-<main class="container">
+          <a href="AdminCommandes.html"> Commandes </a>
 
-  <section class="page-title">
-    <h2>Gestion des utilisateurs</h2>
-    <p>Consulter les comptes clients, employés et administrateurs.</p>
-  </section>
+          <a href="AdminMenus.html"> Menus </a>
 
-  <section class="admin-section">
-    <h2>Filtres</h2>
+          <a href="AdminUtilisateurs.html" class="active"> Utilisateurs </a>
 
-    <form class="filter-form" action="#" method="get">
+          <a href="AdminMateriel.html"> Matériel </a>
 
-      <div class="form-row">
-
-        <div class="form-group">
-          <label for="role">Rôle</label>
-          <select id="role" name="role">
-            <option value="">Tous</option>
-            <option value="client">Client</option>
-            <option value="employe">Employé</option>
-            <option value="admin">Administrateur</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="ville">Ville</label>
-          <input type="text" id="ville" name="ville" placeholder="Ex : Bordeaux">
-        </div>
-
-        <div class="form-group">
-          <label for="recherche">Recherche</label>
-          <input
-            type="text"
-            id="recherche"
-            name="recherche"
-            placeholder="Nom, prénom ou email"
-          >
-        </div>
-
+          <a href="PagePrincipale.html"> Retour au site </a>
+        </nav>
       </div>
+    </header>
 
-      <button type="submit" class="btn-primary">Filtrer</button>
+    <main class="container">
+      
 
-    </form>
-  </section>
+      <section class="page-title">
+        <h2>Gestion des utilisateurs</h2>
 
-  <section class="admin-section">
-    <h2>Liste des utilisateurs</h2>
+        <p>Consulter les comptes utilisateurs et administrateurs.</p>
+      </section>
 
-    <div class="table-wrapper">
-      <table>
+      <section class="admin-section">
+        <h2>Filtres</h2>
 
-        <thead>
-          <tr>
-            <th>Nom / Prénom</th>
-            <th>Email</th>
-            <th>Téléphone</th>
-            <th>Ville</th>
-            <th>Rôle</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+        <form id="filterForm" class="filter-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="role"> Rôle </label>
 
-        <tbody>
+              <select id="role" name="role">
+                <option value="">Tous</option>
 
-          <tr>
-            <td>Julie Martin</td>
-            <td>julie@mail.com</td>
-            <td>0600000000</td>
-            <td>Bordeaux</td>
-            <td><span class="badge accepted">Client</span></td>
-            <td>
-              <div class="table-actions">
-                <button type="button" class="btn-small">Voir</button>
-                <button type="button" class="btn-small">Modifier rôle</button>
-              </div>
-            </td>
-          </tr>
+                <option value="Utilisateur">Utilisateur</option>
 
-          <tr>
-            <td>Marc Dupont</td>
-            <td>marc@mail.com</td>
-            <td>0611111111</td>
-            <td>Mérignac</td>
-            <td><span class="badge pending">Employé</span></td>
-            <td>
-              <div class="table-actions">
-                <button type="button" class="btn-small">Voir</button>
-                <button type="button" class="btn-small">Modifier rôle</button>
-              </div>
-            </td>
-          </tr>
+                <option value="Administrateur">Administrateur</option>
+              </select>
+            </div>
 
-          <tr>
-            <td>Admin Vite & Gourmand</td>
-            <td>admin@vitegourmand.fr</td>
-            <td>0622222222</td>
-            <td>Bordeaux</td>
-            <td><span class="badge done">Admin</span></td>
-            <td>
-              <div class="table-actions">
-                <button type="button" class="btn-small">Voir</button>
-              </div>
-            </td>
-          </tr>
+            <div class="form-group">
+              <label for="ville"> Ville </label>
 
-        </tbody>
+              <input
+                type="text"
+                id="ville"
+                name="ville"
+                placeholder="Ex : Bordeaux"
+              />
+            </div>
 
-      </table>
-    </div>
-  </section>
+            <div class="form-group">
+              <label for="recherche"> Recherche </label>
 
-  <section class="admin-section">
-    <h2>Ajouter un utilisateur interne</h2>
+              <input
+                type="text"
+                id="recherche"
+                name="recherche"
+                placeholder="Prénom ou email"
+              />
+            </div>
+          </div>
 
-    <form class="filter-form" action="#" method="post">
+          <button type="submit" class="btn-primary">Filtrer</button>
+        </form>
+      </section>
 
-      <div class="form-row">
+      <section class="admin-section">
+        <h2>Liste des utilisateurs</h2>
 
-        <div class="form-group">
-          <label for="prenom">Prénom</label>
-          <input type="text" id="prenom" name="prenom">
+        <p id="messageUtilisateurs" role="status" aria-live="polite"></p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Prénom</th>
+
+                <th>Email</th>
+
+                <th>Téléphone</th>
+
+                <th>Ville</th>
+
+                <th>Rôle</th>
+
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody id="utilisateursTableBody">
+              <tr>
+                <td colspan="6">Chargement des utilisateurs...</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </section>
+    </main>
 
-        <div class="form-group">
-          <label for="nom">Nom</label>
-          <input type="text" id="nom" name="nom">
-        </div>
-
-        <div class="form-group">
-          <label for="email">Adresse mail</label>
-          <input type="email" id="email" name="email">
-        </div>
-
+    <footer>
+      <div class="container footer-content">
+        <p>Interface administrateur - Gestion des utilisateurs</p>
       </div>
+    </footer>
 
-      <div class="form-row">
+    <script src="asset/JS/Admin.js"></script>
 
-        <div class="form-group">
-          <label for="telephone">Téléphone</label>
-          <input type="tel" id="telephone" name="telephone">
-        </div>
+    <script src="asset/JS/SessionFront.js"></script>
 
-        <div class="form-group">
-          <label for="role_user">Rôle</label>
-          <select id="role_user" name="role_user">
-            <option value="employe">Employé</option>
-            <option value="admin">Administrateur</option>
-          </select>
-        </div>
+    <script src="asset/JS/AdminAccess.js"></script>
 
-        <div class="form-group">
-          <label for="ville_user">Ville</label>
-          <input type="text" id="ville_user" name="ville_user">
-        </div>
-
-      </div>
-
-      <button type="submit" class="btn-primary">
-        Ajouter l'utilisateur
-      </button>
-
-    </form>
-  </section>
-
-</main>
-
-<footer>
-  <div class="container footer-content">
-    <p>Interface administrateur - Gestion des utilisateurs</p>
-  </div>
-
-  <script src="asset/JS/Admin.js"></script>
-  <script src="asset/JS/SessionFront.js"></script>
-  <script src="asset/JS/AdminAccess.js"></script>
-</footer>
-
-</body>
+    <script src="asset/JS/AdminUtilisateurs.js"></script>
+  </body>
 </html>

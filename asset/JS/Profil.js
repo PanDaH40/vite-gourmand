@@ -1,78 +1,245 @@
-const forms = document.querySelectorAll(".profile-form");
+document.addEventListener("DOMContentLoaded", () => {
 
-const profilForm = forms[0];
-const passwordForm = forms[1];
+    const profilForm = document.getElementById("profilForm");
+    const passwordForm = document.getElementById("passwordForm");
 
-const prenom = document.getElementById("prenom");
-const nom = document.getElementById("nom");
-const email = document.getElementById("email");
-const telephone = document.getElementById("telephone");
-const adresse = document.getElementById("adresse");
-const ville = document.getElementById("ville");
-const pays = document.getElementById("pays");
+    const messageProfil = document.getElementById("messageProfil");
+    const messagePassword = document.getElementById("messagePassword");
 
-const currentPassword = document.getElementById("current-password");
-const newPassword = document.getElementById("new-password");
-const confirmPassword = document.getElementById("confirm-password");
+    const prenom = document.getElementById("prenom");
+    const email = document.getElementById("email");
+    const telephone = document.getElementById("telephone");
+    const adressePostale = document.getElementById("adresse_postale");
+    const ville = document.getElementById("ville");
+    const pays = document.getElementById("pays");
 
-function motDePasseValide(mdp) {
-  const longueur = mdp.length >= 10;
-  const majuscule = /[A-Z]/.test(mdp);
-  const minuscule = /[a-z]/.test(mdp);
-  const chiffre = /[0-9]/.test(mdp);
-  const special = /[^A-Za-z0-9]/.test(mdp);
 
-  return longueur && majuscule && minuscule && chiffre && special;
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Chargement du profil
+    |--------------------------------------------------------------------------
+    */
 
-profilForm.addEventListener("submit", function (e) {
-  if (
-    prenom.value.trim() === "" ||
-    nom.value.trim() === "" ||
-    email.value.trim() === "" ||
-    telephone.value.trim() === "" ||
-    adresse.value.trim() === "" ||
-    ville.value.trim() === "" ||
-    pays.value.trim() === ""
-  ) {
-    e.preventDefault();
-    alert("Veuillez remplir toutes vos informations personnelles.");
-    return;
-  }
+    async function chargerProfil() {
 
-  if (!email.value.includes("@")) {
-    e.preventDefault();
-    alert("Veuillez saisir une adresse email valide.");
-    return;
-  }
+        try {
 
-  alert("Informations du profil vérifiées.");
+            const response = await fetch(
+                "PHP/Profil.php",
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.error ||
+                    "Impossible de charger le profil."
+                );
+            }
+
+
+            const utilisateur = data.utilisateur;
+
+            prenom.value = utilisateur.prenom || "";
+            email.value = utilisateur.email || "";
+            telephone.value = utilisateur.telephone || "";
+            adressePostale.value = utilisateur.adresse_postale || "";
+            ville.value = utilisateur.ville || "";
+            pays.value = utilisateur.pays || "";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            messageProfil.textContent = error.message;
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Modification des informations personnelles
+    |--------------------------------------------------------------------------
+    */
+
+    profilForm.addEventListener("submit", async event => {
+
+        event.preventDefault();
+
+        messageProfil.textContent =
+            "Enregistrement en cours...";
+
+
+        const donnees = {
+
+            prenom: prenom.value.trim(),
+
+            email: email.value.trim(),
+
+            telephone: telephone.value.trim(),
+
+            adresse_postale: adressePostale.value.trim(),
+
+            ville: ville.value.trim(),
+
+            pays: pays.value.trim()
+        };
+
+
+        try {
+
+            const response = await fetch(
+                "PHP/ModifierProfil.php",
+                {
+                    method: "POST",
+
+                    credentials: "same-origin",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(donnees)
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.error ||
+                    "Impossible de modifier le profil."
+                );
+            }
+
+
+            messageProfil.textContent =
+                "Profil modifié avec succès.";
+
+
+            await chargerProfil();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            messageProfil.textContent = error.message;
+        }
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mot de passe
+    |--------------------------------------------------------------------------
+    */
+
+    passwordForm.addEventListener("submit", async event => {
+
+    event.preventDefault();
+
+    const currentPassword =
+        document.getElementById("current-password").value;
+
+    const newPassword =
+        document.getElementById("new-password").value;
+
+    const confirmPassword =
+        document.getElementById("confirm-password").value;
+
+
+    if (newPassword !== confirmPassword) {
+
+        messagePassword.textContent =
+            "Les deux nouveaux mots de passe ne correspondent pas.";
+
+        return;
+    }
+
+
+    if (newPassword.length < 8) {
+
+        messagePassword.textContent =
+            "Le nouveau mot de passe doit contenir au moins 8 caractères.";
+
+        return;
+    }
+
+
+    messagePassword.textContent =
+        "Modification en cours...";
+
+
+    try {
+
+        const response = await fetch(
+            "PHP/ModifierPassword.php",
+            {
+                method: "POST",
+
+                credentials: "same-origin",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    current_password: currentPassword,
+
+                    new_password: newPassword,
+
+                    confirm_password: confirmPassword
+                })
+            }
+        );
+
+
+        const data = await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error ||
+                "Impossible de modifier le mot de passe."
+            );
+        }
+
+
+        messagePassword.textContent =
+            "Mot de passe modifié avec succès.";
+
+
+        passwordForm.reset();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        messagePassword.textContent = error.message;
+    }
+
 });
 
-passwordForm.addEventListener("submit", function (e) {
-  if (
-    currentPassword.value.trim() === "" ||
-    newPassword.value.trim() === "" ||
-    confirmPassword.value.trim() === ""
-  ) {
-    e.preventDefault();
-    alert("Veuillez remplir tous les champs du mot de passe.");
-    return;
-  }
 
-  if (!motDePasseValide(newPassword.value)) {
-    e.preventDefault();
-    alert(
-      "Le nouveau mot de passe doit contenir au moins 10 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial."
-    );
-    return;
-  }
+    /*
+    |--------------------------------------------------------------------------
+    | Premier chargement
+    |--------------------------------------------------------------------------
+    */
 
-  if (newPassword.value !== confirmPassword.value) {
-    e.preventDefault();
-    alert("Les mots de passe ne correspondent pas.");
-    return;
-  }
+    chargerProfil();
 
-  alert("Mot de passe vérifié.");
 });

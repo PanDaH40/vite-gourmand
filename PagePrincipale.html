@@ -96,29 +96,10 @@
 
       <section class="reviews">
         <div class="container">
-          <h2>Avis clients (validés)</h2>
+          <h2>Avis clients</h2>
 
-          <div class="reviews-grid">
-            <article class="review">
-              <p class="review-text">
-                “Repas excellent et livré à l'heure. Très professionnel.”
-              </p>
-              <p class="review-meta"><strong>Julie M.</strong> — Note : 5/5</p>
-            </article>
-
-            <article class="review">
-              <p class="review-text">
-                “Menu Noël très bon, tout le monde s'est régalé.”
-              </p>
-              <p class="review-meta"><strong>Marc D.</strong> — Note : 4/5</p>
-            </article>
-
-            <article class="review">
-              <p class="review-text">
-                “Service sérieux, portions généreuses, je recommande.”
-              </p>
-              <p class="review-meta"><strong>Sophie L.</strong> — Note : 5/5</p>
-            </article>
+          <div class="reviews-grid" id="reviewsGrid">
+            <p>Chargement des avis...</p>
           </div>
         </div>
       </section>
@@ -153,7 +134,10 @@
       <div class="container footer-content">
         <div>
           <strong>Horaires</strong>
-          <p>Lundi - Dimanche : 08h00 - 20h00</p>
+
+          <div id="horairesFooter">
+            <p>Chargement des horaires...</p>
+          </div>
         </div>
 
         <div>
@@ -164,5 +148,8 @@
     </footer>
 
     <script src="asset/JS/SessionFront.js"></script>
+    <script src="asset/JS/AvisPublic.js"></script>
+    <script src="asset/JS/Horaires.js"></script>
+    
   </body>
 </html>

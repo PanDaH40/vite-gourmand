@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>Admin - Avis | Vite & Gourmand</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <link
+    rel="stylesheet"
+    href="asset/CSS/Admin.css"
+  >
+</head>
+
+<body>
+
+<header class="admin-header">
+
+  <div class="container header-content">
+
+    <h1 class="logo">
+      Vite & Gourmand
+    </h1>
+
+    <nav aria-label="Navigation administrateur">
+
+      <a href="AdminDashboard.html">
+        Tableau de bord
+      </a>
+
+      <a href="AdminCommandes.html">
+        Commandes
+      </a>
+
+      <a href="AdminMenus.html">
+        Menus
+      </a>
+
+      <a href="AdminUtilisateurs.html">
+        Utilisateurs
+      </a>
+
+      <a href="AdminMateriel.html">
+        Matériel
+      </a>
+
+      <a
+        href="AdminAvis.html"
+        class="active"
+      >
+        Avis
+      </a>
+
+      <a href="PagePrincipale.html">
+        Retour au site
+      </a>
+
+    </nav>
+
+  </div>
+
+</header>
+
+
+<main class="container">
+
+  <section class="page-title">
+
+    <h2>
+      Gestion des avis
+    </h2>
+
+    <p>
+      Consultez et modérez les avis laissés par les clients.
+    </p>
+
+  </section>
+
+
+  <section
+    class="stats-grid"
+    aria-label="Statistiques des avis"
+  >
+
+    <article class="stat-card">
+
+      <h3>
+        En attente
+      </h3>
+
+      <p
+        class="stat-number"
+        id="avisAttente"
+      >
+        0
+      </p>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <h3>
+        Acceptés
+      </h3>
+
+      <p
+        class="stat-number"
+        id="avisAcceptes"
+      >
+        0
+      </p>
+
+    </article>
+
+
+    <article class="stat-card">
+
+      <h3>
+        Refusés
+      </h3>
+
+      <p
+        class="stat-number"
+        id="avisRefuses"
+      >
+        0
+      </p>
+
+    </article>
+
+  </section>
+
+
+  <section class="admin-section">
+
+    <h2>
+      Avis clients
+    </h2>
+
+    <p
+      id="messageAvis"
+      role="status"
+      aria-live="polite"
+    ></p>
+
+
+    <div class="table-wrapper">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Client</th>
+            <th>Note</th>
+            <th>Commentaire</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+
+        </thead>
+
+
+        <tbody id="avisTableBody">
+
+          <tr>
+
+            <td colspan="5">
+              Chargement des avis...
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <div class="container footer-content">
+
+    <p>
+      Interface administrateur - Gestion des avis
+    </p>
+
+  </div>
+
+</footer>
+
+
+<script src="asset/JS/Admin.js"></script>
+<script src="asset/JS/SessionFront.js"></script>
+<script src="asset/JS/AdminAccess.js"></script>
+<script src="asset/JS/AdminAvis.js"></script>
+
+</body>
+
+</html>

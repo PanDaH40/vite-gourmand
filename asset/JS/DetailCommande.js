@@ -11,7 +11,7 @@ if (!numeroCommande) {
 
 } else {
 
-  fetch("php/DetailCommande.php?numero=" + numeroCommande)
+  fetch("PHP/DetailCommande.php?numero=" + numeroCommande)
 
     .then(function (response) {
       return response.json();

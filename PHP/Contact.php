@@ -1,47 +1,124 @@
 <?php
-session_start();
 
-$html = file_get_contents("../Contact.html");
+header("Content-Type: application/json; charset=utf-8");
 
-if ($html === false) {
-    die("Erreur : impossible de charger Contact.html");
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+
+    http_response_code(405);
+
+    echo json_encode([
+        "success" => false,
+        "error" => "Méthode non autorisée."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
 }
 
-$html = str_replace(
-    "<head>",
-    '<head><base href="../">',
-    $html
+
+$data = json_decode(
+    file_get_contents("php://input"),
+    true
 );
 
-$html = preg_replace(
-    '/<div class="user-menu">.*?<\/div>/s',
-    '',
-    $html,
-    1
-);
 
-if (isset($_SESSION["utilisateur_id"])) {
+if (!is_array($data)) {
 
-    $html = preg_replace(
-        '/<a href="Connection\.html">Connexion<\/a>/',
-        '',
-        $html,
-        1
-    );
+    http_response_code(400);
 
-    $blocUtilisateur = '
-    <div class="user-menu">
-        <span>Bonjour ' . htmlspecialchars($_SESSION["prenom"]) . '</span>
-        <a href="php/Deconnexion.php">Déconnexion</a>
-    </div>';
+    echo json_encode([
+        "success" => false,
+        "error" => "Données invalides."
+    ], JSON_UNESCAPED_UNICODE);
 
-    $html = preg_replace(
-        '/<\/nav>/',
-        '</nav>' . $blocUtilisateur,
-        $html,
-        1
-    );
+    exit;
 }
 
-echo $html;
-?>
+
+$email =
+    trim($data["email"] ?? "");
+
+$titre =
+    trim($data["titre"] ?? "");
+
+$message =
+    trim($data["message"] ?? "");
+
+
+/*
+|--------------------------------------------------------------------------
+| Validation
+|--------------------------------------------------------------------------
+*/
+
+if (
+    $email === "" ||
+    $titre === "" ||
+    $message === ""
+) {
+
+    http_response_code(400);
+
+    echo json_encode([
+        "success" => false,
+        "error" => "Tous les champs sont obligatoires."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+    http_response_code(400);
+
+    echo json_encode([
+        "success" => false,
+        "error" => "L'adresse email n'est pas valide."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+
+if (mb_strlen($titre) > 100) {
+
+    http_response_code(400);
+
+    echo json_encode([
+        "success" => false,
+        "error" => "Le titre est trop long."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+
+if (mb_strlen($message) > 2000) {
+
+    http_response_code(400);
+
+    echo json_encode([
+        "success" => false,
+        "error" => "Le message est trop long."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Traitement
+|--------------------------------------------------------------------------
+|
+| Aucun serveur SMTP n'est actuellement configuré dans l'environnement
+| Docker. Les données sont donc validées côté serveur.
+|
+| L'envoi réel pourra être configuré lors du déploiement.
+|
+*/
+
+echo json_encode([
+    "success" => true,
+    "message" => "Votre demande a bien été prise en compte."
+], JSON_UNESCAPED_UNICODE);

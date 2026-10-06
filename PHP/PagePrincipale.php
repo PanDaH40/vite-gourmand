@@ -32,7 +32,7 @@ if (isset($_SESSION["utilisateur_id"])) {
         . htmlspecialchars($_SESSION["prenom"]) .
         '</span>
 
-        <a href="php/Deconnexion.php">
+        <a href="PHP/Deconnexion.php">
             Déconnexion
         </a>
     </div>';

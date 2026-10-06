@@ -1,4 +1,4 @@
-fetch("php/check_session.php")
+fetch("PHP/Check_Session.php")
   .then(function (response) {
     return response.json();
   })
@@ -46,7 +46,7 @@ fetch("php/check_session.php")
         "<span>Bonjour " +
         data.prenom +
         "</span>" +
-        '<a href="php/Deconnexion.php">Déconnexion</a>';
+        '<a href="PHP/Deconnexion.php">Déconnexion</a>';
 
       nav.after(userMenu);
     }

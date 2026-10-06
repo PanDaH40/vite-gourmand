@@ -1,4 +1,4 @@
-fetch("php/check_session.php")
+fetch("PHP/Check_Session.php")
   .then(function (response) {
     return response.json();
   })
