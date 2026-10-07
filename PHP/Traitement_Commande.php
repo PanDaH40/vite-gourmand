@@ -34,8 +34,8 @@ try {
         isset($_POST["pret_materiel"]) ? 1 : 0;
 
 
-    /*
-     * Vérification des données obligatoires
+    /**
+     * Vérification des données obligatoires.
      */
     if (
         $menu_id <= 0 ||
@@ -48,17 +48,18 @@ try {
     }
 
 
-    /*
+    /**
      * Récupération du menu directement depuis MySQL.
      *
-     * Le prix et le minimum ne viennent donc pas
-     * du navigateur.
+     * Le prix, le minimum et le stock ne viennent
+     * donc pas du navigateur.
      */
     $sqlMenu = "
         SELECT
             menu_id,
             prix_par_personne,
-            nombre_personne_minimum
+            nombre_personne_minimum,
+            quantite_restante
         FROM menu
         WHERE menu_id = :menu_id
     ";
@@ -76,7 +77,7 @@ try {
     }
 
 
-    /*
+    /**
      * Vérification du nombre minimum de personnes.
      */
     $minimum =
@@ -92,7 +93,7 @@ try {
     }
 
 
-    /*
+    /**
      * Calcul du prix depuis les données MySQL.
      */
     $prix_par_personne =
@@ -102,7 +103,7 @@ try {
         $prix_par_personne * $nombre_personne;
 
 
-    /*
+    /**
      * Réduction de 10 %
      * à partir de minimum + 5 personnes.
      */
@@ -116,7 +117,7 @@ try {
     }
 
 
-    /*
+    /**
      * Livraison.
      *
      * Bordeaux : gratuite
@@ -129,7 +130,7 @@ try {
     }
 
 
-    /*
+    /**
      * Création d'un numéro de commande.
      */
     $numero_commande =
@@ -139,15 +140,52 @@ try {
         random_int(100, 999);
 
 
-    /*
+    /**
      * Transaction :
-     * soit les trois INSERT fonctionnent,
-     * soit aucun n'est enregistré.
+     *
+     * Le stock et les trois INSERT doivent
+     * tous réussir.
+     *
+     * En cas d'erreur, aucune modification
+     * n'est conservée.
      */
     $pdo->beginTransaction();
 
 
-    /*
+    /**
+     * Vérification et déduction du stock.
+     *
+     * La quantité est retirée uniquement
+     * si le stock est suffisant.
+     */
+    $sqlStock = "
+        UPDATE menu
+        SET quantite_restante =
+            quantite_restante - :quantite
+        WHERE menu_id = :menu_id
+        AND quantite_restante >= :quantite_minimum
+    ";
+
+    $stmtStock = $pdo->prepare($sqlStock);
+
+    $stmtStock->execute([
+        "quantite" => $nombre_personne,
+        "menu_id" => $menu_id,
+        "quantite_minimum" => $nombre_personne
+    ]);
+
+    if ($stmtStock->rowCount() !== 1) {
+
+        $pdo->rollBack();
+
+        die(
+            "Stock insuffisant pour ce menu. " .
+            "Veuillez réduire le nombre de personnes."
+        );
+    }
+
+
+    /**
      * Enregistrement de la commande.
      */
     $sqlCommande = "
@@ -193,7 +231,7 @@ try {
     ]);
 
 
-    /*
+    /**
      * Association commande / utilisateur.
      */
     $sqlUtilisateur = "
@@ -218,7 +256,7 @@ try {
     ]);
 
 
-    /*
+    /**
      * Association commande / menu.
      */
     $sqlMenuCommande = "
@@ -243,8 +281,11 @@ try {
     ]);
 
 
-    /*
+    /**
      * Tout s'est correctement passé.
+     *
+     * La commande est enregistrée
+     * et le stock est mis à jour.
      */
     $pdo->commit();
 
@@ -261,9 +302,10 @@ try {
 
 } catch (Throwable $e) {
 
-    /*
-     * Si une erreur survient pendant les INSERT,
-     * on annule la transaction.
+    /**
+     * Si une erreur survient pendant
+     * la transaction, on annule tout,
+     * y compris la déduction du stock.
      */
     if ($pdo->inTransaction()) {
         $pdo->rollBack();

@@ -3,283 +3,278 @@
 
 <head>
   <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Admin - Tableau de bord | Vite & Gourmand</title>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="robots" content="noindex, nofollow">
 
-  <link
-    rel="stylesheet"
-    href="asset/CSS/Admin.css"
-  >
+  <link rel="stylesheet" href="asset/CSS/Admin.css">
 </head>
 
 <body>
 
-<header class="admin-header">
+  <header class="admin-header">
 
-  <div class="container header-content">
+    <div class="container header-content">
 
-    <h1 class="logo">
-      Vite & Gourmand
-    </h1>
+      <h1 class="logo">
+        Vite & Gourmand
+      </h1>
 
-    <nav aria-label="Navigation administrateur">
+      <nav aria-label="Navigation administrateur">
 
-      <a
-        href="AdminDashboard.html"
-        class="active"
-      >
-        Tableau de bord
-      </a>
+        <a href="AdminDashboard.html" class="active" aria-current="page">
+          Tableau de bord
+        </a>
 
-      <a href="AdminCommandes.html">
-        Commandes
-      </a>
+        <a href="AdminCommandes.html">
+          Commandes
+        </a>
 
-      <a href="AdminMenus.html">
-        Menus
-      </a>
+        <a href="AdminMenus.html">
+          Menus
+        </a>
 
-      <a href="AdminUtilisateurs.html">
-        Utilisateurs
-      </a>
+        <a href="AdminUtilisateurs.html">
+          Utilisateurs
+        </a>
 
-      <a href="AdminMateriel.html">
-        Matériel
-      </a>
+        <a href="AdminMateriel.html">
+          Matériel
+        </a>
 
-      <a href="PagePrincipale.html">
-        Retour au site
-      </a>
+        <a href="AdminAvis.html">
+          Avis
+        </a>
 
-    </nav>
+        <a href="PagePrincipale.html">
+          Retour au site
+        </a>
 
-  </div>
-
-</header>
-
-
-<main class="container">
-
-  <!-- TITRE -->
-
-  <section class="page-title">
-
-    <h2>
-      Tableau de bord administrateur
-    </h2>
-
-    <p>
-      Vue d’ensemble de l’activité de Vite & Gourmand.
-    </p>
-
-  </section>
-
-
-  <!-- STATISTIQUES -->
-
-  <section
-    class="stats-grid"
-    aria-label="Statistiques principales"
-  >
-
-    <article class="stat-card">
-
-      <h3>
-        Commandes en attente
-      </h3>
-
-      <p
-        class="stat-number"
-        id="commandesAttente"
-      >
-        0
-      </p>
-
-    </article>
-
-
-    <article class="stat-card">
-
-      <h3>
-        Commandes acceptées
-      </h3>
-
-      <p
-        class="stat-number"
-        id="commandesAcceptees"
-      >
-        0
-      </p>
-
-    </article>
-
-
-    <article class="stat-card">
-
-      <h3>
-        Menus disponibles
-      </h3>
-
-      <p
-        class="stat-number"
-        id="menusDisponibles"
-      >
-        0
-      </p>
-
-    </article>
-
-
-    <article class="stat-card">
-
-      <h3>
-        Matériel à récupérer
-      </h3>
-
-      <p
-        class="stat-number"
-        id="materielRecuperer"
-      >
-        0
-      </p>
-
-    </article>
-
-  </section>
-
-
-  <!-- ACCÈS RAPIDES -->
-
-  <section class="admin-section">
-
-    <h2>
-      Accès rapides
-    </h2>
-
-    <div class="quick-actions">
-
-      <a
-        href="AdminCommandes.html"
-        class="action-card"
-      >
-
-        <h3>
-          Gérer les commandes
-        </h3>
-
-        <p>
-          Accepter, refuser ou modifier
-          le statut des commandes.
-        </p>
-
-      </a>
-
-
-      <a
-        href="AdminMenus.html"
-        class="action-card"
-      >
-
-        <h3>
-          Gérer les menus
-        </h3>
-
-        <p>
-          Modifier les prix, les stocks
-          et les informations des menus.
-        </p>
-
-      </a>
-
-
-      <a
-        href="AdminMateriel.html"
-        class="action-card"
-      >
-
-        <h3>
-          Suivre le matériel
-        </h3>
-
-        <p>
-          Contrôler les prêts et les
-          retours de matériel.
-        </p>
-
-      </a>
+      </nav>
 
     </div>
 
-  </section>
+  </header>
 
 
-  <!-- DERNIÈRES COMMANDES -->
+  <main class="container">
 
-  <section class="admin-section">
+    <!-- TITRE -->
 
-    <h2>
-      Dernières commandes
-    </h2>
+    <section class="page-title" aria-labelledby="dashboard-title">
 
-    <div class="table-wrapper">
+      <h2 id="dashboard-title">
+        Tableau de bord administrateur
+      </h2>
 
-      <table>
+      <p>
+        Vue d'ensemble de l'activité de Vite & Gourmand.
+      </p>
 
-        <thead>
-
-          <tr>
-            <th>Numéro</th>
-            <th>Client</th>
-            <th>Menu</th>
-            <th>Date prestation</th>
-            <th>Statut</th>
-          </tr>
-
-        </thead>
+    </section>
 
 
-        <tbody id="dernieresCommandes">
+    <!-- STATISTIQUES -->
 
-          <tr>
+    <section class="stats-grid" aria-label="Statistiques principales">
 
-            <td colspan="5">
-              Chargement des commandes...
-            </td>
+      <article class="stat-card">
 
-          </tr>
+        <h3>
+          Commandes en attente
+        </h3>
 
-        </tbody>
+        <p class="stat-number" id="commandesAttente" aria-live="polite">
+          0
+        </p>
 
-      </table>
+      </article>
+
+
+      <article class="stat-card">
+
+        <h3>
+          Commandes acceptées
+        </h3>
+
+        <p class="stat-number" id="commandesAcceptees" aria-live="polite">
+          0
+        </p>
+
+      </article>
+
+
+      <article class="stat-card">
+
+        <h3>
+          Menus disponibles
+        </h3>
+
+        <p class="stat-number" id="menusDisponibles" aria-live="polite">
+          0
+        </p>
+
+      </article>
+
+
+      <article class="stat-card">
+
+        <h3>
+          Matériel à récupérer
+        </h3>
+
+        <p class="stat-number" id="materielRecuperer" aria-live="polite">
+          0
+        </p>
+
+      </article>
+
+    </section>
+
+
+    <!-- ACCÈS RAPIDES -->
+
+    <section class="admin-section">
+
+      <h2>
+        Accès rapides
+      </h2>
+
+      <div class="quick-actions">
+
+        <a href="AdminCommandes.html" class="action-card">
+
+          <h3>
+            Gérer les commandes
+          </h3>
+
+          <p>
+            Accepter, refuser ou modifier
+            le statut des commandes.
+          </p>
+
+        </a>
+
+
+        <a href="AdminMenus.html" class="action-card">
+
+          <h3>
+            Gérer les menus
+          </h3>
+
+          <p>
+            Modifier les prix, les stocks
+            et les informations des menus.
+          </p>
+
+        </a>
+
+
+        <a href="AdminMateriel.html" class="action-card">
+
+          <h3>
+            Suivre le matériel
+          </h3>
+
+          <p>
+            Contrôler les prêts et les
+            retours de matériel.
+          </p>
+
+        </a>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- DERNIÈRES COMMANDES -->
+
+    <section class="admin-section">
+
+      <h2>
+        Dernières commandes
+      </h2>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <caption>
+            Liste des dernières commandes
+          </caption>
+
+          <thead>
+
+            <tr>
+
+              <th scope="col">
+                Numéro
+              </th>
+
+              <th scope="col">
+                Client
+              </th>
+
+              <th scope="col">
+                Menu
+              </th>
+
+              <th scope="col">
+                Date prestation
+              </th>
+
+              <th scope="col">
+                Statut
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="dernieresCommandes" aria-live="polite">
+
+            <tr>
+
+              <td colspan="5">
+                Chargement des commandes...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+
+    <div class="container footer-content">
+
+      <p>
+        Interface administrateur - Vite & Gourmand
+      </p>
 
     </div>
 
-  </section>
-
-</main>
+  </footer>
 
 
-<footer>
-
-  <div class="container footer-content">
-
-    <p>
-      Interface administrateur - Vite & Gourmand
-    </p>
-
-  </div>
-
-</footer>
-
-
-<script src="asset/JS/Admin.js"></script>
-<script src="asset/JS/SessionFront.js"></script>
-<script src="asset/JS/AdminAccess.js"></script>
-<script src="asset/JS/AdminDashboard.js"></script>
+  <script src="asset/JS/Admin.js"></script>
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/AdminAccess.js"></script>
+  <script src="asset/JS/AdminDashboard.js"></script>
 
 </body>
 

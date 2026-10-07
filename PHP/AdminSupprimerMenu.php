@@ -6,8 +6,7 @@ require __DIR__ . "/db.php";
 
 header("Content-Type: application/json; charset=utf-8");
 
-
-/*
+/**
  * Vérification connexion
  */
 if (!isset($_SESSION["utilisateur_id"])) {
@@ -22,8 +21,7 @@ if (!isset($_SESSION["utilisateur_id"])) {
     exit;
 }
 
-
-/*
+/**
  * Vérification administrateur
  */
 $sqlRole = "
@@ -34,6 +32,7 @@ $sqlRole = "
         ON possede_utilisateur_role.role_id = role.role_id
 
     WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
+    AND role.libelle = 'Administrateur'
 
     LIMIT 1
 ";
@@ -45,7 +44,6 @@ $stmtRole->execute([
 ]);
 
 $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
-
 
 if (
     !$role ||
@@ -62,8 +60,7 @@ if (
     exit;
 }
 
-
-/*
+/**
  * POST uniquement
  */
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -78,8 +75,29 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
+/**
+ * Vérification du jeton CSRF
+ */
+$csrfToken = $_SERVER["HTTP_X_CSRF_TOKEN"] ?? "";
 
-/*
+if (
+    !isset($_SESSION["csrf_token"]) ||
+    !is_string($_SESSION["csrf_token"]) ||
+    !is_string($csrfToken) ||
+    !hash_equals($_SESSION["csrf_token"], $csrfToken)
+) {
+
+    http_response_code(403);
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Jeton de sécurité invalide."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+/**
  * Lecture du JSON
  */
 $donnees = json_decode(
@@ -91,7 +109,6 @@ $menuId =
     isset($donnees["menu_id"])
         ? (int) $donnees["menu_id"]
         : 0;
-
 
 if ($menuId <= 0) {
 
@@ -105,10 +122,9 @@ if ($menuId <= 0) {
     exit;
 }
 
-
 try {
 
-    /*
+    /**
      * Vérifie que le menu existe
      */
     $stmtMenu = $pdo->prepare(
@@ -120,7 +136,6 @@ try {
     $stmtMenu->execute([
         "menu_id" => $menuId
     ]);
-
 
     if (!$stmtMenu->fetch()) {
 
@@ -134,8 +149,7 @@ try {
         exit;
     }
 
-
-    /*
+    /**
      * Vérifie si le menu est déjà utilisé
      * dans une commande.
      */
@@ -152,7 +166,6 @@ try {
     $nombreCommandes =
         (int) $stmtCommande->fetchColumn();
 
-
     if ($nombreCommandes > 0) {
 
         http_response_code(409);
@@ -166,13 +179,11 @@ try {
         exit;
     }
 
-
-    /*
+    /**
      * Suppression des éventuelles relations
      * régime et thème.
      */
     $pdo->beginTransaction();
-
 
     $stmtRegime = $pdo->prepare(
         "DELETE FROM adapte_menu_regime
@@ -183,7 +194,6 @@ try {
         "menu_id" => $menuId
     ]);
 
-
     $stmtTheme = $pdo->prepare(
         "DELETE FROM propose_menu_theme
          WHERE menu_id = :menu_id"
@@ -192,7 +202,6 @@ try {
     $stmtTheme->execute([
         "menu_id" => $menuId
     ]);
-
 
     $stmtPlat = $pdo->prepare(
         "DELETE FROM propose_menu_plat
@@ -203,8 +212,7 @@ try {
         "menu_id" => $menuId
     ]);
 
-
-    /*
+    /**
      * Suppression du menu
      */
     $stmtDelete = $pdo->prepare(
@@ -216,15 +224,12 @@ try {
         "menu_id" => $menuId
     ]);
 
-
     $pdo->commit();
-
 
     echo json_encode([
         "success" => true,
         "message" => "Menu supprimé avec succès."
     ], JSON_UNESCAPED_UNICODE);
-
 
 } catch (Throwable $e) {
 

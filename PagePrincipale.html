@@ -1,155 +1,300 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Vite & Gourmand</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="asset/CSS/PagePrincipale.css" />
-  </head>
 
-  <body>
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vite & Gourmand - Traiteur à Bordeaux</title>
+
+    <meta name="description" content="Vite & Gourmand, traiteur à Bordeaux depuis 25 ans, propose des menus faits maison pour vos repas, fêtes et événements.">
+
+    <link rel="stylesheet" href="asset/CSS/PagePrincipale.css">
+</head>
+
+<body>
+
     <header>
-      <div class="container header-content">
-        <h1 class="logo">Vite & Gourmand</h1>
 
-        <nav>
-          <a href="PagePrincipale.html" class="active">Accueil</a>
-          <a href="Profil.html">Profil</a>
-          <a href="Menu.html">Menus</a>
-          <a href="Contact.html">Contact</a>
-          <a href="Connection.html">Connexion</a>
-          <a href="MesCommandes.html">Mes commandes</a>
-        </nav>
-      </div>
+        <div class="container header-content">
+
+            <h1 class="logo">
+                Vite & Gourmand
+            </h1>
+
+            <nav aria-label="Navigation principale">
+
+                <a href="PagePrincipale.html" class="active" aria-current="page">
+                    Accueil
+                </a>
+
+                <a href="Profil.html">
+                    Profil
+                </a>
+
+                <a href="Menu.html">
+                    Menus
+                </a>
+
+                <a href="Contact.html">
+                    Contact
+                </a>
+
+                <a href="Connection.html">
+                    Connexion
+                </a>
+
+                <a href="MesCommandes.html">
+                    Mes commandes
+                </a>
+
+            </nav>
+
+        </div>
+
     </header>
 
+
     <main>
-      <!-- Présentation -->
 
-      <section
-        class="hero hero-image"
-        aria-label="Présentation de Vite & Gourmand"
-      >
-        <div class="hero-overlay">
-          <div class="container hero-content">
-            <h2>Des repas faits maison pour vos événements</h2>
+        <!-- Présentation principale -->
 
-            <p>
-              Vite & Gourmand prépare des menus pour vos repas familiaux, fêtes
-              et événements professionnels, avec des produits frais et une
-              livraison simplifiée.
-            </p>
+        <section class="hero hero-image" aria-labelledby="hero-title">
 
-            <a href="Menu.html" class="btn-primary">Voir les menus</a>
-          </div>
-        </div>
-      </section>
+            <div class="hero-overlay">
 
-      <!-- Présentation entreprise -->
+                <div class="container hero-content">
 
-      <section class="about container">
-        <h2>Notre entreprise</h2>
+                    <h2 id="hero-title">
+                        Des repas faits maison pour vos événements
+                    </h2>
 
-        <p>
-          Vite & Gourmand est une entreprise spécialisée dans la préparation de
-          repas pour événements : anniversaires, repas familiaux, fêtes ou
-          événements professionnels.
-        </p>
+                    <p>
+                        Vite & Gourmand prépare des menus pour vos repas
+                        familiaux, fêtes et événements professionnels,
+                        avec des produits frais et une livraison simplifiée.
+                    </p>
 
-        <p>
-          Nos menus sont préparés avec des produits frais et adaptés à
-          différents régimes alimentaires.
-        </p>
+                    <a href="Menu.html" class="btn-primary">
+                        Voir les menus
+                    </a>
 
-        <p>
-          Nous assurons également la livraison dans la région afin de vous
-          permettre de profiter pleinement de votre événement.
-        </p>
-      </section>
+                </div>
 
-      <!--  Professionnalisme, avis clients -->
-      <section class="pro container">
-        <h2>Notre professionnalisme</h2>
-
-        <div class="pro-grid">
-          <div class="pro-item">
-            <h3>25 ans d’expérience</h3>
-            <p>
-              Entreprise familiale basée à Bordeaux, au service de vos
-              événements.
-            </p>
-          </div>
-
-          <div class="pro-item">
-            <h3>Produits frais</h3>
-            <p>Des menus préparés maison avec des produits de saison.</p>
-          </div>
-
-          <div class="pro-item">
-            <h3>Organisation</h3>
-            <p>
-              Respect des délais, préparation soignée et livraison planifiée.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="reviews">
-        <div class="container">
-          <h2>Avis clients</h2>
-
-          <div class="reviews-grid" id="reviewsGrid">
-            <p>Chargement des avis...</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Fonctionnement -->
-
-      <section class="steps">
-        <div class="container">
-          <h2>Comment ça fonctionne ?</h2>
-
-          <div class="steps-grid">
-            <div class="step">
-              <h3>1</h3>
-              <p>Choisissez votre menu</p>
             </div>
 
-            <div class="step">
-              <h3>2</h3>
-              <p>Indiquez le nombre de personnes</p>
+        </section>
+
+
+        <!-- Présentation de l'entreprise -->
+
+        <section class="about container" aria-labelledby="about-title">
+
+            <h2 id="about-title">
+                Notre entreprise
+            </h2>
+
+            <p>
+                Vite & Gourmand est une entreprise spécialisée dans la
+                préparation de repas pour événements : anniversaires,
+                repas familiaux, fêtes ou événements professionnels.
+            </p>
+
+            <p>
+                Nos menus sont préparés avec des produits frais et adaptés
+                à différents régimes alimentaires.
+            </p>
+
+            <p>
+                Nous assurons également la livraison dans la région afin
+                de vous permettre de profiter pleinement de votre événement.
+            </p>
+
+        </section>
+
+
+        <!-- Professionnalisme -->
+
+        <section class="pro container" aria-labelledby="pro-title">
+
+            <h2 id="pro-title">
+                Notre professionnalisme
+            </h2>
+
+            <div class="pro-grid">
+
+                <article class="pro-item">
+
+                    <h3>
+                        25 ans d'expérience
+                    </h3>
+
+                    <p>
+                        Entreprise familiale basée à Bordeaux,
+                        au service de vos événements.
+                    </p>
+
+                </article>
+
+
+                <article class="pro-item">
+
+                    <h3>
+                        Produits frais
+                    </h3>
+
+                    <p>
+                        Des menus préparés maison avec des produits de saison.
+                    </p>
+
+                </article>
+
+
+                <article class="pro-item">
+
+                    <h3>
+                        Organisation
+                    </h3>
+
+                    <p>
+                        Respect des délais, préparation soignée
+                        et livraison planifiée.
+                    </p>
+
+                </article>
+
             </div>
 
-            <div class="step">
-              <h3>3</h3>
-              <p>Nous préparons et livrons votre repas</p>
+        </section>
+
+
+        <!-- Avis clients -->
+
+        <section class="reviews" aria-labelledby="reviews-title">
+
+            <div class="container">
+
+                <h2 id="reviews-title">
+                    Avis clients
+                </h2>
+
+                <div class="reviews-grid" id="reviewsGrid" aria-live="polite">
+                    <p>
+                        Chargement des avis...
+                    </p>
+                </div>
+
             </div>
-          </div>
-        </div>
-      </section>
+
+        </section>
+
+
+        <!-- Fonctionnement -->
+
+        <section class="steps" aria-labelledby="steps-title">
+
+            <div class="container">
+
+                <h2 id="steps-title">
+                    Comment ça fonctionne ?
+                </h2>
+
+                <div class="steps-grid">
+
+                    <article class="step">
+
+                        <h3>
+                            1. Choisissez votre menu
+                        </h3>
+
+                        <p>
+                            Consultez les menus proposés par Vite & Gourmand.
+                        </p>
+
+                    </article>
+
+
+                    <article class="step">
+
+                        <h3>
+                            2. Indiquez le nombre de personnes
+                        </h3>
+
+                        <p>
+                            Sélectionnez le nombre de personnes prévu
+                            pour votre événement.
+                        </p>
+
+                    </article>
+
+
+                    <article class="step">
+
+                        <h3>
+                            3. Nous préparons votre repas
+                        </h3>
+
+                        <p>
+                            Notre équipe prépare votre commande
+                            et organise sa livraison.
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
     </main>
 
+
     <footer>
-      <div class="container footer-content">
-        <div>
-          <strong>Horaires</strong>
 
-          <div id="horairesFooter">
-            <p>Chargement des horaires...</p>
-          </div>
+        <div class="container footer-content">
+
+            <div>
+
+                <strong>
+                    Horaires
+                </strong>
+
+                <div id="horairesFooter" aria-live="polite">
+                    <p>
+                        Chargement des horaires...
+                    </p>
+                </div>
+
+            </div>
+
+
+            <nav aria-label="Informations légales">
+
+                <a href="MentionLegale.html">
+                    Mentions légales
+                </a>
+
+                <span aria-hidden="true">
+                    |
+                </span>
+
+                <a href="CGV.html">
+                    CGV
+                </a>
+
+            </nav>
+
         </div>
 
-        <div>
-          <a href="MentionLegale.html">Mentions légales</a> |
-          <a href="CGV.html">CGV</a>
-        </div>
-      </div>
     </footer>
+
 
     <script src="asset/JS/SessionFront.js"></script>
     <script src="asset/JS/AvisPublic.js"></script>
     <script src="asset/JS/Horaires.js"></script>
-    
-  </body>
+
+</body>
+
 </html>

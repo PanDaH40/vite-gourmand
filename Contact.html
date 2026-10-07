@@ -1,124 +1,165 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
 
-    <title>Contact - Vite & Gourmand</title>
+<head>
+  <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="asset/CSS/Contact.css" />
-  </head>
+  <title>Contact - Vite & Gourmand</title>
 
-  <body>
-    <header>
-      <div class="container header-content">
-        <h1 class="logo">Vite & Gourmand</h1>
+  <meta name="description" content="Contactez Vite & Gourmand pour toute question ou demande concernant nos menus et prestations.">
 
-        <nav aria-label="Navigation principale">
-          <a href="PagePrincipale.html"> Accueil </a>
+  <link rel="stylesheet" href="asset/CSS/Contact.css">
+</head>
 
-          <a href="Menu.html"> Menus </a>
+<body>
 
-          <a href="Contact.html" class="active"> Contact </a>
+  <header>
 
-          <a href="Connection.html"> Connexion </a>
-        </nav>
-      </div>
-    </header>
+    <div class="container header-content">
 
-    <main class="container">
-      <h2>Nous contacter</h2>
+      <h1 class="logo">
+        Vite & Gourmand
+      </h1>
 
-      <section class="contact-card">
-        <p class="muted">
-          Une question ? Une demande particulière ? Envoyez-nous un message et
-          nous vous répondrons par email.
+      <nav aria-label="Navigation principale">
+
+        <a href="PagePrincipale.html">
+          Accueil
+        </a>
+
+        <a href="Menu.html">
+          Menus
+        </a>
+
+        <a href="Contact.html" class="active" aria-current="page">
+          Contact
+        </a>
+
+        <a href="Connection.html">
+          Connexion
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <main class="container">
+
+    <h2>
+      Nous contacter
+    </h2>
+
+    <div class="contact-card">
+
+      <p class="muted" id="contact-description">
+        Une question ? Une demande particulière ? Envoyez-nous un
+        message et nous vous répondrons par email.
+      </p>
+
+
+      <form class="contact-form" id="contactForm">
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+          <label for="email">
+            Votre email *
+          </label>
+
+          <input id="email" type="email" name="email" placeholder="exemple@mail.com" maxlength="100" required>
+
+        </div>
+
+
+        <!-- TITRE -->
+
+        <div class="form-group">
+
+          <label for="titre">
+            Titre *
+          </label>
+
+          <input id="titre" type="text" name="titre" placeholder="Objet de votre demande" maxlength="100" required>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div class="form-group">
+
+          <label for="message">
+            Description *
+          </label>
+
+          <textarea id="message" name="message" rows="6" maxlength="2000" placeholder="Expliquez votre demande..." required></textarea>
+
+        </div>
+
+
+        <button type="submit" class="btn-primary">
+          Envoyer
+        </button>
+
+
+        <p id="contactMessage" class="muted small" role="status" aria-live="polite">
+          * Champs obligatoires.
         </p>
 
-        <form class="contact-form" id="contactForm">
-          <!-- EMAIL -->
+      </form>
 
-          <div class="form-group">
-            <label for="email"> Votre email * </label>
+    </div>
 
-            <input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="exemple@mail.com"
-              maxlength="100"
-              required
-            />
-          </div>
+  </main>
 
-          <!-- TITRE -->
 
-          <div class="form-group">
-            <label for="titre"> Titre * </label>
+  <footer>
 
-            <input
-              id="titre"
-              type="text"
-              name="titre"
-              placeholder="Objet de votre demande"
-              maxlength="100"
-              required
-            />
-          </div>
+    <div class="container footer-content">
 
-          <!-- MESSAGE -->
+      <div>
 
-          <div class="form-group">
-            <label for="message"> Description * </label>
+        <strong>
+          Horaires
+        </strong>
 
-            <textarea
-              id="message"
-              name="message"
-              rows="6"
-              maxlength="2000"
-              placeholder="Expliquez votre demande..."
-              required
-            ></textarea>
-          </div>
+        <p>
+          Lundi - Dimanche : 08h00 - 20h00
+        </p>
 
-          <!-- BOUTON -->
-
-          <button type="submit" class="btn-primary">Envoyer</button>
-
-          <!-- RETOUR UTILISATEUR -->
-
-          <p
-            id="contactMessage"
-            class="muted small"
-            role="status"
-            aria-live="polite"
-          >
-            * Champs obligatoires.
-          </p>
-        </form>
-      </section>
-    </main>
-
-    <footer>
-      <div class="container footer-content">
-        <div>
-          <strong> Horaires </strong>
-
-          <p>Lundi - Dimanche : 08h00 - 20h00</p>
-        </div>
-
-        <div>
-          <a href="MentionLegale.html"> Mentions légales </a>
-
-          |
-
-          <a href="CGV.html"> CGV </a>
-        </div>
       </div>
-    </footer>
 
-    <script src="asset/JS/SessionFront.js"></script>
-    <script src="asset/JS/Contact.js"></script>
-  </body>
+
+      <nav aria-label="Informations légales">
+
+        <a href="MentionLegale.html">
+          Mentions légales
+        </a>
+
+        <span aria-hidden="true">
+          |
+        </span>
+
+        <a href="CGV.html">
+          CGV
+        </a>
+
+      </nav>
+
+    </div>
+
+  </footer>
+
+
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/Contact.js"></script>
+
+</body>
+
 </html>

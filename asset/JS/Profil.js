@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const profilForm = document.getElementById("profilForm");
@@ -33,15 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data = await response.json();
 
-
             if (!response.ok || !data.success) {
-
                 throw new Error(
                     data.error ||
                     "Impossible de charger le profil."
                 );
             }
-
 
             const utilisateur = data.utilisateur;
 
@@ -52,11 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
             ville.value = utilisateur.ville || "";
             pays.value = utilisateur.pays || "";
 
-
         } catch (error) {
 
             console.error(error);
-
             messageProfil.textContent = error.message;
         }
     }
@@ -72,25 +68,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         event.preventDefault();
 
-        messageProfil.textContent =
-            "Enregistrement en cours...";
-
+        messageProfil.textContent = "Enregistrement en cours...";
 
         const donnees = {
-
             prenom: prenom.value.trim(),
-
             email: email.value.trim(),
-
             telephone: telephone.value.trim(),
-
             adresse_postale: adressePostale.value.trim(),
-
             ville: ville.value.trim(),
-
             pays: pays.value.trim()
         };
-
 
         try {
 
@@ -98,41 +85,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 "PHP/ModifierProfil.php",
                 {
                     method: "POST",
-
                     credentials: "same-origin",
-
                     headers: {
                         "Content-Type": "application/json"
                     },
-
                     body: JSON.stringify(donnees)
                 }
             );
 
-
             const data = await response.json();
 
-
             if (!response.ok || !data.success) {
-
                 throw new Error(
                     data.error ||
                     "Impossible de modifier le profil."
                 );
             }
 
-
             messageProfil.textContent =
                 "Profil modifié avec succès.";
 
-
             await chargerProfil();
-
 
         } catch (error) {
 
             console.error(error);
-
             messageProfil.textContent = error.message;
         }
     });
@@ -140,98 +117,124 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /*
     |--------------------------------------------------------------------------
-    | Mot de passe
+    | Modification du mot de passe
     |--------------------------------------------------------------------------
     */
 
     passwordForm.addEventListener("submit", async event => {
 
-    event.preventDefault();
+        event.preventDefault();
 
-    const currentPassword =
-        document.getElementById("current-password").value;
+        const currentPassword =
+            document.getElementById("current-password").value;
 
-    const newPassword =
-        document.getElementById("new-password").value;
+        const newPassword =
+            document.getElementById("new-password").value;
 
-    const confirmPassword =
-        document.getElementById("confirm-password").value;
+        const confirmPassword =
+            document.getElementById("confirm-password").value;
 
-
-    if (newPassword !== confirmPassword) {
-
-        messagePassword.textContent =
-            "Les deux nouveaux mots de passe ne correspondent pas.";
-
-        return;
-    }
-
-
-    if (newPassword.length < 8) {
-
-        messagePassword.textContent =
-            "Le nouveau mot de passe doit contenir au moins 8 caractères.";
-
-        return;
-    }
-
-
-    messagePassword.textContent =
-        "Modification en cours...";
-
-
-    try {
-
-        const response = await fetch(
-            "PHP/ModifierPassword.php",
-            {
-                method: "POST",
-
-                credentials: "same-origin",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    current_password: currentPassword,
-
-                    new_password: newPassword,
-
-                    confirm_password: confirmPassword
-                })
-            }
-        );
-
-
-        const data = await response.json();
-
-
-        if (!response.ok || !data.success) {
-
-            throw new Error(
-                data.error ||
-                "Impossible de modifier le mot de passe."
-            );
+        // Vérifier les champs
+        if (
+            currentPassword === "" ||
+            newPassword === "" ||
+            confirmPassword === ""
+        ) {
+            messagePassword.textContent =
+                "Tous les champs sont obligatoires.";
+            return;
         }
 
+        // Vérifier la confirmation
+        if (newPassword !== confirmPassword) {
+            messagePassword.textContent =
+                "Les deux nouveaux mots de passe ne correspondent pas.";
+            return;
+        }
+
+        // Même règle que l'inscription
+        const motDePasseValide =
+            newPassword.length >= 10 &&
+            /[A-Z]/.test(newPassword) &&
+            /[a-z]/.test(newPassword) &&
+            /[0-9]/.test(newPassword) &&
+            /[^A-Za-z0-9]/.test(newPassword);
+
+        if (!motDePasseValide) {
+            messagePassword.textContent =
+                "Le mot de passe doit contenir au moins 10 caractères, " +
+                "une majuscule, une minuscule, un chiffre " +
+                "et un caractère spécial.";
+            return;
+        }
 
         messagePassword.textContent =
-            "Mot de passe modifié avec succès.";
+            "Modification en cours...";
 
+        try {
 
-        passwordForm.reset();
+            // Récupérer le jeton CSRF
+            const sessionResponse = await fetch(
+                "PHP/Check_Session.php",
+                {
+                    credentials: "same-origin",
+                    cache: "no-store"
+                }
+            );
 
+            if (!sessionResponse.ok) {
+                throw new Error(
+                    "Impossible de vérifier la session."
+                );
+            }
 
-    } catch (error) {
+            const session = await sessionResponse.json();
 
-        console.error(error);
+            if (!session.connecte || !session.csrf_token) {
+                throw new Error(
+                    "Session expirée ou jeton de sécurité indisponible."
+                );
+            }
 
-        messagePassword.textContent = error.message;
-    }
+            // Envoyer les données au serveur
+            const response = await fetch(
+                "PHP/ModifierPassword.php",
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword,
+                        confirm_password: confirmPassword,
+                        csrf_token: session.csrf_token
+                    })
+                }
+            );
 
-});
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.error ||
+                    "Impossible de modifier le mot de passe."
+                );
+            }
+
+            messagePassword.textContent =
+                "Mot de passe modifié avec succès.";
+
+            passwordForm.reset();
+
+        } catch (error) {
+
+            console.error(error);
+            messagePassword.textContent = error.message;
+        }
+
+    });
 
 
     /*

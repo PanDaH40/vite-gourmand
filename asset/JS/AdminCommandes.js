@@ -1,4 +1,5 @@
 const commandesTableBody = document.getElementById("commandesTableBody");
+
 const filterForm = document.getElementById("filterForm");
 const filtreStatut = document.getElementById("statut");
 const filtreDate = document.getElementById("date");
@@ -7,7 +8,7 @@ const filtreRecherche = document.getElementById("recherche");
 let toutesLesCommandes = [];
 
 
-/*
+/**
  * Formate une date SQL :
  * 2026-10-23 -> 23/10/2026
  */
@@ -27,7 +28,7 @@ function formaterDate(dateSQL) {
 }
 
 
-/*
+/**
  * Retourne la classe CSS correspondant au statut.
  */
 function getBadgeClass(statut) {
@@ -65,7 +66,7 @@ function getBadgeClass(statut) {
 }
 
 
-/*
+/**
  * Affiche les commandes dans le tableau.
  */
 function afficherCommandes(commandes) {
@@ -85,7 +86,6 @@ function afficherCommandes(commandes) {
         return;
     }
 
-
     commandes.forEach(function (commande) {
 
         const ligne = document.createElement("tr");
@@ -100,13 +100,11 @@ function afficherCommandes(commandes) {
                 : "Non";
 
         const statut = commande.statut.toLowerCase();
-
         const badgeClass = getBadgeClass(commande.statut);
 
         let boutons = "";
 
-
-        /*
+        /**
          * Commande en attente
          */
         if (statut === "en attente") {
@@ -128,9 +126,9 @@ function afficherCommandes(commandes) {
             `;
         }
 
-
-        /*
+        /**
          * Commande acceptée
+         * AJOUT : bouton Refuser.
          */
         else if (
             statut === "acceptée" ||
@@ -144,11 +142,17 @@ function afficherCommandes(commandes) {
                     data-numero="${commande.numero_commande}">
                     Terminer
                 </button>
+
+                <button
+                    type="button"
+                    class="btn-small btn-danger btn-refuser"
+                    data-numero="${commande.numero_commande}">
+                    Refuser
+                </button>
             `;
         }
 
-
-        /*
+        /**
          * Commande refusée ou terminée
          */
         else {
@@ -159,7 +163,6 @@ function afficherCommandes(commandes) {
                 </span>
             `;
         }
-
 
         ligne.innerHTML = `
             <td>
@@ -212,7 +215,7 @@ function afficherCommandes(commandes) {
 }
 
 
-/*
+/**
  * Charge les commandes depuis MySQL
  * grâce à AdminCommandes.php.
  */
@@ -255,7 +258,6 @@ function chargerCommandes() {
             }
 
             toutesLesCommandes = commandes;
-
             afficherCommandes(toutesLesCommandes);
         })
 
@@ -280,94 +282,108 @@ function chargerCommandes() {
 }
 
 
-/*
+/**
  * Modifie le statut d'une commande.
+ * Protection CSRF ajoutée.
  */
-function modifierStatut(numeroCommande, nouveauStatut) {
+async function modifierStatut(numeroCommande, nouveauStatut) {
 
-    fetch("PHP/UpdateCommandeStatut.php", {
+    try {
 
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            numero_commande: numeroCommande,
-            statut: nouveauStatut
-        })
-    })
-
-        .then(function (response) {
-
-            /*
-             * On récupère d'abord le contenu en texte.
-             *
-             * Cela nous permettra de voir clairement
-             * une éventuelle erreur PHP au lieu d'avoir
-             * simplement "Unexpected token <".
-             */
-            return response.text().then(function (texte) {
-
-                let data;
-
-                try {
-
-                    data = JSON.parse(texte);
-
-                } catch (erreur) {
-
-                    console.error(
-                        "Réponse reçue du serveur :",
-                        texte
-                    );
-
-                    throw new Error(
-                        "Le serveur n'a pas renvoyé du JSON valide."
-                    );
-                }
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        data.message ||
-                        "Erreur serveur."
-                    );
-                }
-
-                return data;
-            });
-        })
-
-        .then(function (data) {
-
-            if (!data.success) {
-
-                alert(
-                    data.message ||
-                    "Impossible de modifier la commande."
-                );
-
-                return;
-            }
-
-            /*
-             * Recharge les données depuis MySQL.
-             */
-            chargerCommandes();
-        })
-
-        .catch(function (error) {
-
-            console.error(error);
-
-            alert(error.message);
+        /**
+         * Récupération du jeton CSRF
+         * depuis la session administrateur.
+         */
+        const sessionResponse = await fetch("PHP/Check_Session.php", {
+            credentials: "same-origin",
+            cache: "no-store"
         });
+
+        const sessionData = await sessionResponse.json();
+
+        if (
+            !sessionResponse.ok ||
+            !sessionData.connecte ||
+            !sessionData.admin ||
+            !sessionData.csrf_token
+        ) {
+
+            throw new Error("Session administrateur invalide.");
+        }
+
+        /**
+         * Envoi de la modification du statut.
+         */
+        const response = await fetch("PHP/UpdateCommandeStatut.php", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-Token": sessionData.csrf_token
+            },
+            body: JSON.stringify({
+                numero_commande: numeroCommande,
+                statut: nouveauStatut
+            })
+        });
+
+        /**
+         * On récupère d'abord le contenu en texte.
+         * Cela permet d'identifier une éventuelle
+         * erreur PHP au lieu de voir uniquement
+         * "Unexpected token <".
+         */
+        const texte = await response.text();
+
+        let data;
+
+        try {
+
+            data = JSON.parse(texte);
+
+        } catch (erreur) {
+
+            console.error(
+                "Réponse reçue du serveur :",
+                texte
+            );
+
+            throw new Error(
+                "Le serveur n'a pas renvoyé du JSON valide."
+            );
+        }
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message || "Erreur serveur."
+            );
+        }
+
+        if (!data.success) {
+
+            alert(
+                data.message ||
+                "Impossible de modifier la commande."
+            );
+
+            return;
+        }
+
+        /**
+         * Recharge les données depuis MySQL.
+         */
+        chargerCommandes();
+
+    } catch (error) {
+
+        console.error(error);
+        alert(error.message);
+    }
 }
 
 
-/*
+/**
  * Gestion des boutons dynamiques.
  */
 commandesTableBody.addEventListener(
@@ -380,20 +396,16 @@ commandesTableBody.addEventListener(
             return;
         }
 
-        const numeroCommande =
-            bouton.dataset.numero;
+        const numeroCommande = bouton.dataset.numero;
 
         if (!numeroCommande) {
             return;
         }
 
-
-        /*
+        /**
          * ACCEPTER
          */
-        if (
-            bouton.classList.contains("btn-accepter")
-        ) {
+        if (bouton.classList.contains("btn-accepter")) {
 
             const confirmation = confirm(
                 "Accepter la commande " +
@@ -412,13 +424,10 @@ commandesTableBody.addEventListener(
             return;
         }
 
-
-        /*
+        /**
          * REFUSER
          */
-        if (
-            bouton.classList.contains("btn-refuser")
-        ) {
+        if (bouton.classList.contains("btn-refuser")) {
 
             const confirmation = confirm(
                 "Refuser la commande " +
@@ -437,13 +446,10 @@ commandesTableBody.addEventListener(
             return;
         }
 
-
-        /*
+        /**
          * TERMINER
          */
-        if (
-            bouton.classList.contains("btn-terminer")
-        ) {
+        if (bouton.classList.contains("btn-terminer")) {
 
             const confirmation = confirm(
                 "Marquer la commande " +
@@ -463,7 +469,7 @@ commandesTableBody.addEventListener(
 );
 
 
-/*
+/**
  * Gestion des filtres.
  */
 filterForm.addEventListener(
@@ -472,79 +478,65 @@ filterForm.addEventListener(
 
         event.preventDefault();
 
-        const statut =
-            filtreStatut.value.toLowerCase();
+        const statut = filtreStatut.value.toLowerCase();
+        const date = filtreDate.value;
 
-        const date =
-            filtreDate.value;
+        const recherche = filtreRecherche.value
+            .trim()
+            .toLowerCase();
 
-        const recherche =
-            filtreRecherche.value
-                .trim()
-                .toLowerCase();
+        const commandesFiltrees = toutesLesCommandes.filter(
+            function (commande) {
 
+                let afficher = true;
 
-        const commandesFiltrees =
-            toutesLesCommandes.filter(
-                function (commande) {
+                if (
+                    statut !== "" &&
+                    commande.statut.toLowerCase() !== statut
+                ) {
 
-                    let afficher = true;
-
-                    if (
-                        statut !== "" &&
-                        commande.statut.toLowerCase() !== statut
-                    ) {
-
-                        afficher = false;
-                    }
-
-
-                    if (
-                        date !== "" &&
-                        commande.date_prestation !== date
-                    ) {
-
-                        afficher = false;
-                    }
-
-
-                    if (recherche !== "") {
-
-                        const numero =
-                            commande.numero_commande
-                                .toLowerCase();
-
-                        const prenom =
-                            commande.prenom
-                                .toLowerCase();
-
-                        const email =
-                            commande.email
-                                .toLowerCase();
-
-
-                        if (
-                            !numero.includes(recherche) &&
-                            !prenom.includes(recherche) &&
-                            !email.includes(recherche)
-                        ) {
-
-                            afficher = false;
-                        }
-                    }
-
-
-                    return afficher;
+                    afficher = false;
                 }
-            );
 
+                if (
+                    date !== "" &&
+                    commande.date_prestation !== date
+                ) {
+
+                    afficher = false;
+                }
+
+                if (recherche !== "") {
+
+                    const numero = commande.numero_commande
+                        .toLowerCase();
+
+                    const prenom = commande.prenom
+                        .toLowerCase();
+
+                    const email = commande.email
+                        .toLowerCase();
+
+                    if (
+                        !numero.includes(recherche) &&
+                        !prenom.includes(recherche) &&
+                        !email.includes(recherche)
+                    ) {
+
+                        afficher = false;
+                    }
+                }
+
+                return afficher;
+            }
+        );
 
         afficherCommandes(commandesFiltrees);
     }
 );
 
 
-/*
+/**
  * Chargement de la page.
  */
 chargerCommandes();

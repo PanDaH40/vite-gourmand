@@ -40,7 +40,7 @@ $sqlRoleAdmin = "
         ON possede_utilisateur_role.role_id = role.role_id
 
     WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
-
+    AND role.libelle = 'Administrateur'
     LIMIT 1
 ";
 

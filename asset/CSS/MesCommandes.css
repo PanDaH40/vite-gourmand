@@ -1,58 +1,117 @@
+/* =========================
+   BASE
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
 body {
   font-family: Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
   margin: 0;
   background: #f7f2ea;
-  color: #333;
+  color: #333333;
 }
 
 .container {
+  width: 100%;
   max-width: 1000px;
   margin: auto;
   padding: 20px;
 }
 
-/* HEADER */
+
+/* =========================
+   ACCESSIBILITÉ CLAVIER
+========================= */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #7a5c3a;
+  outline-offset: 3px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
 
 header {
-  background: white;
-  border-bottom: 1px solid #e3d9cc;
+  background: #ffffff;
+  border-bottom: 1px solid #d8cfc4;
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
 }
 
 .logo {
-  color: #7a5c3a;
+  color: #6b4d2e;
   margin: 0;
+  font-size: 2rem;
+}
+
+nav {
+  display: flex;
+  align-items: center;
 }
 
 nav a {
   margin-left: 20px;
+  padding: 5px 2px;
   text-decoration: none;
-  color: #333;
+  color: #333333;
   font-weight: 600;
 }
 
-nav a.active,
-nav a:hover {
-  color: #7a5c3a;
+nav a.active {
+  color: #6b4d2e;
+  text-decoration: underline;
 }
 
-/* TITRE */
+nav a:hover,
+nav a:focus-visible {
+  color: #6b4d2e;
+  text-decoration: underline;
+}
+
+
+/* =========================
+   TITRE
+========================= */
 
 .page-title {
   margin-top: 20px;
 }
 
-.page-title p,
-.muted {
-  color: #6b6b6b;
+.page-title h2 {
+  margin-bottom: 8px;
+  color: #333333;
+  font-size: 2rem;
+  line-height: 1.2;
 }
 
-/* COMMANDES */
+.page-title p,
+.muted {
+  color: #595959;
+}
+
+
+/* =========================
+   COMMANDES
+========================= */
 
 .orders-list {
   display: flex;
@@ -62,8 +121,9 @@ nav a:hover {
 }
 
 .order-card {
-  background: white;
-  border: 1px solid #e3d9cc;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #d8cfc4;
   border-radius: 10px;
   padding: 20px;
 }
@@ -78,13 +138,18 @@ nav a:hover {
 .order-header h3 {
   margin-top: 0;
   margin-bottom: 5px;
+  line-height: 1.3;
 }
 
 .order-details {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 5px 20px;
+  gap: 8px 20px;
   margin-top: 15px;
+}
+
+.order-details p {
+  margin: 5px 0;
 }
 
 .order-actions {
@@ -94,93 +159,239 @@ nav a:hover {
   flex-wrap: wrap;
 }
 
-/* BADGES */
+
+/* =========================
+   BADGES / STATUTS
+========================= */
 
 .badge {
-  padding: 6px 10px;
+  display: inline-block;
+  padding: 7px 10px;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 1rem;
+  line-height: 1.3;
   font-weight: 600;
   white-space: nowrap;
 }
 
+/* En attente */
 .pending {
   background: #fff4e5;
-  color: #8a5a00;
+  color: #704900;
+  border: 1px solid #8a5a00;
 }
 
+/* Acceptée */
 .accepted {
   background: #e8f5e9;
-  color: #2e7d32;
+  color: #205c24;
+  border: 1px solid #2e7d32;
 }
 
+/* Terminée */
 .done {
   background: #eeeeee;
-  color: #555;
+  color: #444444;
+  border: 1px solid #666666;
 }
 
-/* BOUTONS */
+
+/* =========================
+   BOUTONS
+========================= */
 
 .btn-secondary,
 .btn-danger {
-  border: none;
-  padding: 9px 12px;
+  min-height: 44px;
+  border: 2px solid transparent;
+  padding: 10px 14px;
   border-radius: 7px;
   cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
   font-weight: 600;
 }
 
 .btn-secondary {
-  background: #7a5c3a;
-  color: white;
-}
-
-.btn-danger {
-  background: #9b3b30;
-  color: white;
+  background: #6b4d2e;
+  border-color: #6b4d2e;
+  color: #ffffff;
 }
 
 .btn-secondary:hover,
-.btn-danger:hover {
-  filter: brightness(0.95);
+.btn-secondary:focus-visible {
+  background: #4f381f;
+  border-color: #4f381f;
 }
 
-/* FOOTER */
+.btn-danger {
+  background: #8b3028;
+  border-color: #8b3028;
+  color: #ffffff;
+}
+
+.btn-danger:hover,
+.btn-danger:focus-visible {
+  background: #68231e;
+  border-color: #68231e;
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
+
+.message-erreur {
+  color: #a0001b;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.message-succes {
+  color: #236b27;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
 
 footer {
-  background: white;
-  border-top: 1px solid #e3d9cc;
+  background: #ffffff;
+  border-top: 1px solid #d8cfc4;
   margin-top: 40px;
 }
 
 .footer-content {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   flex-wrap: wrap;
+  gap: 20px;
 }
 
 footer a {
-  color: #7a5c3a;
-  text-decoration: none;
-}
-
-footer a:hover {
+  color: #6b4d2e;
+  font-weight: 600;
   text-decoration: underline;
 }
 
-/* RESPONSIVE */
+footer a:hover,
+footer a:focus-visible {
+  color: #4f381f;
+}
 
-@media (max-width: 900px) {
-  .header-content,
-  .order-header {
+
+/* =========================
+   TABLETTE / MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .header-content {
     flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .logo {
+    margin: 0;
+  }
+
+  nav {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
   }
 
   nav a {
-    margin: 0 10px;
+    margin: 0;
+    padding: 8px 10px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .order-details {
     grid-template-columns: 1fr;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+  .container {
+    padding: 15px;
+  }
+
+  .header-content {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  nav {
+    gap: 4px;
+  }
+
+  nav a {
+    margin: 0;
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  .page-title h2 {
+    font-size: 1.7rem;
+  }
+
+  .orders-list {
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .order-card {
+    padding: 15px;
+  }
+
+  .order-actions {
+    flex-direction: column;
+  }
+
+  .order-actions .btn-secondary,
+  .order-actions .btn-danger,
+  .order-actions a {
+    width: 100%;
+  }
+
+  .btn-secondary,
+  .btn-danger {
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer-content {
+    gap: 12px;
   }
 }

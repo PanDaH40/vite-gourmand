@@ -1,3 +1,4 @@
+
 const commandesContainer = document.querySelector(".orders-list");
 
 
@@ -100,7 +101,6 @@ fetch("PHP/Mes_Commandes.php")
                 badgeClass = "accepted";
             }
 
-
             if (estTerminee) {
                 badgeClass = "done";
             }
@@ -146,6 +146,32 @@ fetch("PHP/Mes_Commandes.php")
                 "Voir le détail" +
 
                 "</a>";
+
+
+            /**
+             * Une commande en attente
+             * peut être annulée par le client.
+             */
+            if (statut === "en attente") {
+
+                actions +=
+
+                    ' <button type="button" ' +
+
+                    'class="btn-secondary btn-annuler" ' +
+
+                    'data-commande="' +
+
+                    encodeURIComponent(
+                        commande.numero_commande
+                    ) +
+
+                    '">' +
+
+                    "Annuler la commande" +
+
+                    "</button>";
+            }
 
 
             /**
@@ -278,18 +304,135 @@ commandesContainer.addEventListener(
         const bouton =
             event.target.closest(".btn-avis");
 
-
         if (!bouton) {
             return;
         }
 
-
         const numeroCommande =
             bouton.dataset.commande;
-
 
         window.location.href =
             "Avis.html?commande=" +
             numeroCommande;
+    }
+);
+
+
+/**
+ * Clic sur "Annuler la commande".
+ */
+commandesContainer.addEventListener(
+    "click",
+    async function (event) {
+
+        const bouton =
+            event.target.closest(".btn-annuler");
+
+        if (!bouton || bouton.disabled) {
+            return;
+        }
+
+        const numeroCommande =
+            decodeURIComponent(
+                bouton.dataset.commande
+            );
+
+        const confirmation = confirm(
+            "Voulez-vous vraiment annuler la commande " +
+            numeroCommande +
+            " ?"
+        );
+
+        if (!confirmation) {
+            return;
+        }
+
+        // Empêche plusieurs clics pendant la requête.
+        bouton.disabled = true;
+
+        try {
+
+            /**
+             * Récupération du jeton CSRF.
+             */
+            const sessionResponse = await fetch(
+                "PHP/Check_Session.php",
+                {
+                    credentials: "same-origin",
+                    cache: "no-store"
+                }
+            );
+
+            if (!sessionResponse.ok) {
+                throw new Error(
+                    "Impossible de vérifier la session."
+                );
+            }
+
+            const session = await sessionResponse.json();
+
+            if (
+                !session.connecte ||
+                !session.csrf_token
+            ) {
+                throw new Error(
+                    "Session expirée ou jeton de sécurité absent."
+                );
+            }
+
+
+            /**
+             * Envoi de la demande d'annulation.
+             */
+            const response = await fetch(
+                "PHP/AnnulerCommande.php",
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": session.csrf_token
+                    },
+                    body: JSON.stringify({
+                        numero_commande: numeroCommande
+                    })
+                }
+            );
+
+
+            /**
+             * Lecture de la réponse PHP.
+             */
+            const resultat = await response.json();
+
+            if (
+                !response.ok ||
+                !resultat.success
+            ) {
+                throw new Error(
+                    resultat.message ||
+                    "Impossible d'annuler la commande."
+                );
+            }
+
+
+            /**
+             * Confirmation et actualisation.
+             */
+            alert(resultat.message);
+
+            window.location.reload();
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                error.message ||
+                "Une erreur est survenue."
+            );
+
+            bouton.disabled = false;
+        }
     }
 );

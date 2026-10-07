@@ -9,7 +9,7 @@ header("Content-Type: application/json; charset=utf-8");
 
 
 /**
- * Vérification de la connexion
+ * Vérification de la connexion.
  */
 if (!isset($_SESSION["utilisateur_id"])) {
 
@@ -25,7 +25,7 @@ if (!isset($_SESSION["utilisateur_id"])) {
 
 
 /**
- * Vérification du rôle administrateur
+ * Vérification du rôle administrateur.
  */
 $sqlRole = "
     SELECT role.libelle
@@ -33,6 +33,7 @@ $sqlRole = "
     INNER JOIN role
         ON possede_utilisateur_role.role_id = role.role_id
     WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
+    AND role.libelle = 'Administrateur'
     LIMIT 1
 ";
 
@@ -43,7 +44,6 @@ $stmtRole->execute([
 ]);
 
 $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
-
 
 if (
     !$role ||
@@ -78,6 +78,29 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
 
 /**
+ * Vérification du jeton CSRF.
+ */
+$csrfToken = $_SERVER["HTTP_X_CSRF_TOKEN"] ?? "";
+
+if (
+    !isset($_SESSION["csrf_token"]) ||
+    !is_string($_SESSION["csrf_token"]) ||
+    !is_string($csrfToken) ||
+    !hash_equals($_SESSION["csrf_token"], $csrfToken)
+) {
+
+    http_response_code(403);
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Jeton de sécurité invalide."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+
+/**
  * Récupération du JSON envoyé par JavaScript.
  */
 $donnees = json_decode(
@@ -85,11 +108,25 @@ $donnees = json_decode(
     true
 );
 
-$numeroCommande =
-    trim($donnees["numero_commande"] ?? "");
+if (!is_array($donnees)) {
 
-$nouveauStatut =
-    trim($donnees["statut"] ?? "");
+    http_response_code(400);
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Données JSON invalides."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+$numeroCommande = trim(
+    $donnees["numero_commande"] ?? ""
+);
+
+$nouveauStatut = trim(
+    $donnees["statut"] ?? ""
+);
 
 
 /**
@@ -121,7 +158,6 @@ $statutsAutorises = [
     "terminée"
 ];
 
-
 if (!in_array(
     $nouveauStatut,
     $statutsAutorises,
@@ -142,13 +178,27 @@ if (!in_array(
 try {
 
     /**
-     * Vérifie que la commande existe.
+     * Début de la transaction MySQL.
+     *
+     * Le statut et le stock doivent
+     * être modifiés ensemble.
+     */
+    $pdo->beginTransaction();
+
+
+    /**
+     * Récupération et verrouillage
+     * de la commande.
      */
     $sqlCommande = "
-        SELECT numero_commande
+        SELECT
+            numero_commande,
+            statut,
+            nombre_personne
         FROM commande
         WHERE numero_commande = :numero_commande
         LIMIT 1
+        FOR UPDATE
     ";
 
     $stmtCommande = $pdo->prepare($sqlCommande);
@@ -157,8 +207,12 @@ try {
         "numero_commande" => $numeroCommande
     ]);
 
+    $commande = $stmtCommande->fetch(PDO::FETCH_ASSOC);
 
-    if (!$stmtCommande->fetch()) {
+
+    if (!$commande) {
+
+        $pdo->rollBack();
 
         http_response_code(404);
 
@@ -168,6 +222,114 @@ try {
         ], JSON_UNESCAPED_UNICODE);
 
         exit;
+    }
+
+
+    $ancienStatut = $commande["statut"];
+
+    $nombrePersonnes =
+        (int) $commande["nombre_personne"];
+
+
+    /**
+     * Une commande refusée ou terminée
+     * ne peut plus être modifiée.
+     */
+    if (
+        in_array(
+            $ancienStatut,
+            ["refusée", "terminée"],
+            true
+        )
+    ) {
+
+        $pdo->rollBack();
+
+        http_response_code(400);
+
+        echo json_encode([
+            "success" => false,
+            "message" => "Cette commande ne peut plus être modifiée."
+        ], JSON_UNESCAPED_UNICODE);
+
+        exit;
+    }
+
+
+    /**
+     * Vérification des transitions autorisées.
+     *
+     * En attente -> Acceptée ou Refusée
+     * Acceptée -> Terminée ou Refusée
+     */
+    $transitionAutorisee =
+        (
+            $ancienStatut === "en attente" &&
+            in_array(
+                $nouveauStatut,
+                ["acceptée", "refusée"],
+                true
+            )
+        )
+        ||
+        (
+            $ancienStatut === "acceptée" &&
+            in_array(
+                $nouveauStatut,
+                ["terminée", "refusée"],
+                true
+            )
+        );
+
+
+    if (!$transitionAutorisee) {
+
+        $pdo->rollBack();
+
+        http_response_code(400);
+
+        echo json_encode([
+            "success" => false,
+            "message" => "Changement de statut non autorisé."
+        ], JSON_UNESCAPED_UNICODE);
+
+        exit;
+    }
+
+
+    /**
+     * Restitution du stock.
+     *
+     * Si une commande devient refusée,
+     * on rend au menu le nombre de places
+     * précédemment réservées.
+     */
+    if ($nouveauStatut === "refusée") {
+
+        $sqlRestitution = "
+            UPDATE menu
+            INNER JOIN commande_menu
+                ON menu.menu_id = commande_menu.menu_id
+            SET menu.quantite_restante =
+                menu.quantite_restante + :nombre_personnes
+            WHERE commande_menu.numero_commande = :numero_commande
+        ";
+
+        $stmtRestitution = $pdo->prepare(
+            $sqlRestitution
+        );
+
+        $stmtRestitution->execute([
+            "nombre_personnes" => $nombrePersonnes,
+            "numero_commande" => $numeroCommande
+        ]);
+
+        if ($stmtRestitution->rowCount() !== 1) {
+
+            throw new RuntimeException(
+                "Impossible de restituer le stock de la commande."
+            );
+        }
     }
 
 
@@ -189,6 +351,15 @@ try {
 
 
     /**
+     * Validation de la transaction.
+     *
+     * Le statut et le stock sont
+     * enregistrés définitivement.
+     */
+    $pdo->commit();
+
+
+    /**
      * Synchronisation MongoDB.
      *
      * On synchronise les commandes acceptées
@@ -198,7 +369,11 @@ try {
      */
     if (
         $mongo !== null &&
-        in_array($nouveauStatut, ["acceptée", "terminée"], true)
+        in_array(
+            $nouveauStatut,
+            ["acceptée", "terminée", "refusée"],
+            true
+        )
     ) {
 
         try {
@@ -338,8 +513,10 @@ try {
                 /**
                  * Upsert MongoDB :
                  *
-                 * si la commande existe déjà -> mise à jour
-                 * sinon -> création.
+                 * Si la commande existe déjà :
+                 * mise à jour.
+                 *
+                 * Sinon : création.
                  */
                 $bulk =
                     new MongoDB\Driver\BulkWrite();
@@ -387,7 +564,15 @@ try {
     ], JSON_UNESCAPED_UNICODE);
 
 
-} catch (PDOException $e) {
+} catch (Throwable $e) {
+
+    /**
+     * Annulation de la transaction
+     * si une erreur survient.
+     */
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
 
     error_log($e->getMessage());
 

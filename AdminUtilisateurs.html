@@ -1,134 +1,242 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
 
-    <title>Admin - Utilisateurs | Vite & Gourmand</title>
+<head>
+  <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="asset/CSS/Admin.css" />
-  </head>
+  <title>Admin - Utilisateurs | Vite & Gourmand</title>
 
-  <body>
-    <header class="admin-header">
-      <div class="container header-content">
-        <h1 class="logo">Vite & Gourmand</h1>
+  <meta name="robots" content="noindex, nofollow">
 
-        <nav aria-label="Navigation administrateur">
-          <a href="AdminDashboard.html"> Tableau de bord </a>
+  <link rel="stylesheet" href="asset/CSS/Admin.css">
+</head>
 
-          <a href="AdminCommandes.html"> Commandes </a>
+<body>
 
-          <a href="AdminMenus.html"> Menus </a>
+  <header class="admin-header">
 
-          <a href="AdminUtilisateurs.html" class="active"> Utilisateurs </a>
+    <div class="container header-content">
 
-          <a href="AdminMateriel.html"> Matériel </a>
+      <h1 class="logo">
+        Vite & Gourmand
+      </h1>
 
-          <a href="PagePrincipale.html"> Retour au site </a>
-        </nav>
-      </div>
-    </header>
+      <nav aria-label="Navigation administrateur">
 
-    <main class="container">
-      
+        <a href="AdminDashboard.html">
+          Tableau de bord
+        </a>
 
-      <section class="page-title">
-        <h2>Gestion des utilisateurs</h2>
+        <a href="AdminCommandes.html">
+          Commandes
+        </a>
 
-        <p>Consulter les comptes utilisateurs et administrateurs.</p>
-      </section>
+        <a href="AdminMenus.html">
+          Menus
+        </a>
 
-      <section class="admin-section">
-        <h2>Filtres</h2>
+        <a href="AdminUtilisateurs.html" class="active" aria-current="page">
+          Utilisateurs
+        </a>
 
-        <form id="filterForm" class="filter-form">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="role"> Rôle </label>
+        <a href="AdminMateriel.html">
+          Matériel
+        </a>
 
-              <select id="role" name="role">
-                <option value="">Tous</option>
+        <a href="AdminAvis.html">
+          Avis
+        </a>
 
-                <option value="Utilisateur">Utilisateur</option>
+        <a href="PagePrincipale.html">
+          Retour au site
+        </a>
 
-                <option value="Administrateur">Administrateur</option>
-              </select>
-            </div>
+      </nav>
 
-            <div class="form-group">
-              <label for="ville"> Ville </label>
+    </div>
 
-              <input
-                type="text"
-                id="ville"
-                name="ville"
-                placeholder="Ex : Bordeaux"
-              />
-            </div>
+  </header>
 
-            <div class="form-group">
-              <label for="recherche"> Recherche </label>
 
-              <input
-                type="text"
-                id="recherche"
-                name="recherche"
-                placeholder="Prénom ou email"
-              />
-            </div>
+  <main class="container">
+
+    <!-- TITRE -->
+
+    <section class="page-title" aria-labelledby="utilisateurs-title">
+
+      <h2 id="utilisateurs-title">
+        Gestion des utilisateurs
+      </h2>
+
+      <p>
+        Consulter les comptes utilisateurs et administrateurs.
+      </p>
+
+    </section>
+
+
+    <!-- FILTRES -->
+
+    <section class="admin-section">
+
+      <h2>
+        Filtres
+      </h2>
+
+      <form id="filterForm" class="filter-form">
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="role">
+              Rôle
+            </label>
+
+            <select id="role" name="role">
+
+              <option value="">
+                Tous
+              </option>
+
+              <option value="Utilisateur">
+                Utilisateur
+              </option>
+
+              <option value="Administrateur">
+                Administrateur
+              </option>
+
+            </select>
+
           </div>
 
-          <button type="submit" class="btn-primary">Filtrer</button>
-        </form>
-      </section>
 
-      <section class="admin-section">
-        <h2>Liste des utilisateurs</h2>
+          <div class="form-group">
 
-        <p id="messageUtilisateurs" role="status" aria-live="polite"></p>
+            <label for="ville">
+              Ville
+            </label>
 
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Prénom</th>
+            <input type="text" id="ville" name="ville" placeholder="Ex : Bordeaux">
 
-                <th>Email</th>
+          </div>
 
-                <th>Téléphone</th>
 
-                <th>Ville</th>
+          <div class="form-group">
 
-                <th>Rôle</th>
+            <label for="recherche">
+              Recherche
+            </label>
 
-                <th>Actions</th>
-              </tr>
-            </thead>
+            <input type="text" id="recherche" name="recherche" placeholder="Prénom ou email">
 
-            <tbody id="utilisateursTableBody">
-              <tr>
-                <td colspan="6">Chargement des utilisateurs...</td>
-              </tr>
-            </tbody>
-          </table>
+          </div>
+
         </div>
-      </section>
-    </main>
 
-    <footer>
-      <div class="container footer-content">
-        <p>Interface administrateur - Gestion des utilisateurs</p>
+
+        <button type="submit" class="btn-primary">
+          Filtrer
+        </button>
+
+      </form>
+
+    </section>
+
+
+    <!-- LISTE DES UTILISATEURS -->
+
+    <section class="admin-section">
+
+      <h2>
+        Liste des utilisateurs
+      </h2>
+
+      <p id="messageUtilisateurs" role="status" aria-live="polite"></p>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <caption>
+            Liste des comptes utilisateurs
+          </caption>
+
+          <thead>
+
+            <tr>
+
+              <th scope="col">
+                Prénom
+              </th>
+
+              <th scope="col">
+                Email
+              </th>
+
+              <th scope="col">
+                Téléphone
+              </th>
+
+              <th scope="col">
+                Ville
+              </th>
+
+              <th scope="col">
+                Rôle
+              </th>
+
+              <th scope="col">
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="utilisateursTableBody" aria-live="polite">
+
+            <tr>
+
+              <td colspan="6">
+                Chargement des utilisateurs...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
       </div>
-    </footer>
 
-    <script src="asset/JS/Admin.js"></script>
+    </section>
 
-    <script src="asset/JS/SessionFront.js"></script>
+  </main>
 
-    <script src="asset/JS/AdminAccess.js"></script>
 
-    <script src="asset/JS/AdminUtilisateurs.js"></script>
-  </body>
+  <footer>
+
+    <div class="container footer-content">
+
+      <p>
+        Interface administrateur - Gestion des utilisateurs
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <script src="asset/JS/Admin.js"></script>
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/AdminAccess.js"></script>
+  <script src="asset/JS/AdminUtilisateurs.js"></script>
+
+</body>
+
 </html>

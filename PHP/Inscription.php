@@ -38,8 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     } catch (PDOException $e) {
 
-        echo "Erreur : " . $e->getMessage();
+        error_log("Erreur inscription : " . $e->getMessage());
 
+        http_response_code(500);
+        exit("Une erreur est survenue lors de l'inscription.");
     }
 
 }

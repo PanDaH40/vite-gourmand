@@ -34,6 +34,7 @@ $sqlRole = "
         ON possede_utilisateur_role.role_id = role.role_id
 
     WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
+    AND role.libelle = 'Administrateur'
 
     LIMIT 1
 ";
@@ -78,6 +79,27 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
+/**
+ * Vérification du jeton CSRF
+ */
+$csrfToken = $_SERVER["HTTP_X_CSRF_TOKEN"] ?? "";
+
+if (
+    !isset($_SESSION["csrf_token"]) ||
+    !is_string($_SESSION["csrf_token"]) ||
+    !is_string($csrfToken) ||
+    !hash_equals($_SESSION["csrf_token"], $csrfToken)
+) {
+
+    http_response_code(403);
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Jeton de sécurité invalide."
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
 
 /*
  * Récupération des données JSON

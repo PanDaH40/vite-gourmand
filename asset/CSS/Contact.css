@@ -1,138 +1,329 @@
-body{
+/* =========================
+   BASE
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
   font-family: Arial, sans-serif;
-  margin:0;
-  background:#f7f2ea;
-  color:#333;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+  background: #f7f2ea;
+  color: #333333;
 }
 
-.container{
-  max-width:1000px;
-  margin:auto;
-  padding:20px;
+.container {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
 }
 
-/* HEADER */
-header{
-  background:white;
-  border-bottom:1px solid #e3d9cc;
+
+/* =========================
+   ACCESSIBILITÉ CLAVIER
+========================= */
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #7a5c3a;
+  outline-offset: 3px;
 }
 
-.header-content{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+  background: #ffffff;
+  border-bottom: 1px solid #d8cfc4;
 }
 
-.logo{
-  color:#7a5c3a;
-  margin:0;
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
-nav a{
-  margin-left:20px;
-  text-decoration:none;
-  color:#333;
-  font-weight:600;
+.logo {
+  color: #6b4d2e;
+  margin: 0;
+  font-size: 2rem;
 }
 
-nav a.active{
-  color:#7a5c3a;
+nav {
+  display: flex;
+  align-items: center;
 }
 
-nav a:hover{
-  color:#7a5c3a;
+nav a {
+  margin-left: 20px;
+  padding: 5px 2px;
+  text-decoration: none;
+  color: #333333;
+  font-weight: 600;
 }
 
-/* CARD */
-.contact-card{
-  background:white;
-  border:1px solid #e3d9cc;
-  border-radius:10px;
-  padding:25px;
-  margin-top:15px;
+nav a.active {
+  color: #6b4d2e;
+  text-decoration: underline;
 }
 
-.muted{
-  color:#6b6b6b;
+nav a:hover,
+nav a:focus-visible {
+  color: #6b4d2e;
+  text-decoration: underline;
 }
 
-.small{
-  font-size:13px;
-  margin-top:10px;
+
+/* =========================
+   TITRE
+========================= */
+
+main h2 {
+  color: #333333;
+  font-size: 2rem;
+  line-height: 1.2;
 }
 
-/* FORM */
-.contact-form{
-  margin-top:15px;
+
+/* =========================
+   CARTE CONTACT
+========================= */
+
+.contact-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #d8cfc4;
+  border-radius: 10px;
+  padding: 25px;
+  margin-top: 15px;
 }
 
-.form-group{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-bottom:14px;
+.muted {
+  color: #595959;
 }
 
-.form-group label{
-  font-weight:600;
+.small {
+  color: #595959;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+
+/* =========================
+   FORMULAIRE
+========================= */
+
+.contact-form {
+  margin-top: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  color: #333333;
+  font-weight: 600;
 }
 
 .form-group input,
-.form-group textarea{
-  padding:10px;
-  border:1px solid #ccc;
-  border-radius:6px;
-  font-family: inherit;
+.form-group textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #767676;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #333333;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
 }
 
-.form-group textarea{
-  resize:vertical;
+.form-group input:hover,
+.form-group textarea:hover {
+  border-color: #6b4d2e;
 }
 
-/* BUTTON */
-.btn-primary{
-  background:#7a5c3a;
-  color:white;
-  border:none;
-  padding:12px;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
+.form-group textarea {
+  min-height: 140px;
+  resize: vertical;
 }
 
-.btn-primary:hover{
-  filter:brightness(0.95);
+
+/* =========================
+   BOUTON
+========================= */
+
+.btn-primary {
+  min-height: 44px;
+  background: #6b4d2e;
+  color: #ffffff;
+  border: 2px solid #6b4d2e;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-/* FOOTER */
-footer{
-  background:white;
-  border-top:1px solid #e3d9cc;
-  margin-top:40px;
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background: #4f381f;
+  border-color: #4f381f;
 }
 
-.footer-content{
-  display:flex;
-  justify-content:space-between;
-  flex-wrap:wrap;
+
+/* =========================
+   MESSAGES FORMULAIRE
+========================= */
+
+.message-erreur {
+  color: #a0001b;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-top: 10px;
 }
 
-footer a{
-  color:#7a5c3a;
-  text-decoration:none;
+.message-succes {
+  color: #236b27;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-top: 10px;
 }
 
-footer a:hover{
-  text-decoration:underline;
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  background: #ffffff;
+  border-top: 1px solid #d8cfc4;
+  margin-top: 40px;
 }
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .header-content{
-    flex-direction:column;
-    gap:10px;
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+footer a {
+  color: #6b4d2e;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+footer a:hover,
+footer a:focus-visible {
+  color: #4f381f;
+}
+
+
+/* =========================
+   TABLETTE / MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+  .header-content {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
   }
-  nav a{
-    margin:0 10px;
+
+  .logo {
+    margin: 0;
+  }
+
+  nav {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  nav a {
+    margin: 0;
+    padding: 8px 10px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+  .container {
+    padding: 15px;
+  }
+
+  .header-content {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  nav {
+    gap: 4px;
+  }
+
+  nav a {
+    margin: 0;
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  main h2 {
+    font-size: 1.7rem;
+  }
+
+  .contact-card {
+    padding: 18px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 16px;
+  }
+
+  .btn-primary {
+    width: 100%;
   }
 }

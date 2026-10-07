@@ -15,6 +15,7 @@ FROM possede_utilisateur_role
 INNER JOIN role
 ON possede_utilisateur_role.role_id = role.role_id
 WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
+AND role.libelle = 'Administrateur'
 LIMIT 1";
 
 $stmtRole = $pdo->prepare($sqlRole);
@@ -48,6 +49,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die("Tous les champs sont obligatoires.");
     }
 
+
+        /**
+     * Vérification du jeton CSRF
+     */
+    $csrfToken = $_POST["csrf_token"] ?? "";
+
+    if (
+        !isset($_SESSION["csrf_token"]) ||
+        !is_string($_SESSION["csrf_token"]) ||
+        !is_string($csrfToken) ||
+        !hash_equals($_SESSION["csrf_token"], $csrfToken)
+    ) {
+        http_response_code(403);
+        die("Jeton de sécurité invalide.");
+    }
+
+    
     $sql = "INSERT INTO menu
     (titre, nombre_personne_minimum, prix_par_personne, regime, description, quantite_restante)
     VALUES

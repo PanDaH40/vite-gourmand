@@ -1,126 +1,120 @@
 <?php
-
 session_start();
 
 require_once __DIR__ . "/db.php";
+require_once __DIR__ . "/PasswordSecurity.php";
 
 header("Content-Type: application/json; charset=utf-8");
+header("Cache-Control: no-store");
 
+// Fonction pour envoyer les réponses JSON
+function envoyerReponse(int $code, bool $success, string $message): void
+{
+    http_response_code($code);
 
-if (!isset($_SESSION["utilisateur_id"])) {
-
-    http_response_code(401);
-
-    echo json_encode([
-        "success" => false,
-        "error" => "Utilisateur non connecté."
-    ], JSON_UNESCAPED_UNICODE);
+    echo json_encode(
+        $success
+            ? [
+                "success" => true,
+                "message" => $message
+            ]
+            : [
+                "success" => false,
+                "error" => $message
+            ],
+        JSON_UNESCAPED_UNICODE
+    );
 
     exit;
 }
 
+// Vérifier que l'utilisateur est connecté
+if (empty($_SESSION["utilisateur_id"])) {
+    envoyerReponse(401, false, "Utilisateur non connecté.");
+}
 
+// Vérifier la méthode HTTP
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-
-    http_response_code(405);
-
-    echo json_encode([
-        "success" => false,
-        "error" => "Méthode non autorisée."
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
+    envoyerReponse(405, false, "Méthode non autorisée.");
 }
 
-
+// Récupérer les données JSON
 $data = json_decode(
     file_get_contents("php://input"),
     true
 );
 
-
 if (!is_array($data)) {
-
-    http_response_code(400);
-
-    echo json_encode([
-        "success" => false,
-        "error" => "Données invalides."
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
+    envoyerReponse(400, false, "Données invalides.");
 }
 
+// Vérifier le jeton CSRF
+$csrfToken = $data["csrf_token"] ?? "";
 
+if (
+    !is_string($csrfToken) ||
+    empty($_SESSION["csrf_token"]) ||
+    !hash_equals($_SESSION["csrf_token"], $csrfToken)
+) {
+    envoyerReponse(403, false, "Jeton de sécurité invalide.");
+}
+
+// Récupérer les mots de passe
 $currentPassword = $data["current_password"] ?? "";
 $newPassword = $data["new_password"] ?? "";
 $confirmPassword = $data["confirm_password"] ?? "";
 
+// Vérifier les types
+if (
+    !is_string($currentPassword) ||
+    !is_string($newPassword) ||
+    !is_string($confirmPassword)
+) {
+    envoyerReponse(400, false, "Données invalides.");
+}
 
-/*
-|--------------------------------------------------------------------------
-| Vérifications
-|--------------------------------------------------------------------------
-*/
-
+// Vérifier les champs obligatoires
 if (
     $currentPassword === "" ||
     $newPassword === "" ||
     $confirmPassword === ""
 ) {
-
-    http_response_code(400);
-
-    echo json_encode([
-        "success" => false,
-        "error" => "Tous les champs sont obligatoires."
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
+    envoyerReponse(400, false, "Tous les champs sont obligatoires.");
 }
 
-
+// Vérifier la confirmation
 if ($newPassword !== $confirmPassword) {
-
-    http_response_code(400);
-
-    echo json_encode([
-        "success" => false,
-        "error" => "Les deux nouveaux mots de passe ne correspondent pas."
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
+    envoyerReponse(
+        400,
+        false,
+        "Les deux nouveaux mots de passe ne correspondent pas."
+    );
 }
 
-
-if (strlen($newPassword) < 8) {
-
-    http_response_code(400);
-
-    echo json_encode([
-        "success" => false,
-        "error" => "Le nouveau mot de passe doit contenir au moins 8 caractères."
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
+// Vérifier la complexité du nouveau mot de passe
+if (
+    strlen($newPassword) < 10 ||
+    !preg_match('/[A-Z]/', $newPassword) ||
+    !preg_match('/[a-z]/', $newPassword) ||
+    !preg_match('/[0-9]/', $newPassword) ||
+    !preg_match('/[^A-Za-z0-9]/', $newPassword)
+) {
+    envoyerReponse(
+        400,
+        false,
+        "Le mot de passe doit contenir au moins 10 caractères, "
+        . "une majuscule, une minuscule, un chiffre "
+        . "et un caractère spécial."
+    );
 }
-
 
 try {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Récupération du mot de passe actuel
-    |--------------------------------------------------------------------------
-    */
-
+    // Récupérer le mot de passe actuel
     $stmt = $pdo->prepare("
         SELECT password
-
         FROM utilisateur
-
         WHERE utilisateur_id = :utilisateur_id
-
         LIMIT 1
     ");
 
@@ -130,77 +124,81 @@ try {
 
     $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
     if (!$utilisateur) {
-
-        http_response_code(404);
-
-        echo json_encode([
-            "success" => false,
-            "error" => "Utilisateur introuvable."
-        ], JSON_UNESCAPED_UNICODE);
-
-        exit;
+        envoyerReponse(404, false, "Utilisateur introuvable.");
     }
 
+    $hashStocke = (string) $utilisateur["password"];
+    $motDePasseValide = false;
 
-    /*
-    |--------------------------------------------------------------------------
-    | Vérification de l'ancien mot de passe
-    |--------------------------------------------------------------------------
-    */
-
-    if ($utilisateur["password"] !== md5($currentPassword)) {
-
-        http_response_code(400);
-
-        echo json_encode([
-            "success" => false,
-            "error" => "Le mot de passe actuel est incorrect."
-        ], JSON_UNESCAPED_UNICODE);
-
-        exit;
+    // Vérification PBKDF2
+    if (
+        strlen($hashStocke) === 49 &&
+        str_starts_with($hashStocke, PASSWORD_PREFIX)
+    ) {
+        $motDePasseValide = verifierHashPassword(
+            $currentPassword,
+            $hashStocke
+        );
     }
 
+    // Compatibilité avec les anciens mots de passe MD5
+    elseif (
+        strlen($hashStocke) === 32 &&
+        ctype_xdigit($hashStocke)
+    ) {
+        $motDePasseValide = hash_equals(
+            strtolower($hashStocke),
+            md5($currentPassword)
+        );
+    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Modification
-    |--------------------------------------------------------------------------
-    */
+    if (!$motDePasseValide) {
+        envoyerReponse(
+            400,
+            false,
+            "Le mot de passe actuel est incorrect."
+        );
+    }
 
-    $nouveauPasswordHash = md5($newPassword);
+    // Créer le nouveau hash PBKDF2
+    $nouveauPasswordHash = creerHashPassword($newPassword);
 
-
+    // Mettre à jour le mot de passe
     $stmtUpdate = $pdo->prepare("
         UPDATE utilisateur
-
         SET password = :password
-
         WHERE utilisateur_id = :utilisateur_id
+          AND password = :ancien_password
     ");
-
 
     $stmtUpdate->execute([
         "password" => $nouveauPasswordHash,
-        "utilisateur_id" => $_SESSION["utilisateur_id"]
+        "utilisateur_id" => $_SESSION["utilisateur_id"],
+        "ancien_password" => $hashStocke
     ]);
 
+    if ($stmtUpdate->rowCount() !== 1) {
+        envoyerReponse(
+            409,
+            false,
+            "Le mot de passe a été modifié entre-temps. Réessayez."
+        );
+    }
 
-    echo json_encode([
-        "success" => true,
-        "message" => "Mot de passe modifié avec succès."
-    ], JSON_UNESCAPED_UNICODE);
+    envoyerReponse(
+        200,
+        true,
+        "Mot de passe modifié avec succès."
+    );
 
+} catch (Throwable $e) {
 
-} catch (PDOException $e) {
+    error_log("Erreur ModifierPassword : " . $e->getMessage());
 
-    error_log($e->getMessage());
-
-    http_response_code(500);
-
-    echo json_encode([
-        "success" => false,
-        "error" => "Erreur lors de la modification du mot de passe."
-    ], JSON_UNESCAPED_UNICODE);
+    envoyerReponse(
+        500,
+        false,
+        "Erreur lors de la modification du mot de passe."
+    );
 }

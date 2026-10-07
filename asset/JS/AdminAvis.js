@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const tableBody =
@@ -16,12 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("avisRefuses");
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Protection de l'affichage HTML
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Protection de l'affichage HTML
+     */
     function escapeHtml(value) {
 
         if (value === null || value === undefined) {
@@ -37,12 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Chargement des avis
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Chargement des avis
+     */
     async function chargerAvis() {
 
         try {
@@ -56,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const data = await response.json();
 
-
             if (!response.ok || !data.success) {
 
                 throw new Error(
@@ -65,11 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             }
 
-
-            /*
-             * Statistiques
-             */
-
+            // Statistiques
             avisAttente.textContent =
                 data.statistiques.attente;
 
@@ -79,13 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
             avisRefuses.textContent =
                 data.statistiques.refuses;
 
-
-            /*
-             * Tableau
-             */
-
+            // Tableau
             afficherAvis(data.avis);
-
 
         } catch (error) {
 
@@ -105,16 +90,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Affichage
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Affichage
+     */
     function afficherAvis(avis) {
 
         tableBody.innerHTML = "";
-
 
         if (avis.length === 0) {
 
@@ -129,46 +110,32 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
         avis.forEach(function (unAvis) {
 
             const ligne =
                 document.createElement("tr");
 
-
             const statut =
-                String(unAvis.statut)
-                    .toLowerCase();
-
+                String(unAvis.statut).toLowerCase();
 
             let badgeClass = "pending";
-
 
             if (
                 statut === "accepté" ||
                 statut === "accepte"
             ) {
-
                 badgeClass = "accepted";
             }
-
 
             if (
                 statut === "refusé" ||
                 statut === "refuse"
             ) {
-
                 badgeClass = "late";
             }
 
-
-            /*
-             * Les boutons sont uniquement disponibles
-             * pour un avis en attente.
-             */
-
+            // Boutons uniquement pour les avis en attente
             let actions = "<span>Terminé</span>";
-
 
             if (statut === "en attente") {
 
@@ -176,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button
                         type="button"
                         class="btn-small btn-accepter-avis"
-                        data-id="${unAvis.avis_id}"
+                        data-id="${Number(unAvis.avis_id)}"
                     >
                         Accepter
                     </button>
@@ -184,16 +151,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     <button
                         type="button"
                         class="btn-small btn-danger btn-refuser-avis"
-                        data-id="${unAvis.avis_id}"
+                        data-id="${Number(unAvis.avis_id)}"
                     >
                         Refuser
                     </button>
                 `;
             }
 
-
             ligne.innerHTML = `
-
                 <td>
                     ${escapeHtml(unAvis.prenom)}
                     <br>
@@ -223,18 +188,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 </td>
             `;
 
-
             tableBody.appendChild(ligne);
         });
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Accepter / Refuser
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Accepter / Refuser
+     */
     tableBody.addEventListener(
         "click",
         function (event) {
@@ -249,7 +210,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     ".btn-refuser-avis"
                 );
 
-
             if (accepter) {
 
                 modifierAvis(
@@ -258,7 +218,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             }
 
-
             if (refuser) {
 
                 modifierAvis(
@@ -266,17 +225,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Refusé"
                 );
             }
-
         }
     );
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Modification du statut
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Modification du statut
+     */
     async function modifierAvis(
         avisId,
         nouveauStatut
@@ -288,18 +243,43 @@ document.addEventListener("DOMContentLoaded", function () {
             " » pour cet avis ?"
         );
 
-
         if (!confirmation) {
             return;
         }
 
-
         message.textContent =
             "Modification en cours...";
 
-
         try {
 
+            /**
+             * Récupération du jeton CSRF
+             */
+            const sessionResponse = await fetch(
+                "PHP/Check_Session.php",
+                {
+                    credentials: "same-origin",
+                    cache: "no-store"
+                }
+            );
+
+            const sessionData =
+                await sessionResponse.json();
+
+            if (
+                !sessionResponse.ok ||
+                !sessionData.connecte ||
+                !sessionData.admin ||
+                !sessionData.csrf_token
+            ) {
+                throw new Error(
+                    "Session administrateur invalide."
+                );
+            }
+
+            /**
+             * Modification de l'avis
+             */
             const response = await fetch(
                 "PHP/AdminModifierAvis.php",
                 {
@@ -308,7 +288,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     credentials: "same-origin",
 
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "X-CSRF-Token": sessionData.csrf_token
                     },
 
                     body: JSON.stringify({
@@ -318,10 +299,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             );
 
-
             const data =
                 await response.json();
-
 
             if (!response.ok || !data.success) {
 
@@ -331,13 +310,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
             }
 
-
             message.textContent =
                 "Statut de l'avis modifié.";
 
-
             await chargerAvis();
-
 
         } catch (error) {
 
@@ -349,12 +325,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Premier chargement
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * Premier chargement
+     */
     chargerAvis();
 
 });

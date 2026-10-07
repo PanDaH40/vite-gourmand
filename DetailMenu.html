@@ -1,131 +1,139 @@
 <!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Vite & Gourmand - Détail du menu</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- On réutilise le CSS de tes anciennes fiches -->
-    <link rel="stylesheet" href="asset/CSS/MenuClassique.css">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Détail du menu - Vite & Gourmand</title>
+
+  <meta name="description" content="Découvrez le détail de ce menu Vite & Gourmand : description, plats proposés, tarifs et conditions de commande.">
+
+  <link rel="stylesheet" href="asset/CSS/MenuClassique.css">
 </head>
 
 <body>
-
-<header>
+  <header>
     <div class="container header-content">
-        <h1 class="logo">Vite & Gourmand</h1>
+      <h1 class="logo">Vite & Gourmand</h1>
 
-        <nav>
-            <a href="PagePrincipale.html">Accueil</a>
-            <a href="Menu.html" class="active">Menus</a>
-            <a href="Contact.html">Contact</a>
-            <a href="Connection.html">Connexion</a>
-        </nav>
+      <nav aria-label="Navigation principale">
+        <a href="PagePrincipale.html"> Accueil </a>
+
+        <a href="Menu.html" class="active"> Menus </a>
+
+        <a href="Contact.html"> Contact </a>
+
+        <a href="Connection.html"> Connexion </a>
+      </nav>
     </div>
-</header>
+  </header>
 
-<main class="container">
+  <main class="container">
+    <!-- Retour vers les menus -->
 
-    <section class="breadcrumb">
-        <a href="Menu.html">← Retour à la liste des menus</a>
-    </section>
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="Menu.html"> ← Retour à la liste des menus </a>
+    </nav>
 
-    <section class="menu-detail">
+    <!-- Détail du menu -->
 
-        <div class="menu-detail-header">
+    <article class="menu-detail">
+      <div class="menu-detail-header">
+        <div>
+          <h2 id="menu-titre" aria-live="polite">Chargement...</h2>
 
-            <div>
-                <h2 id="menu-titre">Chargement...</h2>
+          <p class="muted" id="menu-infos"></p>
 
-                <p class="muted" id="menu-infos"></p>
-
-                <p class="muted small">
-                    Option végétarienne disponible sur demande
-                </p>
-            </div>
-
-            <div class="menu-price-box">
-                <p>
-                    <strong>Minimum :</strong>
-                    <span id="menu-minimum"></span>
-                </p>
-
-                <p>
-                    <strong>Prix minimum :</strong>
-                    <span id="menu-prix-minimum"></span>
-                </p>
-
-                <p class="muted small">
-                    Stock restant :
-                    <span id="menu-stock"></span>
-                </p>
-            </div>
-
+          <p class="muted small">
+            Option végétarienne disponible sur demande
+          </p>
         </div>
 
-        <!-- Galerie -->
-        <section class="gallery" id="menu-gallery"></section>
+        <div class="menu-price-box">
+          <p>
+            <strong>Minimum :</strong>
+            <span id="menu-minimum"></span>
+          </p>
 
-        <!-- Description -->
-        <section class="menu-description">
-            <h3>Description</h3>
-            <p id="menu-description"></p>
-        </section>
+          <p>
+            <strong>Prix minimum :</strong>
+            <span id="menu-prix-minimum"></span>
+          </p>
 
-        <!-- Plats -->
-        <section class="menu-dishes">
-            <h3>Plats proposés</h3>
+          <p class="muted small">
+            Stock restant :
+            <span id="menu-stock"></span>
+          </p>
+        </div>
+      </div>
 
-            <div class="dishes-grid" id="menu-plats"></div>
-        </section>
+      <!-- Galerie -->
 
-        <!-- Conditions -->
-        <section class="menu-conditions">
-            <h3>Conditions importantes</h3>
+      <div class="gallery" id="menu-gallery"></div>
 
-            <div class="conditions-box">
-                <ul id="menu-conditions"></ul>
-            </div>
-        </section>
+      <!-- Description -->
 
-        <!-- Commander -->
-        <section class="menu-actions">
+      <section class="menu-description">
+        <h3>Description</h3>
 
-            <a id="commander-menu"
-               href="Commande.html"
-               class="btn-primary">
-                Commander ce menu
-            </a>
+        <p id="menu-description"></p>
+      </section>
 
-            <p class="muted small">
-                Si vous n'êtes pas connecté, vous devrez vous connecter
-                ou créer un compte.
-            </p>
+      <!-- Plats -->
 
-        </section>
+      <section class="menu-dishes">
+        <h3>Plats proposés</h3>
 
-    </section>
+        <div class="dishes-grid" id="menu-plats"></div>
+      </section>
 
-</main>
+      <!-- Conditions -->
 
-<footer>
+      <section class="menu-conditions">
+        <h3>Conditions importantes</h3>
+
+        <div class="conditions-box">
+          <ul id="menu-conditions"></ul>
+        </div>
+      </section>
+
+      <!-- Commander -->
+
+      <div class="menu-actions">
+        <a id="commander-menu" href="Commande.html" class="btn-primary">
+          Commander ce menu
+        </a>
+
+        <p class="muted small">
+          Si vous n'êtes pas connecté, vous devrez vous connecter ou créer un
+          compte.
+        </p>
+      </div>
+    </article>
+  </main>
+
+  <footer>
     <div class="container footer-content">
+      <div>
+        <strong> Horaires </strong>
 
-        <div>
-            <strong>Horaires</strong>
-            <p>Lundi - Dimanche : 08h00 - 20h00</p>
-        </div>
+        <p>Lundi - Dimanche : 08h00 - 20h00</p>
+      </div>
 
-        <div>
-            <a href="MentionLegale.html">Mentions légales</a> |
-            <a href="CGV.html">CGV</a>
-        </div>
+      <nav aria-label="Informations légales">
+        <a href="MentionLegale.html"> Mentions légales </a>
 
+        <span aria-hidden="true"> | </span>
+
+        <a href="CGV.html"> CGV </a>
+      </nav>
     </div>
-</footer>
+  </footer>
 
-<script src="asset/JS/SessionFront.js"></script>
-<script src="asset/JS/DetailMenu.js"></script>
-
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/DetailMenu.js"></script>
 </body>
+
 </html>

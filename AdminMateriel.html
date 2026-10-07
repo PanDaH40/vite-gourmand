@@ -1,135 +1,253 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Admin - Matériel | Vite & Gourmand</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="asset/CSS/Admin.css" />
-  </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <body>
+  <title>Admin - Matériel | Vite & Gourmand</title>
 
-    <header class="admin-header">
-      <div class="container header-content">
-        <h1 class="logo">Vite & Gourmand</h1>
+  <meta name="robots" content="noindex, nofollow">
 
-        <nav aria-label="Navigation administrateur">
-          <a href="AdminDashboard.html"> Tableau de bord </a>
+  <link rel="stylesheet" href="asset/CSS/Admin.css">
+</head>
 
-          <a href="AdminCommandes.html"> Commandes </a>
+<body>
 
-          <a href="AdminMenus.html"> Menus </a>
+  <header class="admin-header">
 
-          <a href="AdminUtilisateurs.html"> Utilisateurs </a>
+    <div class="container header-content">
 
-          <a href="AdminMateriel.html" class="active"> Matériel </a>
+      <h1 class="logo">
+        Vite & Gourmand
+      </h1>
 
-          <a href="PagePrincipale.html"> Retour au site </a>
-        </nav>
+      <nav aria-label="Navigation administrateur">
+
+        <a href="AdminDashboard.html">
+          Tableau de bord
+        </a>
+
+        <a href="AdminCommandes.html">
+          Commandes
+        </a>
+
+        <a href="AdminMenus.html">
+          Menus
+        </a>
+
+        <a href="AdminUtilisateurs.html">
+          Utilisateurs
+        </a>
+
+        <a href="AdminMateriel.html">
+          Matériel
+        </a>
+
+        <a href="AdminAvis.html">
+          Avis
+        </a>
+
+        <a href="PagePrincipale.html">
+          Retour au site
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <main class="container">
+
+    <!-- TITRE -->
+
+    <section class="page-title" aria-labelledby="materiel-title">
+
+      <h2 id="materiel-title">
+        Gestion du matériel
+      </h2>
+
+      <p>
+        Suivi du matériel prêté avec les commandes et de sa restitution.
+      </p>
+
+    </section>
+
+
+    <!-- STATISTIQUES -->
+
+    <section class="stats-grid" aria-label="Résumé du matériel">
+
+      <article class="stat-card">
+
+        <h3>
+          Prêts enregistrés
+        </h3>
+
+        <p class="stat-number" id="nombrePrets" aria-live="polite">
+          0
+        </p>
+
+      </article>
+
+
+      <article class="stat-card">
+
+        <h3>
+          Retours en attente
+        </h3>
+
+        <p class="stat-number" id="nombreAttente" aria-live="polite">
+          0
+        </p>
+
+      </article>
+
+
+      <article class="stat-card">
+
+        <h3>
+          Matériel restitué
+        </h3>
+
+        <p class="stat-number" id="nombreRestitues" aria-live="polite">
+          0
+        </p>
+
+      </article>
+
+    </section>
+
+
+    <!-- COMMANDES AVEC MATÉRIEL -->
+
+    <section class="admin-section">
+
+      <h2>
+        Commandes avec prêt de matériel
+      </h2>
+
+      <p id="messageMateriel" role="status" aria-live="polite"></p>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <caption>
+            Liste des commandes avec prêt de matériel
+          </caption>
+
+          <thead>
+
+            <tr>
+
+              <th scope="col">
+                Commande
+              </th>
+
+              <th scope="col">
+                Client
+              </th>
+
+              <th scope="col">
+                Téléphone
+              </th>
+
+              <th scope="col">
+                Date prestation
+              </th>
+
+              <th scope="col">
+                Prêt
+              </th>
+
+              <th scope="col">
+                Restitution
+              </th>
+
+              <th scope="col">
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="materielTableBody" aria-live="polite">
+
+            <tr>
+
+              <td colspan="7">
+                Chargement des prêts de matériel...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
       </div>
-    </header>
+
+    </section>
 
 
-    <main class="container">
-      <section class="page-title">
-        <h2>Gestion du matériel</h2>
+    <!-- CONDITIONS -->
 
-        <p>Suivi du matériel prêté avec les commandes et de sa restitution.</p>
-      </section>
+    <section class="admin-section">
 
+      <h2>
+        Conditions importantes
+      </h2>
 
-      <section class="stats-grid" aria-label="Résumé matériel">
-        <article class="stat-card">
-          <h3>Prêts enregistrés</h3>
+      <div class="conditions-box">
 
-          <p class="stat-number" id="nombrePrets">0</p>
-        </article>
+        <ul>
 
-        <article class="stat-card">
-          <h3>Retours en attente</h3>
+          <li>
+            Le matériel prêté doit être restitué après la prestation.
+          </li>
 
-          <p class="stat-number" id="nombreAttente">0</p>
-        </article>
+          <li>
+            L'administrateur peut enregistrer la restitution du matériel.
+          </li>
 
-        <article class="stat-card">
-          <h3>Matériel restitué</h3>
+          <li>
+            Les commandes sans prêt de matériel ne sont pas affichées
+            dans cette liste.
+          </li>
 
-          <p class="stat-number" id="nombreRestitues">0</p>
-        </article>
-      </section>
+        </ul>
 
-
-      <section class="admin-section">
-        <h2>Commandes avec prêt de matériel</h2>
-
-        <p id="messageMateriel" role="status" aria-live="polite"></p>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Commande</th>
-
-                <th>Client</th>
-
-                <th>Téléphone</th>
-
-                <th>Date prestation</th>
-
-                <th>Prêt</th>
-
-                <th>Restitution</th>
-
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody id="materielTableBody">
-              <tr>
-                <td colspan="7">Chargement des prêts de matériel...</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-
-      <section class="admin-section">
-        <h2>Conditions importantes</h2>
-
-        <div class="conditions-box">
-          <ul>
-            <li>Le matériel prêté doit être restitué après la prestation.</li>
-
-            <li>
-              L'administrateur peut enregistrer la restitution du matériel.
-            </li>
-
-            <li>
-              Les commandes sans prêt de matériel ne sont pas affichées dans
-              cette liste.
-            </li>
-          </ul>
-        </div>
-      </section>
-    </main>
-
-
-    <footer>
-      <div class="container footer-content">
-        <p>Interface administrateur - Gestion du matériel</p>
       </div>
-    </footer>
+
+    </section>
+
+  </main>
 
 
-    <script src="asset/JS/Admin.js"></script>
+  <footer>
 
-    <script src="asset/JS/SessionFront.js"></script>
+    <div class="container footer-content">
 
-    <script src="asset/JS/AdminAccess.js"></script>
+      <p>
+        Interface administrateur - Gestion du matériel
+      </p>
 
-    <script src="asset/JS/AdminMateriel.js"></script>
-  </body>
+    </div>
+
+  </footer>
+
+
+  <script src="asset/JS/Admin.js"></script>
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/AdminAccess.js"></script>
+  <script src="asset/JS/AdminMateriel.js"></script>
+
+</body>
+
 </html>

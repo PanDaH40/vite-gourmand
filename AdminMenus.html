@@ -3,268 +3,315 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Admin - Menus | Vite & Gourmand</title>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin - Menus | Vite & Gourmand</title>
+
+  <meta name="robots" content="noindex, nofollow">
+
   <link rel="stylesheet" href="asset/CSS/Admin.css">
 </head>
 
 <body>
 
-<header class="admin-header">
-  <div class="container header-content">
+  <header class="admin-header">
 
-    <h1 class="logo">Vite & Gourmand</h1>
+    <div class="container header-content">
 
-    <nav aria-label="Navigation administrateur">
-      <a href="AdminDashboard.html">Tableau de bord</a>
-      <a href="AdminCommandes.html">Commandes</a>
-      <a href="AdminMenus.html" class="active">Menus</a>
-      <a href="AdminUtilisateurs.html">Utilisateurs</a>
-      <a href="AdminMateriel.html">Matériel</a>
-      <a href="PagePrincipale.html">Retour au site</a>
-    </nav>
+      <h1 class="logo">
+        Vite & Gourmand
+      </h1>
 
-  </div>
-</header>
+      <nav aria-label="Navigation administrateur">
 
+        <a href="AdminDashboard.html">
+          Tableau de bord
+        </a>
 
-<main class="container">
+        <a href="AdminCommandes.html">
+          Commandes
+        </a>
 
-  <section class="page-title">
-    <h2>Gestion des menus</h2>
-    <p>Ajouter, modifier ou supprimer les menus.</p>
-  </section>
+        <a href="AdminMenus.html" class="active" aria-current="page">
+          Menus
+        </a>
 
+        <a href="AdminUtilisateurs.html">
+          Utilisateurs
+        </a>
 
-  <!-- AJOUT / MODIFICATION -->
+        <a href="AdminMateriel.html">
+          Matériel
+        </a>
 
-  <section class="admin-section">
+        <a href="AdminAvis.html">
+          Avis
+        </a>
 
-    <h2 id="formTitre">Ajouter un menu</h2>
-
-    <form
-      class="filter-form"
-      id="menuForm"
-      action="PHP/AjouterMenu.php"
-      method="post"
-    >
-
-      <input
-        type="hidden"
-        id="menuId"
-        name="menu_id"
-        value=""
-      >
-
-      <div class="form-row">
-
-        <div class="form-group">
-          <label for="titre">Titre du menu</label>
-
-          <input
-            type="text"
-            id="titre"
-            name="titre"
-            placeholder="Nom du menu"
-            required
-          >
-        </div>
-
-
-        <div class="form-group">
-          <label for="prix">Prix par personne</label>
-
-          <input
-            type="number"
-            id="prix"
-            name="prix"
-            min="1"
-            step="0.01"
-            placeholder="Prix"
-            required
-          >
-        </div>
-
-
-        <div class="form-group">
-          <label for="stock">Stock disponible</label>
-
-          <input
-            type="number"
-            id="stock"
-            name="stock"
-            min="0"
-            placeholder="Quantité"
-            required
-          >
-        </div>
-
-      </div>
-
-
-      <div class="form-row">
-
-        <div class="form-group">
-          <label for="minimum">
-            Nombre minimum de personnes
-          </label>
-
-          <input
-            type="number"
-            id="minimum"
-            name="minimum"
-            min="1"
-            required
-          >
-        </div>
-
-
-        <div class="form-group">
-          <label for="regime">Régime</label>
-
-          <select
-            id="regime"
-            name="regime"
-            required
-          >
-            <option value="Classique">
-              Classique
-            </option>
-
-            <option value="Végétarien">
-              Végétarien
-            </option>
-
-            <option value="Vegan">
-              Vegan
-            </option>
-          </select>
-        </div>
-
-
-        <div class="form-group">
-          <label for="theme">Thème</label>
-
-          <select
-            id="theme"
-            name="theme"
-          >
-            <option value="Pâques">
-              Pâques
-            </option>
-
-            <option value="Noël">
-              Noël
-            </option>
-
-            <option value="Classique">
-              Classique
-            </option>
-
-            <option value="Évènement">
-              Évènement
-            </option>
-          </select>
-        </div>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="description">
-          Description
-        </label>
-
-        <textarea
-          id="description"
-          name="description"
-          rows="5"
-          placeholder="Description du menu"
-          required
-        ></textarea>
-
-      </div>
-
-
-      <button
-        type="submit"
-        class="btn-primary"
-        id="btnEnregistrer"
-      >
-        Ajouter le menu
-      </button>
-
-
-      <button
-        type="button"
-        class="btn-small"
-        id="btnAnnulerModification"
-        hidden
-      >
-        Annuler la modification
-      </button>
-
-    </form>
-
-  </section>
-
-
-  <!-- MENUS -->
-
-  <section class="admin-section">
-
-    <h2>Menus existants</h2>
-
-    <div class="table-wrapper">
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Menu</th>
-            <th>Prix / pers.</th>
-            <th>Minimum</th>
-            <th>Stock</th>
-            <th>Régime</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody id="menusTableBody">
-
-          <tr>
-            <td colspan="6">
-              Chargement des menus...
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
+        <a href="PagePrincipale.html">
+          Retour au site
+        </a>
+      </nav>
 
     </div>
 
-  </section>
-
-</main>
+  </header>
 
 
-<footer>
+  <main class="container">
 
-  <div class="container footer-content">
-    <p>
-      Interface administrateur - Gestion des menus
-    </p>
-  </div>
+    <!-- TITRE -->
 
-</footer>
+    <section class="page-title" aria-labelledby="menus-title">
+
+      <h2 id="menus-title">
+        Gestion des menus
+      </h2>
+
+      <p>
+        Ajouter, modifier ou supprimer les menus.
+      </p>
+
+    </section>
 
 
-<script src="asset/JS/Admin.js"></script>
-<script src="asset/JS/SessionFront.js"></script>
-<script src="asset/JS/AdminAccess.js"></script>
-<script src="asset/JS/AdminMenus.js"></script>
+    <!-- AJOUT / MODIFICATION -->
+
+    <section class="admin-section" aria-labelledby="formTitre">
+
+      <h2 id="formTitre">
+        Ajouter un menu
+      </h2>
+
+      <form class="filter-form" id="menuForm" action="PHP/AjouterMenu.php" method="post">
+
+        <input type="hidden" id="menuId" name="menu_id" value="">
+
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="titre">
+              Titre du menu
+            </label>
+
+            <input type="text" id="titre" name="titre" placeholder="Nom du menu" required>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="prix">
+              Prix par personne
+            </label>
+
+            <input type="number" id="prix" name="prix" min="1" step="0.01" placeholder="Prix" required>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="stock">
+              Stock disponible
+            </label>
+
+            <input type="number" id="stock" name="stock" min="0" placeholder="Quantité" required>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="minimum">
+              Nombre minimum de personnes
+            </label>
+
+            <input type="number" id="minimum" name="minimum" min="1" required>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="regime">
+              Régime
+            </label>
+
+            <select id="regime" name="regime" required>
+
+              <option value="">
+                Choisissez un régime
+              </option>
+
+              <option value="Classique">
+                Classique
+              </option>
+
+              <option value="Végétarien">
+                Végétarien
+              </option>
+
+              <option value="Vegan">
+                Vegan
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="theme">
+              Thème
+            </label>
+
+            <select id="theme" name="theme">
+
+              <option value="Pâques">
+                Pâques
+              </option>
+
+              <option value="Noël">
+                Noël
+              </option>
+
+              <option value="Classique">
+                Classique
+              </option>
+
+              <option value="Évènement">
+                Évènement
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="description">
+            Description
+          </label>
+
+          <textarea id="description" name="description" rows="5" placeholder="Description du menu" required></textarea>
+
+        </div>
+
+
+        <button type="submit" class="btn-primary" id="btnEnregistrer">
+          Ajouter le menu
+        </button>
+
+
+        <button type="button" class="btn-small" id="btnAnnulerModification" hidden>
+          Annuler la modification
+        </button>
+
+      </form>
+
+    </section>
+
+
+    <!-- MENUS EXISTANTS -->
+
+    <section class="admin-section">
+
+      <h2>
+        Menus existants
+      </h2>
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <caption>
+            Liste des menus existants
+          </caption>
+
+          <thead>
+
+            <tr>
+
+              <th scope="col">
+                Menu
+              </th>
+
+              <th scope="col">
+                Prix / pers.
+              </th>
+
+              <th scope="col">
+                Minimum
+              </th>
+
+              <th scope="col">
+                Stock
+              </th>
+
+              <th scope="col">
+                Régime
+              </th>
+
+              <th scope="col">
+                Actions
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="menusTableBody" aria-live="polite">
+
+            <tr>
+
+              <td colspan="6">
+                Chargement des menus...
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+
+    <div class="container footer-content">
+
+      <p>
+        Interface administrateur - Gestion des menus
+      </p>
+
+    </div>
+
+  </footer>
+
+
+  <script src="asset/JS/Admin.js"></script>
+  <script src="asset/JS/SessionFront.js"></script>
+  <script src="asset/JS/AdminAccess.js"></script>
+  <script src="asset/JS/AdminMenus.js"></script>
 
 </body>
+
 </html>

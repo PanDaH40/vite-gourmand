@@ -1,37 +1,64 @@
 <!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>Mes commandes - Vite & Gourmand</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="asset/CSS/MesCommandes.css" />
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mes commandes - Vite & Gourmand</title>
+
+  <meta name="description" content="Consultez vos commandes Vite & Gourmand et suivez leur état depuis votre espace personnel.">
+
+  <link rel="stylesheet" href="asset/CSS/MesCommandes.css">
 </head>
 
 <body>
 
   <header>
+
     <div class="container header-content">
 
-      <h1 class="logo">Vite & Gourmand</h1>
+      <h1 class="logo">
+        Vite & Gourmand
+      </h1>
 
-      <nav>
-        <a href="PagePrincipale.html">Accueil</a>
-        <a href="Menu.html">Menus</a>
-        <a href="MesCommandes.html" class="active">Mes commandes</a>
-        <a href="Contact.html">Contact</a>
-        <a href="Connection.html">Connexion</a>
+      <nav aria-label="Navigation principale">
+
+        <a href="PagePrincipale.html">
+          Accueil
+        </a>
+
+        <a href="Menu.html">
+          Menus
+        </a>
+
+        <a href="MesCommandes.html" class="active" aria-current="page">
+          Mes commandes
+        </a>
+
+        <a href="Contact.html">
+          Contact
+        </a>
+
+        <a href="Connection.html">
+          Connexion
+        </a>
+
       </nav>
 
     </div>
+
   </header>
 
 
   <main class="container">
 
-    <section class="page-title">
+    <section class="page-title" aria-labelledby="commandes-title">
 
-      <h2>Mes commandes</h2>
+      <h2 id="commandes-title">
+        Mes commandes
+      </h2>
 
       <p>
         Retrouvez ici le suivi de vos commandes passées.
@@ -40,8 +67,9 @@
     </section>
 
 
-    <!-- Les commandes seront ajoutées ici par JavaScript -->
-    <section class="orders-list" id="ordersList">
+    <!-- Les commandes sont ajoutées ici par JavaScript -->
+
+    <section class="orders-list" id="ordersList" aria-label="Liste de mes commandes" aria-live="polite">
 
       <p id="loadingOrders">
         Chargement de vos commandes...
@@ -57,14 +85,33 @@
     <div class="container footer-content">
 
       <div>
-        <strong>Horaires</strong>
-        <p>Lundi - Dimanche : 08h00 - 20h00</p>
+
+        <strong>
+          Horaires
+        </strong>
+
+        <p>
+          Lundi - Dimanche : 08h00 - 20h00
+        </p>
+
       </div>
 
-      <div>
-        <a href="MentionLegale.html">Mentions légales</a> |
-        <a href="CGV.html">CGV</a>
-      </div>
+
+      <nav aria-label="Informations légales">
+
+        <a href="MentionLegale.html">
+          Mentions légales
+        </a>
+
+        <span aria-hidden="true">
+          |
+        </span>
+
+        <a href="CGV.html">
+          CGV
+        </a>
+
+      </nav>
 
     </div>
 
@@ -75,4 +122,5 @@
   <script src="asset/JS/MesCommandes.js"></script>
 
 </body>
+
 </html>
