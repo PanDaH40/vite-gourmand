@@ -18,10 +18,23 @@ try {
     die("Erreur de connexion : " . $e->getMessage());
 } */
 
-$host = getenv("DB_HOST") ?: "localhost";
-$dbname = getenv("DB_NAME") ?: "vite_gourmand";
-$user = getenv("DB_USER") ?: "root";
-$password = getenv("DB_PASSWORD") ?: "";
+$configPath = dirname(__DIR__, 2) . '/db_config.php';
+
+if (is_file($configPath)) {
+    // Configuration privée OVH
+    $config = require $configPath;
+
+    $host = $config['host'];
+    $dbname = $config['dbname'];
+    $user = $config['user'];
+    $password = $config['password'];
+} else {
+    // Configuration Docker locale
+    $host = getenv('DB_HOST') ?: 'localhost';
+    $dbname = getenv('DB_NAME') ?: 'vite_gourmand';
+    $user = getenv('DB_USER') ?: 'root';
+    $password = getenv('DB_PASSWORD') ?: '';
+}
 
 try {
     $pdo = new PDO(

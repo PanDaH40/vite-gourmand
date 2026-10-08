@@ -1,10 +1,10 @@
+
 <?php
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
 
 /**
  * Envoie un e-mail depuis Vite & Gourmand.
@@ -18,6 +18,20 @@ function envoyerEmail(
 
     $mail = new PHPMailer(true);
 
+    // Configuration privée OVH ou variables Docker
+    $configPath = dirname(__DIR__, 2) . "/mail_config.php";
+
+    if (is_file($configPath)) {
+        // OVH
+        $config = require $configPath;
+        $gmailUser = $config["user"];
+        $gmailPassword = $config["password"];
+    } else {
+        // Docker
+        $gmailUser = getenv("GMAIL_USER");
+        $gmailPassword = getenv("GMAIL_APP_PASSWORD");
+    }
+
     try {
 
         // Configuration SMTP Gmail
@@ -26,29 +40,21 @@ function envoyerEmail(
         $mail->Host = "smtp.gmail.com";
         $mail->SMTPAuth = true;
 
-        $mail->Username =
-            getenv("GMAIL_USER");
+        $mail->Username = $gmailUser;
+        $mail->Password = $gmailPassword;
 
-        $mail->Password =
-            getenv("GMAIL_APP_PASSWORD");
-
-        $mail->SMTPSecure =
-            PHPMailer::ENCRYPTION_STARTTLS;
-
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
         $mail->CharSet = "UTF-8";
 
-
         // Expéditeur
         $mail->setFrom(
-            getenv("GMAIL_USER"),
+            $gmailUser,
             "Vite & Gourmand"
         );
 
-
         // Destinataire
         $mail->addAddress($destinataire);
-
 
         // Contenu
         $mail->isHTML(true);
@@ -59,10 +65,8 @@ function envoyerEmail(
         if ($contenuTexte !== "") {
             $mail->AltBody = $contenuTexte;
         } else {
-            $mail->AltBody =
-                strip_tags($contenuHtml);
+            $mail->AltBody = strip_tags($contenuHtml);
         }
-
 
         // Envoi
         $mail->send();
