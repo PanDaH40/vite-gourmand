@@ -7,7 +7,7 @@ require __DIR__ . "/db.php";
 header("Content-Type: application/json; charset=utf-8");
 
 
-/*
+/**
  * L'utilisateur doit être connecté.
  */
 if (!isset($_SESSION["utilisateur_id"])) {
@@ -26,7 +26,7 @@ if (!isset($_SESSION["utilisateur_id"])) {
 $utilisateur_id = (int) $_SESSION["utilisateur_id"];
 
 
-/*
+/**
  * Récupération uniquement des commandes
  * appartenant à l'utilisateur connecté.
  */
@@ -74,6 +74,49 @@ $stmt->execute([
 
 
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+/**
+ * Récupération de l'historique
+ * de chaque commande.
+ */
+$sqlHistorique = "
+    SELECT
+        historique_commande.statut,
+        historique_commande.date_modification
+
+    FROM historique_commande
+
+    WHERE historique_commande.numero_commande =
+          :numero_commande
+
+    ORDER BY
+        historique_commande.date_modification ASC,
+        historique_commande.historique_id ASC
+";
+
+
+$stmtHistorique = $pdo->prepare($sqlHistorique);
+
+
+/**
+ * Ajout de l'historique
+ * dans chaque commande.
+ */
+foreach ($commandes as &$commande) {
+
+    $stmtHistorique->execute([
+        "numero_commande" =>
+            $commande["numero_commande"]
+    ]);
+
+    $commande["historique"] =
+        $stmtHistorique->fetchAll(
+            PDO::FETCH_ASSOC
+        );
+}
+
+unset($commande);
 
 
 echo json_encode(

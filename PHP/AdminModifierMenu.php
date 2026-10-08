@@ -7,7 +7,7 @@ require __DIR__ . "/db.php";
 header("Content-Type: application/json; charset=utf-8");
 
 
-/*
+/**
  * Vérification de la connexion
  */
 if (!isset($_SESSION["utilisateur_id"])) {
@@ -23,8 +23,8 @@ if (!isset($_SESSION["utilisateur_id"])) {
 }
 
 
-/*
- * Vérification du rôle administrateur
+/**
+ * Vérification du rôle employé ou administrateur
  */
 $sqlRole = "
     SELECT role.libelle
@@ -34,7 +34,7 @@ $sqlRole = "
         ON possede_utilisateur_role.role_id = role.role_id
 
     WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
-    AND role.libelle = 'Administrateur'
+    AND role.libelle IN ('Administrateur', 'Employé')
 
     LIMIT 1
 ";
@@ -47,11 +47,7 @@ $stmtRole->execute([
 
 $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
-
-if (
-    !$role ||
-    $role["libelle"] !== "Administrateur"
-) {
+if (!$role) {
 
     http_response_code(403);
 
@@ -64,7 +60,7 @@ if (
 }
 
 
-/*
+/**
  * POST uniquement
  */
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -78,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
     exit;
 }
+
 
 /**
  * Vérification du jeton CSRF
@@ -101,14 +98,14 @@ if (
     exit;
 }
 
-/*
+
+/**
  * Récupération des données JSON
  */
 $donnees = json_decode(
     file_get_contents("php://input"),
     true
 );
-
 
 $menuId =
     isset($donnees["menu_id"])
@@ -140,7 +137,7 @@ $description =
     trim($donnees["description"] ?? "");
 
 
-/*
+/**
  * Validation
  */
 if (
@@ -169,7 +166,6 @@ $regimesAutorises = [
     "Vegan"
 ];
 
-
 if (!in_array(
     $regime,
     $regimesAutorises,
@@ -189,7 +185,7 @@ if (!in_array(
 
 try {
 
-    /*
+    /**
      * Modification du menu
      */
     $sql = "
@@ -218,12 +214,10 @@ try {
         "menu_id" => $menuId
     ]);
 
-
     echo json_encode([
         "success" => true,
         "message" => "Menu modifié avec succès."
     ], JSON_UNESCAPED_UNICODE);
-
 
 } catch (PDOException $e) {
 

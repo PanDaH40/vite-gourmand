@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestion des horaires | Vite & Gourmand</title>
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="asset/CSS/Admin.css">
+</head>
+
+<body>
+
+    <header class="admin-header">
+
+        <div class="container header-content">
+
+            <h1 class="logo">
+                Vite & Gourmand
+            </h1>
+
+            <nav aria-label="Navigation gestion">
+
+                <a href="EmployeDashboard.html">
+                    Espace employé
+                </a>
+
+                <a href="AdminCommandes.html">
+                    Commandes
+                </a>
+
+                <a href="AdminMenus.html">
+                    Menus
+                </a>
+
+                <a href="AdminPlats.html">
+                    Plats
+                </a>
+
+                <a href="AdminPlats.html">
+                    Plats
+                </a>
+
+                <a href="AdminHoraires.html" class="active" aria-current="page">
+                    Horaires
+                </a>
+
+                <a href="AdminAvis.html">
+                    Avis
+                </a>
+
+                <a href="PagePrincipale.html">
+                    Retour au site
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <section class="page-title" aria-labelledby="horaires-title">
+
+            <h2 id="horaires-title">
+                Gestion des horaires
+            </h2>
+
+            <p>
+                Ajouter, modifier ou supprimer les horaires d'ouverture.
+            </p>
+
+        </section>
+
+
+        <section class="admin-section" aria-labelledby="formTitre">
+
+            <h2 id="formTitre">
+                Ajouter un horaire
+            </h2>
+
+            <form class="filter-form" id="horaireForm">
+
+                <input type="hidden" id="horaireId" name="horaire_id" value="">
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="jour">
+                            Jour
+                        </label>
+
+                        <select id="jour" name="jour" required>
+
+                            <option value="">
+                                Choisissez un jour
+                            </option>
+
+                            <option value="Lundi">Lundi</option>
+                            <option value="Mardi">Mardi</option>
+                            <option value="Mercredi">Mercredi</option>
+                            <option value="Jeudi">Jeudi</option>
+                            <option value="Vendredi">Vendredi</option>
+                            <option value="Samedi">Samedi</option>
+                            <option value="Dimanche">Dimanche</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="heureOuverture">
+                            Heure d'ouverture
+                        </label>
+
+                        <input type="time" id="heureOuverture" name="heure_ouverture" required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="heureFermeture">
+                            Heure de fermeture
+                        </label>
+
+                        <input type="time" id="heureFermeture" name="heure_fermeture" required>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="btn-primary" id="btnEnregistrer">
+                    Ajouter l'horaire
+                </button>
+
+
+                <button type="button" class="btn-small" id="btnAnnulerModification" hidden>
+                    Annuler la modification
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section class="admin-section">
+
+            <h2>
+                Horaires existants
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <caption>
+                        Liste des horaires d'ouverture
+                    </caption>
+
+                    <thead>
+
+                        <tr>
+
+                            <th scope="col">
+                                Jour
+                            </th>
+
+                            <th scope="col">
+                                Ouverture
+                            </th>
+
+                            <th scope="col">
+                                Fermeture
+                            </th>
+
+                            <th scope="col">
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="horairesTableBody" aria-live="polite">
+
+                        <tr>
+
+                            <td colspan="4">
+                                Chargement des horaires...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <div class="container footer-content">
+
+            <p>
+                Vite & Gourmand - Gestion des horaires
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="asset/JS/SessionFront.js"></script>
+    <script src="asset/JS/EmployeAccess.js?v=2"></script>
+    <script src="asset/JS/AdminHoraires.js?v=1"></script>
+
+</body>
+
+</html>

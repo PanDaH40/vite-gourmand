@@ -1,0 +1,187 @@
+/* =========================
+   BASE
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #222;
+}
+
+a {
+    color: inherit;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+body > header {
+    background-color: #ffffff;
+    padding: 20px 5%;
+    border-bottom: 1px solid #dddddd;
+}
+
+body > header h1 {
+    margin: 0 0 20px;
+}
+
+body > header nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+body > header nav a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+body > header nav a:hover,
+body > header nav a:focus {
+    text-decoration: underline;
+}
+
+body > header nav a[aria-current="page"] {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   CONTENU PRINCIPAL
+========================= */
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+main > header {
+    margin-bottom: 35px;
+}
+
+main > header h2 {
+    margin-bottom: 10px;
+    font-size: 2rem;
+}
+
+main > header p {
+    margin: 0;
+    color: #666666;
+}
+
+
+/* =========================
+   GESTION
+========================= */
+
+section[aria-labelledby="gestion-title"] > h2 {
+    margin-bottom: 25px;
+}
+
+section[aria-labelledby="gestion-title"] {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+section[aria-labelledby="gestion-title"] > h2 {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================
+   CARTES
+========================= */
+
+article {
+    background-color: #ffffff;
+    padding: 25px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+}
+
+article h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+article p {
+    margin-bottom: 20px;
+    line-height: 1.5;
+    color: #555555;
+}
+
+article a {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #222222;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+article a:hover,
+article a:focus {
+    background-color: #444444;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    margin-top: 50px;
+    padding: 25px 5%;
+    background-color: #ffffff;
+    border-top: 1px solid #dddddd;
+    text-align: center;
+}
+
+footer p {
+    margin-top: 0;
+}
+
+footer nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+footer nav a {
+    text-decoration: none;
+}
+
+footer nav a:hover,
+footer nav a:focus {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
+
+    section[aria-labelledby="gestion-title"] {
+        grid-template-columns: 1fr;
+    }
+
+    body > header nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

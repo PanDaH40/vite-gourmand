@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 require __DIR__ . "/db.php";
@@ -9,23 +10,29 @@ if (!isset($_SESSION["utilisateur_id"])) {
     exit;
 }
 
-/* Vérifie si admin */
-$sqlRole = "SELECT role.libelle
-FROM possede_utilisateur_role
-INNER JOIN role
-ON possede_utilisateur_role.role_id = role.role_id
-WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
-AND role.libelle = 'Administrateur'
-LIMIT 1";
+/* Vérifie si administrateur ou employé */
+$sqlRole = "
+    SELECT role.libelle
+    FROM possede_utilisateur_role
+
+    INNER JOIN role
+        ON possede_utilisateur_role.role_id = role.role_id
+
+    WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
+    AND role.libelle IN ('Administrateur', 'Employé')
+
+    LIMIT 1
+";
 
 $stmtRole = $pdo->prepare($sqlRole);
+
 $stmtRole->execute([
     "utilisateur_id" => $_SESSION["utilisateur_id"]
 ]);
 
 $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
-if (!$role || $role["libelle"] !== "Administrateur") {
+if (!$role) {
     die("Accès refusé.");
 }
 
@@ -49,8 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die("Tous les champs sont obligatoires.");
     }
 
-
-        /**
+    /**
      * Vérification du jeton CSRF
      */
     $csrfToken = $_POST["csrf_token"] ?? "";
@@ -65,11 +71,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die("Jeton de sécurité invalide.");
     }
 
-    
-    $sql = "INSERT INTO menu
-    (titre, nombre_personne_minimum, prix_par_personne, regime, description, quantite_restante)
-    VALUES
-    (:titre, :minimum, :prix, :regime, :description, :stock)";
+    $sql = "
+        INSERT INTO menu
+        (
+            titre,
+            nombre_personne_minimum,
+            prix_par_personne,
+            regime,
+            description,
+            quantite_restante
+        )
+        VALUES
+        (
+            :titre,
+            :minimum,
+            :prix,
+            :regime,
+            :description,
+            :stock
+        )
+    ";
 
     $stmt = $pdo->prepare($sql);
 
@@ -84,10 +105,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     echo "
     <script>
-      alert('Menu ajouté avec succès.');
-      window.location.href = '../AdminMenus.html';
+        alert('Menu ajouté avec succès.');
+        window.location.href = '../AdminMenus.html';
     </script>
     ";
+
     exit;
 }
 ?>

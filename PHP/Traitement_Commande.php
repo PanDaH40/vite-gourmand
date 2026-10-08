@@ -3,16 +3,20 @@
 session_start();
 
 require __DIR__ . "/db.php";
+require_once __DIR__ . "/Mailer.php";
+
 
 if (!isset($_SESSION["utilisateur_id"])) {
     header("Location: ../Connection.html");
     exit;
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../Menu.html");
     exit;
 }
+
 
 try {
 
@@ -30,6 +34,11 @@ try {
     $heure_livraison = $_POST["heure_livraison"] ?? "";
     $ville = trim($_POST["ville"] ?? "");
 
+    // Récupération de l'adresse de livraison
+    $adresse_livraison = trim(
+        $_POST["adresse_livraison"] ?? ""
+    );
+
     $pret_materiel =
         isset($_POST["pret_materiel"]) ? 1 : 0;
 
@@ -42,9 +51,38 @@ try {
         $nombre_personne <= 0 ||
         empty($date_prestation) ||
         empty($heure_livraison) ||
-        empty($ville)
+        empty($ville) ||
+        $adresse_livraison === ""
     ) {
         die("Veuillez remplir tous les champs obligatoires.");
+    }
+
+
+    /**
+     * Récupération du client connecté.
+     *
+     * On récupère son prénom et son adresse e-mail
+     * pour pouvoir envoyer la confirmation.
+     */
+    $sqlClient = "
+        SELECT
+            prenom,
+            email
+        FROM utilisateur
+        WHERE utilisateur_id = :utilisateur_id
+        LIMIT 1
+    ";
+
+    $stmtClient = $pdo->prepare($sqlClient);
+
+    $stmtClient->execute([
+        "utilisateur_id" => $utilisateur_id
+    ]);
+
+    $client = $stmtClient->fetch(PDO::FETCH_ASSOC);
+
+    if (!$client) {
+        die("Utilisateur introuvable.");
     }
 
 
@@ -57,6 +95,7 @@ try {
     $sqlMenu = "
         SELECT
             menu_id,
+            titre,
             prix_par_personne,
             nombre_personne_minimum,
             quantite_restante
@@ -121,12 +160,206 @@ try {
      * Livraison.
      *
      * Bordeaux : gratuite
-     * Autre ville : 5 €
+     * Hors Bordeaux : 5 € + 0,59 € par kilomètre.
      */
     $prix_livraison = 0;
 
-    if (strtolower($ville) !== "bordeaux") {
-        $prix_livraison = 5;
+    if (mb_strtolower($ville, "UTF-8") !== "bordeaux") {
+
+        /**
+         * Création de l'adresse complète.
+         */
+        $adresse_complete =
+            $adresse_livraison . ", " .
+            $ville . ", France";
+
+
+        /**
+         * 1 - Recherche des coordonnées
+         * de l'adresse de livraison.
+         */
+        $url_geocodage =
+            "https://nominatim.openstreetmap.org/search" .
+            "?format=json" .
+            "&limit=1" .
+            "&countrycodes=fr" .
+            "&q=" .
+            urlencode($adresse_complete);
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url_geocodage,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_USERAGENT => "ViteEtGourmand/1.0"
+        ]);
+
+        $reponse_geocodage = curl_exec($curl);
+
+        if ($reponse_geocodage === false) {
+
+            curl_close($curl);
+
+            die(
+                "Impossible de rechercher " .
+                "l'adresse de livraison."
+            );
+        }
+
+
+        $code_http =
+            curl_getinfo(
+                $curl,
+                CURLINFO_HTTP_CODE
+            );
+
+        curl_close($curl);
+
+
+        if ($code_http !== 200) {
+
+            die(
+                "Impossible de rechercher " .
+                "l'adresse de livraison."
+            );
+        }
+
+
+        $resultat_geocodage =
+            json_decode(
+                $reponse_geocodage,
+                true
+            );
+
+
+        if (
+            !is_array($resultat_geocodage) ||
+            empty($resultat_geocodage)
+        ) {
+
+            die(
+                "Adresse de livraison introuvable."
+            );
+        }
+
+
+        $latitude_destination =
+            (float) $resultat_geocodage[0]["lat"];
+
+        $longitude_destination =
+            (float) $resultat_geocodage[0]["lon"];
+
+
+        /**
+         * 2 - Coordonnées du centre de Bordeaux.
+         */
+        $latitude_bordeaux = 44.8378;
+        $longitude_bordeaux = -0.5792;
+
+
+        /**
+         * 3 - Calcul de la distance routière.
+         *
+         * OSRM attend les coordonnées sous la forme :
+         * longitude,latitude
+         */
+        $url_route =
+            "https://router.project-osrm.org/route/v1/driving/" .
+            $longitude_bordeaux . "," .
+            $latitude_bordeaux . ";" .
+            $longitude_destination . "," .
+            $latitude_destination .
+            "?overview=false";
+
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url_route,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_USERAGENT => "ViteEtGourmand/1.0"
+        ]);
+
+        $reponse_route =
+            curl_exec($curl);
+
+
+        if ($reponse_route === false) {
+
+            curl_close($curl);
+
+            die(
+                "Impossible de calculer " .
+                "la distance de livraison."
+            );
+        }
+
+
+        $code_http =
+            curl_getinfo(
+                $curl,
+                CURLINFO_HTTP_CODE
+            );
+
+        curl_close($curl);
+
+
+        if ($code_http !== 200) {
+
+            die(
+                "Impossible de calculer " .
+                "la distance de livraison."
+            );
+        }
+
+
+        $resultat_route =
+            json_decode(
+                $reponse_route,
+                true
+            );
+
+
+        if (
+            !isset($resultat_route["code"]) ||
+            $resultat_route["code"] !== "Ok" ||
+            !isset($resultat_route["routes"][0]["distance"])
+        ) {
+
+            die(
+                "Aucun itinéraire de livraison trouvé."
+            );
+        }
+
+
+        /**
+         * 4 - OSRM retourne la distance en mètres.
+         * Conversion en kilomètres.
+         */
+        $distance_km =
+            (float) $resultat_route["routes"][0]["distance"]
+            / 1000;
+
+
+        /**
+         * 5 - Calcul des frais de livraison.
+         *
+         * 5 € fixes
+         * +
+         * 0,59 € par kilomètre.
+         */
+        $prix_livraison =
+            5 + ($distance_km * 0.59);
+
+
+        /**
+         * Arrondi à deux chiffres après la virgule.
+         */
+        $prix_livraison =
+            round($prix_livraison, 2);
     }
 
 
@@ -154,9 +387,6 @@ try {
 
     /**
      * Vérification et déduction du stock.
-     *
-     * La quantité est retirée uniquement
-     * si le stock est suffisant.
      */
     $sqlStock = "
         UPDATE menu
@@ -173,6 +403,7 @@ try {
         "menu_id" => $menu_id,
         "quantite_minimum" => $nombre_personne
     ]);
+
 
     if ($stmtStock->rowCount() !== 1) {
 
@@ -282,12 +513,176 @@ try {
 
 
     /**
-     * Tout s'est correctement passé.
-     *
      * La commande est enregistrée
      * et le stock est mis à jour.
      */
     $pdo->commit();
+
+
+    /**
+     * E-mail de confirmation de commande.
+     *
+     * L'envoi est effectué après le commit :
+     * une erreur SMTP ne doit pas annuler
+     * une commande déjà enregistrée.
+     */
+    $prenomSecurise =
+        htmlspecialchars(
+            $client["prenom"],
+            ENT_QUOTES,
+            "UTF-8"
+        );
+
+    $menuSecurise =
+        htmlspecialchars(
+            $menu["titre"],
+            ENT_QUOTES,
+            "UTF-8"
+        );
+
+    $numeroSecurise =
+        htmlspecialchars(
+            $numero_commande,
+            ENT_QUOTES,
+            "UTF-8"
+        );
+
+    $adresseSecurisee =
+        htmlspecialchars(
+            $adresse_livraison,
+            ENT_QUOTES,
+            "UTF-8"
+        );
+
+    $villeSecurisee =
+        htmlspecialchars(
+            $ville,
+            ENT_QUOTES,
+            "UTF-8"
+        );
+
+
+    $prixMenuAffiche =
+        number_format(
+            $prix_menu,
+            2,
+            ",",
+            " "
+        );
+
+    $prixLivraisonAffiche =
+        number_format(
+            $prix_livraison,
+            2,
+            ",",
+            " "
+        );
+
+    $prixTotal =
+        $prix_menu + $prix_livraison;
+
+    $prixTotalAffiche =
+        number_format(
+            $prixTotal,
+            2,
+            ",",
+            " "
+        );
+
+
+    $contenuHtml = "
+        <h1>Confirmation de votre commande</h1>
+
+        <p>
+            Bonjour {$prenomSecurise},
+        </p>
+
+        <p>
+            Votre commande Vite & Gourmand
+            a bien été enregistrée.
+        </p>
+
+        <h2>Commande {$numeroSecurise}</h2>
+
+        <p>
+            <strong>Menu :</strong>
+            {$menuSecurise}
+        </p>
+
+        <p>
+            <strong>Nombre de personnes :</strong>
+            {$nombre_personne}
+        </p>
+
+        <p>
+            <strong>Date de prestation :</strong>
+            {$date_prestation}
+        </p>
+
+        <p>
+            <strong>Heure de livraison :</strong>
+            {$heure_livraison}
+        </p>
+
+        <p>
+            <strong>Adresse de livraison :</strong><br>
+            {$adresseSecurisee}<br>
+            {$villeSecurisee}
+        </p>
+
+        <p>
+            <strong>Prix du menu :</strong>
+            {$prixMenuAffiche} €
+        </p>
+
+        <p>
+            <strong>Frais de livraison :</strong>
+            {$prixLivraisonAffiche} €
+        </p>
+
+        <p>
+            <strong>Total :</strong>
+            {$prixTotalAffiche} €
+        </p>
+
+        <p>
+            Statut actuel :
+            <strong>En attente</strong>
+        </p>
+
+        <p>
+            Merci pour votre commande.
+        </p>
+
+        <p>
+            Vite & Gourmand
+        </p>
+    ";
+
+
+    $contenuTexte =
+        "Bonjour " . $client["prenom"] . ",\n\n" .
+        "Votre commande Vite & Gourmand a bien été enregistrée.\n\n" .
+        "Numéro : " . $numero_commande . "\n" .
+        "Menu : " . $menu["titre"] . "\n" .
+        "Nombre de personnes : " . $nombre_personne . "\n" .
+        "Date de prestation : " . $date_prestation . "\n" .
+        "Heure de livraison : " . $heure_livraison . "\n" .
+        "Adresse : " . $adresse_livraison . ", " . $ville . "\n" .
+        "Prix du menu : " . $prixMenuAffiche . " €\n" .
+        "Frais de livraison : " . $prixLivraisonAffiche . " €\n" .
+        "Total : " . $prixTotalAffiche . " €\n" .
+        "Statut : En attente\n\n" .
+        "Merci pour votre commande.\n" .
+        "Vite & Gourmand";
+
+
+    envoyerEmail(
+        $client["email"],
+        "Confirmation de votre commande " . $numero_commande,
+        $contenuHtml,
+        $contenuTexte
+    );
 
 
     echo "
@@ -303,9 +698,8 @@ try {
 } catch (Throwable $e) {
 
     /**
-     * Si une erreur survient pendant
-     * la transaction, on annule tout,
-     * y compris la déduction du stock.
+     * En cas d'erreur pendant la transaction,
+     * on annule toutes les modifications.
      */
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
@@ -315,4 +709,3 @@ try {
 
     echo "Une erreur est survenue lors de l'enregistrement de la commande.";
 }
-?>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestion des plats | Vite & Gourmand</title>
+
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="asset/CSS/Admin.css">
+</head>
+
+<body>
+
+    <header class="admin-header">
+
+        <div class="container header-content">
+
+            <h1 class="logo">
+                Vite & Gourmand
+            </h1>
+
+            <nav aria-label="Navigation gestion">
+
+                <a href="EmployeDashboard.html">
+                    Espace employé
+                </a>
+
+                <a href="AdminCommandes.html">
+                    Commandes
+                </a>
+
+                <a href="AdminMenus.html">
+                    Menus
+                </a>
+
+                <a href="AdminPlats.html" class="active" aria-current="page">
+                    Plats
+                </a>
+                
+
+                <a href="AdminHoraires.html">
+                    Horaires
+                </a>
+
+                <a href="AdminAvis.html">
+                    Avis
+                </a>
+
+                <a href="PagePrincipale.html">
+                    Retour au site
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- TITRE -->
+
+        <section class="page-title" aria-labelledby="plats-title">
+
+            <h2 id="plats-title">
+                Gestion des plats
+            </h2>
+
+            <p>
+                Ajouter, modifier ou supprimer les plats.
+            </p>
+
+        </section>
+
+
+        <!-- AJOUT / MODIFICATION -->
+
+        <section class="admin-section" aria-labelledby="formTitre">
+
+            <h2 id="formTitre">
+                Ajouter un plat
+            </h2>
+
+            <form class="filter-form" id="platForm">
+
+                <input type="hidden" id="platId" name="plat_id" value="">
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="titrePlat">
+                            Nom du plat
+                        </label>
+
+                        <input type="text" id="titrePlat" name="titre_plat" maxlength="50" placeholder="Nom du plat" required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="menuPlat">
+                            Menu
+                        </label>
+
+                        <select id="menuPlat" name="menu_id" required>
+                            <option value="">
+                                Choisissez un menu
+                            </option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="btn-primary" id="btnEnregistrer">
+                    Ajouter le plat
+                </button>
+
+
+                <button type="button" class="btn-small" id="btnAnnulerModification" hidden>
+                    Annuler la modification
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- PLATS EXISTANTS -->
+
+        <section class="admin-section">
+
+            <h2>
+                Plats existants
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <caption>
+                        Liste des plats existants
+                    </caption>
+
+                    <thead>
+                        <tr>
+
+                            <th scope="col">
+                                Plat
+                            </th>
+
+                            <th scope="col">
+                                Menu
+                            </th>
+
+                            <th scope="col">
+                                Actions
+                            </th>
+
+                        </tr>
+                    </thead>
+
+
+                    <tbody id="platsTableBody" aria-live="polite">
+
+                        <tr>
+
+                            <td colspan="3">
+                                Chargement des plats...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <div class="container footer-content">
+
+            <p>
+                Vite & Gourmand - Gestion des plats
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="asset/JS/SessionFront.js"></script>
+    <script src="asset/JS/EmployeAccess.js?v=2"></script>
+    <script src="asset/JS/AdminPlats.js"></script>
+
+</body>
+
+</html>

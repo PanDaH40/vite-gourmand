@@ -10,11 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let utilisateurs = [];
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Sécurisation simple de l'affichage
-    |--------------------------------------------------------------------------
-    */
+    /**
+     *--------------------------------------------------------------------------
+     * Sécurisation simple de l'affichage
+     *--------------------------------------------------------------------------
+     */
 
     function escapeHtml(value) {
 
@@ -31,11 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Chargement des utilisateurs
-    |--------------------------------------------------------------------------
-    */
+    /**
+     *--------------------------------------------------------------------------
+     * Chargement des utilisateurs
+     *--------------------------------------------------------------------------
+     */
 
     async function chargerUtilisateurs() {
 
@@ -48,8 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             if (!response.ok || !data.success) {
+
                 throw new Error(
-                    data.error || "Impossible de récupérer les utilisateurs."
+                    data.error ||
+                    "Impossible de récupérer les utilisateurs."
                 );
             }
 
@@ -74,11 +76,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Affichage du tableau
-    |--------------------------------------------------------------------------
-    */
+    /**
+     *--------------------------------------------------------------------------
+     * Affichage du tableau
+     *--------------------------------------------------------------------------
+     */
 
     function afficherUtilisateurs(liste) {
 
@@ -100,12 +102,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         liste.forEach(utilisateur => {
 
-            /*
+            /**
              * Un utilisateur sans rôle dans la table de liaison
              * est considéré ici comme un utilisateur standard.
              */
 
             const role = utilisateur.role || "Utilisateur";
+
+            const estEmploye = role === "Employé";
+
+            const compteActif =
+                Number(utilisateur.actif) === 1;
+
 
             let badgeClass = "accepted";
 
@@ -150,6 +158,25 @@ document.addEventListener("DOMContentLoaded", () => {
                             Modifier rôle
                         </button>
 
+                        ${
+                            estEmploye
+                                ? `
+                                    <button
+                                        type="button"
+                                        class="btn-small btn-toggle-employe"
+                                        data-id="${utilisateur.utilisateur_id}"
+                                        data-actif="${compteActif ? 1 : 0}"
+                                    >
+                                        ${
+                                            compteActif
+                                                ? "Désactiver"
+                                                : "Réactiver"
+                                        }
+                                    </button>
+                                `
+                                : ""
+                        }
+
                     </div>
                 </td>
             `;
@@ -159,19 +186,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Filtres
-    |--------------------------------------------------------------------------
-    */
+    /**
+     *--------------------------------------------------------------------------
+     * Filtres
+     *--------------------------------------------------------------------------
+     */
 
     filterForm.addEventListener("submit", event => {
 
         event.preventDefault();
 
-        const roleRecherche = roleFilter.value.toLowerCase().trim();
-        const villeRecherche = villeFilter.value.toLowerCase().trim();
-        const texteRecherche = rechercheFilter.value.toLowerCase().trim();
+        const roleRecherche =
+            roleFilter.value.toLowerCase().trim();
+
+        const villeRecherche =
+            villeFilter.value.toLowerCase().trim();
+
+        const texteRecherche =
+            rechercheFilter.value.toLowerCase().trim();
 
 
         const resultat = utilisateurs.filter(utilisateur => {
@@ -197,11 +229,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 roleRecherche === "" ||
                 role === roleRecherche;
 
-
             const correspondVille =
                 villeRecherche === "" ||
                 ville.includes(villeRecherche);
-
 
             const correspondRecherche =
                 texteRecherche === "" ||
@@ -221,21 +251,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Bouton Modifier rôle
-    |--------------------------------------------------------------------------
-    */
+    /**
+     *--------------------------------------------------------------------------
+     * Bouton Modifier rôle
+     *--------------------------------------------------------------------------
+     */
 
     tableBody.addEventListener("click", event => {
 
-        const bouton = event.target.closest(".btn-role");
+        const bouton =
+            event.target.closest(".btn-role");
 
         if (!bouton) {
             return;
         }
 
-        const utilisateurId = bouton.dataset.id;
+        const utilisateurId =
+            bouton.dataset.id;
 
         const utilisateur = utilisateurs.find(
             utilisateur =>
@@ -253,21 +285,51 @@ document.addEventListener("DOMContentLoaded", () => {
             utilisateur.role || "Utilisateur";
 
 
-        /*
-         * Pour l'instant le bouton permet de choisir
-         * entre les deux rôles réellement présents
-         * dans la base.
-         */
+        const nouveauRole = prompt(
+            `Rôle actuel de ${utilisateur.prenom || utilisateur.email} : ${roleActuel}\n\n` +
+            `Choisissez le nouveau rôle :\n` +
+            `Utilisateur\n` +
+            `Employé\n`,
+            roleActuel
+        );
 
-        const nouveauRole =
-            roleActuel === "Administrateur"
-                ? "Utilisateur"
-                : "Administrateur";
+
+        if (nouveauRole === null) {
+            return;
+        }
+
+
+        const roleChoisi =
+            nouveauRole.trim();
+
+
+        const rolesAutorises = [
+            "Utilisateur",
+            "Employé"
+        ];
+
+
+        if (!rolesAutorises.includes(roleChoisi)) {
+
+            message.textContent =
+                "Rôle invalide : Utilisateur ou Employé.";
+
+            return;
+        }
+
+
+        if (roleChoisi === roleActuel) {
+
+            message.textContent =
+                "Le rôle n'a pas été modifié.";
+
+            return;
+        }
 
 
         const confirmation = confirm(
-            `Modifier le rôle de ${utilisateur.prenom} :\n\n` +
-            `${roleActuel} → ${nouveauRole} ?`
+            `Modifier le rôle de ${utilisateur.prenom || utilisateur.email} :\n\n` +
+            `${roleActuel} → ${roleChoisi} ?`
         );
 
 
@@ -278,22 +340,122 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modifierRole(
             utilisateur.utilisateur_id,
-            nouveauRole
+            roleChoisi
         );
     });
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Modification du rôle
-    |--------------------------------------------------------------------------
-    */
+    /**
+     *--------------------------------------------------------------------------
+     * Activation / désactivation d'un employé
+     *--------------------------------------------------------------------------
+     */
+
+    tableBody.addEventListener("click", async event => {
+
+        const bouton =
+            event.target.closest(".btn-toggle-employe");
+
+        if (!bouton) {
+            return;
+        }
+
+
+        const utilisateurId =
+            Number(bouton.dataset.id);
+
+        const actuellementActif =
+            Number(bouton.dataset.actif);
+
+
+        const nouvelEtat =
+            actuellementActif === 1 ? 0 : 1;
+
+
+        const action =
+            nouvelEtat === 0
+                ? "désactiver"
+                : "réactiver";
+
+
+        const confirmation = confirm(
+            `Voulez-vous vraiment ${action} ce compte employé ?`
+        );
+
+
+        if (!confirmation) {
+            return;
+        }
+
+
+        try {
+
+            message.textContent =
+                nouvelEtat === 0
+                    ? "Désactivation en cours..."
+                    : "Réactivation en cours...";
+
+
+            const response = await fetch(
+                "PHP/AdminToggleEmploye.php",
+                {
+                    method: "POST",
+
+                    credentials: "same-origin",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        utilisateur_id: utilisateurId,
+                        actif: nouvelEtat
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.error ||
+                    "Impossible de modifier le compte employé."
+                );
+            }
+
+
+            message.textContent =
+                data.message;
+
+
+            await chargerUtilisateurs();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.textContent =
+                error.message;
+        }
+    });
+
+
+    /**
+     *--------------------------------------------------------------------------
+     * Modification du rôle
+     *--------------------------------------------------------------------------
+     */
 
     async function modifierRole(utilisateurId, role) {
 
         try {
 
-            message.textContent = "Modification en cours...";
+            message.textContent =
+                "Modification en cours...";
 
 
             const response = await fetch(
@@ -338,16 +500,109 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.error(error);
 
-            message.textContent = error.message;
+            message.textContent =
+                error.message;
         }
     }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Premier chargement
-    |--------------------------------------------------------------------------
-    */
+    /**
+     *--------------------------------------------------------------------------
+     * Création d'un compte employé
+     *--------------------------------------------------------------------------
+     */
+
+    const employeForm =
+        document.getElementById("employeForm");
+
+    const employeEmail =
+        document.getElementById("employeEmail");
+
+    const employePassword =
+        document.getElementById("employePassword");
+
+    const messageEmploye =
+        document.getElementById("messageEmploye");
+
+
+    employeForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            const email =
+                employeEmail.value.trim();
+
+            const password =
+                employePassword.value;
+
+
+            messageEmploye.textContent =
+                "Création du compte en cours...";
+
+
+            try {
+
+                const response = await fetch(
+                    "PHP/AdminCreerEmploye.php",
+                    {
+                        method: "POST",
+
+                        credentials: "same-origin",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.error ||
+                        "Impossible de créer le compte employé."
+                    );
+                }
+
+
+                messageEmploye.textContent =
+                    data.message;
+
+
+                employeForm.reset();
+
+
+                await chargerUtilisateurs();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                messageEmploye.textContent =
+                    error.message;
+            }
+        }
+    );
+
+
+    /**
+     *--------------------------------------------------------------------------
+     * Premier chargement
+     *--------------------------------------------------------------------------
+     */
 
     chargerUtilisateurs();
 

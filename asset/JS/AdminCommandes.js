@@ -37,27 +37,21 @@ function getBadgeClass(statut) {
 
     if (
         valeur === "acceptée" ||
-        valeur === "acceptee" ||
-        valeur === "accepté" ||
-        valeur === "accepte"
+        valeur === "en préparation" ||
+        valeur === "en cours de livraison" ||
+        valeur === "livré" ||
+        valeur === "en attente du retour de matériel"
     ) {
         return "accepted";
     }
 
-    if (
-        valeur === "terminée" ||
-        valeur === "terminee" ||
-        valeur === "terminé" ||
-        valeur === "termine"
-    ) {
+    if (valeur === "terminée") {
         return "done";
     }
 
     if (
         valeur === "refusée" ||
-        valeur === "refusee" ||
-        valeur === "refusé" ||
-        valeur === "refuse"
+        valeur === "annulée"
     ) {
         return "refused";
     }
@@ -67,7 +61,7 @@ function getBadgeClass(statut) {
 
 
 /**
- * Affiche les commandes dans le tableau.
+ * Affiche les commandes.
  */
 function afficherCommandes(commandes) {
 
@@ -86,34 +80,45 @@ function afficherCommandes(commandes) {
         return;
     }
 
+
     commandes.forEach(function (commande) {
 
         const ligne = document.createElement("tr");
 
-        const prixMenu = parseFloat(commande.prix_menu) || 0;
-        const prixLivraison = parseFloat(commande.prix_livraison) || 0;
-        const total = prixMenu + prixLivraison;
+        const prixMenu =
+            parseFloat(commande.prix_menu) || 0;
+
+        const prixLivraison =
+            parseFloat(commande.prix_livraison) || 0;
+
+        const total =
+            prixMenu + prixLivraison;
 
         const materiel =
             commande.pret_materiel == 1
                 ? "Oui"
                 : "Non";
 
-        const statut = commande.statut.toLowerCase();
-        const badgeClass = getBadgeClass(commande.statut);
+        const statut =
+            commande.statut.toLowerCase();
+
+        const badgeClass =
+            getBadgeClass(commande.statut);
 
         let boutons = "";
 
+
         /**
-         * Commande en attente
+         * EN ATTENTE
          */
         if (statut === "en attente") {
 
             boutons = `
                 <button
                     type="button"
-                    class="btn-small btn-accepter"
-                    data-numero="${commande.numero_commande}">
+                    class="btn-small btn-statut"
+                    data-numero="${commande.numero_commande}"
+                    data-statut="acceptée">
                     Accepter
                 </button>
 
@@ -126,34 +131,123 @@ function afficherCommandes(commandes) {
             `;
         }
 
+
         /**
-         * Commande acceptée
-         * AJOUT : bouton Refuser.
+         * ACCEPTÉE
          */
         else if (
             statut === "acceptée" ||
-            statut === "acceptee"
+            statut === "accepté"
         ) {
 
             boutons = `
                 <button
                     type="button"
-                    class="btn-small btn-terminer"
-                    data-numero="${commande.numero_commande}">
-                    Terminer
-                </button>
-
-                <button
-                    type="button"
-                    class="btn-small btn-danger btn-refuser"
-                    data-numero="${commande.numero_commande}">
-                    Refuser
+                    class="btn-small btn-statut"
+                    data-numero="${commande.numero_commande}"
+                    data-statut="en préparation">
+                    Mettre en préparation
                 </button>
             `;
         }
 
+
         /**
-         * Commande refusée ou terminée
+         * EN PRÉPARATION
+         */
+        else if (statut === "en préparation") {
+
+            boutons = `
+                <button
+                    type="button"
+                    class="btn-small btn-statut"
+                    data-numero="${commande.numero_commande}"
+                    data-statut="en cours de livraison">
+                    Mettre en livraison
+                </button>
+            `;
+        }
+
+
+        /**
+         * EN COURS DE LIVRAISON
+         */
+        else if (
+            statut === "en cours de livraison"
+        ) {
+
+            boutons = `
+                <button
+                    type="button"
+                    class="btn-small btn-statut"
+                    data-numero="${commande.numero_commande}"
+                    data-statut="livré">
+                    Marquer comme livré
+                </button>
+            `;
+        }
+
+
+        /**
+         * LIVRÉ
+         *
+         * Avec matériel :
+         * attente du retour.
+         *
+         * Sans matériel :
+         * commande terminée.
+         */
+        else if (statut === "livré") {
+
+            if (commande.pret_materiel == 1) {
+
+                boutons = `
+                    <button
+                        type="button"
+                        class="btn-small btn-statut"
+                        data-numero="${commande.numero_commande}"
+                        data-statut="en attente du retour de matériel">
+                        Attendre retour matériel
+                    </button>
+                `;
+
+            } else {
+
+                boutons = `
+                    <button
+                        type="button"
+                        class="btn-small btn-statut"
+                        data-numero="${commande.numero_commande}"
+                        data-statut="terminée">
+                        Terminer
+                    </button>
+                `;
+            }
+        }
+
+
+        /**
+         * EN ATTENTE DU RETOUR DE MATÉRIEL
+         */
+        else if (
+            statut ===
+            "en attente du retour de matériel"
+        ) {
+
+            boutons = `
+                <button
+                    type="button"
+                    class="btn-small btn-statut"
+                    data-numero="${commande.numero_commande}"
+                    data-statut="terminée">
+                    Matériel restitué
+                </button>
+            `;
+        }
+
+
+        /**
+         * TERMINÉE / REFUSÉE / ANNULÉE
          */
         else {
 
@@ -164,6 +258,7 @@ function afficherCommandes(commandes) {
             `;
         }
 
+
         ligne.innerHTML = `
             <td>
                 ${commande.numero_commande}
@@ -172,6 +267,7 @@ function afficherCommandes(commandes) {
             <td>
                 ${commande.prenom}
                 <br>
+
                 <span class="muted">
                     ${commande.email}
                 </span>
@@ -186,7 +282,9 @@ function afficherCommandes(commandes) {
             </td>
 
             <td>
-                ${formaterDate(commande.date_prestation)}
+                ${formaterDate(
+                    commande.date_prestation
+                )}
             </td>
 
             <td>
@@ -216,20 +314,28 @@ function afficherCommandes(commandes) {
 
 
 /**
- * Charge les commandes depuis MySQL
- * grâce à AdminCommandes.php.
+ * Charge les commandes depuis MySQL.
  */
 function chargerCommandes() {
 
-    fetch("PHP/AdminCommandes.php")
+    fetch("PHP/AdminCommandes.php", {
+        credentials: "same-origin",
+        cache: "no-store"
+    })
 
         .then(function (response) {
 
-            if (response.status === 401 || response.status === 403) {
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
 
-                window.location.href = "PagePrincipale.html";
+                window.location.href =
+                    "PagePrincipale.html";
 
-                throw new Error("Accès administrateur refusé.");
+                throw new Error(
+                    "Accès refusé."
+                );
             }
 
             if (!response.ok) {
@@ -258,7 +364,10 @@ function chargerCommandes() {
             }
 
             toutesLesCommandes = commandes;
-            afficherCommandes(toutesLesCommandes);
+
+            afficherCommandes(
+                toutesLesCommandes
+            );
         })
 
         .catch(function (error) {
@@ -267,7 +376,7 @@ function chargerCommandes() {
 
             if (
                 error.message !==
-                "Accès administrateur refusé."
+                "Accès refusé."
             ) {
 
                 commandesTableBody.innerHTML = `
@@ -284,62 +393,97 @@ function chargerCommandes() {
 
 /**
  * Modifie le statut d'une commande.
- * Protection CSRF ajoutée.
  */
-async function modifierStatut(numeroCommande, nouveauStatut) {
+async function modifierStatut(
+    numeroCommande,
+    nouveauStatut,
+    modeContact = null,
+    motif = null
+) {
 
     try {
 
         /**
-         * Récupération du jeton CSRF
-         * depuis la session administrateur.
+         * Récupération de la session
+         * et du jeton CSRF.
          */
-        const sessionResponse = await fetch("PHP/Check_Session.php", {
-            credentials: "same-origin",
-            cache: "no-store"
-        });
+        const sessionResponse =
+            await fetch(
+                "PHP/Check_Session.php",
+                {
+                    credentials: "same-origin",
+                    cache: "no-store"
+                }
+            );
 
-        const sessionData = await sessionResponse.json();
+        const sessionData =
+            await sessionResponse.json();
 
+
+        /**
+         * Administrateur OU Employé.
+         */
         if (
             !sessionResponse.ok ||
             !sessionData.connecte ||
-            !sessionData.admin ||
+            (!sessionData.admin &&
+             !sessionData.employe) ||
             !sessionData.csrf_token
         ) {
 
-            throw new Error("Session administrateur invalide.");
+            throw new Error(
+                "Session employé ou administrateur invalide."
+            );
         }
 
-        /**
-         * Envoi de la modification du statut.
-         */
-        const response = await fetch("PHP/UpdateCommandeStatut.php", {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-Token": sessionData.csrf_token
-            },
-            body: JSON.stringify({
-                numero_commande: numeroCommande,
-                statut: nouveauStatut
-            })
-        });
 
         /**
-         * On récupère d'abord le contenu en texte.
-         * Cela permet d'identifier une éventuelle
-         * erreur PHP au lieu de voir uniquement
-         * "Unexpected token <".
+         * Envoi au serveur.
          */
-        const texte = await response.text();
+        const response =
+            await fetch(
+                "PHP/UpdateCommandeStatut.php",
+                {
+                    method: "POST",
+
+                    credentials:
+                        "same-origin",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "X-CSRF-Token":
+                            sessionData.csrf_token
+                    },
+
+                    body: JSON.stringify({
+                        numero_commande:
+                            numeroCommande,
+
+                        statut:
+                            nouveauStatut,
+
+                        mode_contact:
+                            modeContact,
+
+                        motif:
+                            motif
+                    })
+                }
+            );
+
+
+        const texte =
+            await response.text();
 
         let data;
 
+
         try {
 
-            data = JSON.parse(texte);
+            data =
+                JSON.parse(texte);
 
         } catch (erreur) {
 
@@ -353,12 +497,15 @@ async function modifierStatut(numeroCommande, nouveauStatut) {
             );
         }
 
+
         if (!response.ok) {
 
             throw new Error(
-                data.message || "Erreur serveur."
+                data.message ||
+                "Erreur serveur."
             );
         }
+
 
         if (!data.success) {
 
@@ -370,98 +517,154 @@ async function modifierStatut(numeroCommande, nouveauStatut) {
             return;
         }
 
-        /**
-         * Recharge les données depuis MySQL.
-         */
+
         chargerCommandes();
+
 
     } catch (error) {
 
         console.error(error);
+
         alert(error.message);
     }
 }
 
 
 /**
- * Gestion des boutons dynamiques.
+ * Gestion des boutons.
  */
 commandesTableBody.addEventListener(
     "click",
     function (event) {
 
-        const bouton = event.target.closest("button");
+        const bouton =
+            event.target.closest("button");
 
         if (!bouton) {
             return;
         }
 
-        const numeroCommande = bouton.dataset.numero;
+
+        const numeroCommande =
+            bouton.dataset.numero;
 
         if (!numeroCommande) {
             return;
         }
 
+
         /**
-         * ACCEPTER
+         * REFUS D'UNE COMMANDE
+         *
+         * L'employé doit avoir contacté
+         * le client et préciser le moyen
+         * de contact ainsi que le motif.
          */
-        if (bouton.classList.contains("btn-accepter")) {
+        if (
+            bouton.classList.contains(
+                "btn-refuser"
+            )
+        ) {
+
+            const modeContact = prompt(
+                "Comment avez-vous contacté le client ?\n\n" +
+                "Saisissez : mail ou GSM"
+            );
+
+            if (modeContact === null) {
+                return;
+            }
+
+
+            const contact =
+                modeContact
+                    .trim()
+                    .toLowerCase();
+
+
+            if (
+                contact !== "mail" &&
+                contact !== "gsm"
+            ) {
+
+                alert(
+                    "Le mode de contact doit être : mail ou GSM."
+                );
+
+                return;
+            }
+
+
+            const motif = prompt(
+                "Indiquez le motif du refus :"
+            );
+
+
+            if (
+                motif === null ||
+                motif.trim() === ""
+            ) {
+
+                alert(
+                    "Le motif est obligatoire."
+                );
+
+                return;
+            }
+
 
             const confirmation = confirm(
-                "Accepter la commande " +
+                "Confirmer le refus de la commande " +
                 numeroCommande +
                 " ?"
             );
+
 
             if (confirmation) {
 
                 modifierStatut(
                     numeroCommande,
-                    "acceptée"
+                    "refusée",
+                    contact,
+                    motif.trim()
                 );
             }
 
             return;
         }
 
+
         /**
-         * REFUSER
+         * CHANGEMENT NORMAL DE STATUT
          */
-        if (bouton.classList.contains("btn-refuser")) {
+        if (
+            bouton.classList.contains(
+                "btn-statut"
+            )
+        ) {
 
-            const confirmation = confirm(
-                "Refuser la commande " +
-                numeroCommande +
-                " ?"
-            );
+            const nouveauStatut =
+                bouton.dataset.statut;
 
-            if (confirmation) {
-
-                modifierStatut(
-                    numeroCommande,
-                    "refusée"
-                );
+            if (!nouveauStatut) {
+                return;
             }
 
-            return;
-        }
-
-        /**
-         * TERMINER
-         */
-        if (bouton.classList.contains("btn-terminer")) {
 
             const confirmation = confirm(
-                "Marquer la commande " +
+                "Passer la commande " +
                 numeroCommande +
-                " comme terminée ?"
+                ' au statut "' +
+                nouveauStatut +
+                '" ?'
             );
+
 
             if (confirmation) {
 
                 modifierStatut(
                     numeroCommande,
-                    "terminée"
+                    nouveauStatut
                 );
             }
         }
@@ -478,65 +681,95 @@ filterForm.addEventListener(
 
         event.preventDefault();
 
-        const statut = filtreStatut.value.toLowerCase();
-        const date = filtreDate.value;
 
-        const recherche = filtreRecherche.value
-            .trim()
-            .toLowerCase();
+        const statut =
+            filtreStatut.value
+                .toLowerCase();
 
-        const commandesFiltrees = toutesLesCommandes.filter(
-            function (commande) {
 
-                let afficher = true;
+        const date =
+            filtreDate.value;
 
-                if (
-                    statut !== "" &&
-                    commande.statut.toLowerCase() !== statut
-                ) {
 
-                    afficher = false;
-                }
+        const recherche =
+            filtreRecherche.value
+                .trim()
+                .toLowerCase();
 
-                if (
-                    date !== "" &&
-                    commande.date_prestation !== date
-                ) {
 
-                    afficher = false;
-                }
+        const commandesFiltrees =
+            toutesLesCommandes.filter(
+                function (commande) {
 
-                if (recherche !== "") {
+                    let afficher = true;
 
-                    const numero = commande.numero_commande
-                        .toLowerCase();
-
-                    const prenom = commande.prenom
-                        .toLowerCase();
-
-                    const email = commande.email
-                        .toLowerCase();
 
                     if (
-                        !numero.includes(recherche) &&
-                        !prenom.includes(recherche) &&
-                        !email.includes(recherche)
+                        statut !== "" &&
+                        commande.statut
+                            .toLowerCase() !==
+                            statut
                     ) {
 
                         afficher = false;
                     }
+
+
+                    if (
+                        date !== "" &&
+                        commande.date_prestation !==
+                            date
+                    ) {
+
+                        afficher = false;
+                    }
+
+
+                    if (recherche !== "") {
+
+                        const numero =
+                            commande.numero_commande
+                                .toLowerCase();
+
+                        const prenom =
+                            commande.prenom
+                                .toLowerCase();
+
+                        const email =
+                            commande.email
+                                .toLowerCase();
+
+
+                        if (
+                            !numero.includes(
+                                recherche
+                            ) &&
+                            !prenom.includes(
+                                recherche
+                            ) &&
+                            !email.includes(
+                                recherche
+                            )
+                        ) {
+
+                            afficher = false;
+                        }
+                    }
+
+
+                    return afficher;
                 }
+            );
 
-                return afficher;
-            }
+
+        afficherCommandes(
+            commandesFiltrees
         );
-
-        afficherCommandes(commandesFiltrees);
     }
 );
 
 
 /**
- * Chargement de la page.
+ * Chargement initial.
  */
 chargerCommandes();

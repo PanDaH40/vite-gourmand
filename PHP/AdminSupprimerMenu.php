@@ -6,6 +6,7 @@ require __DIR__ . "/db.php";
 
 header("Content-Type: application/json; charset=utf-8");
 
+
 /**
  * Vérification connexion
  */
@@ -21,8 +22,9 @@ if (!isset($_SESSION["utilisateur_id"])) {
     exit;
 }
 
+
 /**
- * Vérification administrateur
+ * Vérification employé ou administrateur
  */
 $sqlRole = "
     SELECT role.libelle
@@ -32,7 +34,7 @@ $sqlRole = "
         ON possede_utilisateur_role.role_id = role.role_id
 
     WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
-    AND role.libelle = 'Administrateur'
+    AND role.libelle IN ('Administrateur', 'Employé')
 
     LIMIT 1
 ";
@@ -45,10 +47,7 @@ $stmtRole->execute([
 
 $role = $stmtRole->fetch(PDO::FETCH_ASSOC);
 
-if (
-    !$role ||
-    $role["libelle"] !== "Administrateur"
-) {
+if (!$role) {
 
     http_response_code(403);
 
@@ -59,6 +58,7 @@ if (
 
     exit;
 }
+
 
 /**
  * POST uniquement
@@ -74,6 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 
     exit;
 }
+
 
 /**
  * Vérification du jeton CSRF
@@ -96,6 +97,7 @@ if (
 
     exit;
 }
+
 
 /**
  * Lecture du JSON
@@ -121,6 +123,7 @@ if ($menuId <= 0) {
 
     exit;
 }
+
 
 try {
 
@@ -148,6 +151,7 @@ try {
 
         exit;
     }
+
 
     /**
      * Vérifie si le menu est déjà utilisé
@@ -179,6 +183,7 @@ try {
         exit;
     }
 
+
     /**
      * Suppression des éventuelles relations
      * régime et thème.
@@ -194,6 +199,7 @@ try {
         "menu_id" => $menuId
     ]);
 
+
     $stmtTheme = $pdo->prepare(
         "DELETE FROM propose_menu_theme
          WHERE menu_id = :menu_id"
@@ -203,6 +209,7 @@ try {
         "menu_id" => $menuId
     ]);
 
+
     $stmtPlat = $pdo->prepare(
         "DELETE FROM propose_menu_plat
          WHERE menu_id = :menu_id"
@@ -211,6 +218,7 @@ try {
     $stmtPlat->execute([
         "menu_id" => $menuId
     ]);
+
 
     /**
      * Suppression du menu
@@ -225,6 +233,7 @@ try {
     ]);
 
     $pdo->commit();
+
 
     echo json_encode([
         "success" => true,

@@ -48,7 +48,7 @@ try {
 
     // Rechercher l'utilisateur dans MySQL
     $sql = "
-        SELECT utilisateur_id, email, prenom, password
+        SELECT utilisateur_id, email, prenom, password, actif
         FROM utilisateur
         WHERE email = :email
         LIMIT 1
@@ -66,6 +66,12 @@ try {
     if (!$utilisateur) {
         http_response_code(401);
         exit("Email ou mot de passe incorrect.");
+    }
+
+    // Refuser la connexion si le compte est désactivé
+    if ((int) $utilisateur["actif"] !== 1) {
+        http_response_code(403);
+        exit("Ce compte a été désactivé.");
     }
 
     $hashStocke = (string) $utilisateur["password"];

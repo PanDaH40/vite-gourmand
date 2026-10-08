@@ -56,6 +56,22 @@
 
     <form class="commande-form" action="PHP/Traitement_Commande.php" method="post">
 
+
+      <!-- Informations du client connecté -->
+      <fieldset class="form-group">
+        <legend>Informations du client</legend>
+
+        <label for="clientPrenom">Prénom</label>
+        <input type="text" id="clientPrenom" readonly>
+
+        <label for="clientEmail">Adresse email</label>
+        <input type="email" id="clientEmail" readonly>
+
+        <label for="clientTelephone">Téléphone</label>
+        <input type="tel" id="clientTelephone" readonly>
+      </fieldset>
+
+
       <!-- Menu -->
 
       <div class="form-group">

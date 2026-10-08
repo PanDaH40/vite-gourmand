@@ -1,3 +1,4 @@
+
 const params = new URLSearchParams(window.location.search);
 const menuId = params.get("id");
 
@@ -13,10 +14,12 @@ const menuConditions = document.getElementById("menu-conditions");
 const commanderMenu = document.getElementById("commander-menu");
 
 
-/*
- * Informations détaillées qui étaient auparavant
- * présentes directement dans MenuPaque.html,
- * MenuNoel.html et MenuClassique.html.
+/**
+ * Informations détaillées des anciens menus.
+ * On conserve les images et les conditions.
+ *
+ * Les plats ne sont plus écrits ici :
+ * ils sont maintenant récupérés depuis MySQL.
  */
 const detailsMenus = {
 
@@ -36,24 +39,6 @@ const detailsMenus = {
             {
                 src: "asset/Images/moelleux.jpg",
                 alt: "Dessert du menu Pâques"
-            }
-        ],
-
-        plats: [
-            {
-                type: "Entrée",
-                nom: "Salade de saison, vinaigrette maison",
-                allergenes: "moutarde"
-            },
-            {
-                type: "Plat",
-                nom: "Agneau confit accompagné de légumes rôtis",
-                allergenes: "aucun"
-            },
-            {
-                type: "Dessert",
-                nom: "Moelleux chocolat et crème légère",
-                allergenes: "œufs, lait"
             }
         ],
 
@@ -84,24 +69,6 @@ const detailsMenus = {
             }
         ],
 
-        plats: [
-            {
-                type: "Entrée",
-                nom: "Foie gras maison, pain toasté",
-                allergenes: "gluten"
-            },
-            {
-                type: "Plat",
-                nom: "Dinde rôtie, pommes grenailles",
-                allergenes: "aucun"
-            },
-            {
-                type: "Dessert",
-                nom: "Bûche chocolat praliné",
-                allergenes: "lait, œufs"
-            }
-        ],
-
         conditions: [
             "Commande minimum 7 jours avant la prestation.",
             "Conservation au frais obligatoire après livraison.",
@@ -129,24 +96,6 @@ const detailsMenus = {
             }
         ],
 
-        plats: [
-            {
-                type: "Entrée",
-                nom: "Salade de saison, vinaigrette maison",
-                allergenes: "moutarde"
-            },
-            {
-                type: "Plat",
-                nom: "Bœuf braisé accompagné de légumes rôtis",
-                allergenes: "aucun"
-            },
-            {
-                type: "Dessert",
-                nom: "Tarte aux pommes maison",
-                allergenes: "gluten, œufs"
-            }
-        ],
-
         conditions: [
             "Commande minimum 5 jours avant la prestation.",
             "Conservation au frais obligatoire après livraison.",
@@ -156,6 +105,66 @@ const detailsMenus = {
 };
 
 
+/**
+ * Chargement des vrais plats associés au menu.
+ */
+function chargerPlatsMenu(id) {
+
+    menuPlats.textContent = "Chargement des plats...";
+
+    fetch("PHP/Get_Plats_Menu.php?id=" + encodeURIComponent(id))
+
+        .then(function (response) {
+
+            if (!response.ok) {
+                throw new Error("Impossible de charger les plats.");
+            }
+
+            return response.json();
+        })
+
+        .then(function (plats) {
+
+            if (!Array.isArray(plats)) {
+                throw new Error("Réponse des plats invalide.");
+            }
+
+            menuPlats.innerHTML = "";
+
+            if (plats.length === 0) {
+
+                menuPlats.innerHTML =
+                    '<p class="muted">Aucun plat associé à ce menu pour le moment.</p>';
+
+                return;
+            }
+
+            plats.forEach(function (plat) {
+
+                const article = document.createElement("article");
+                article.classList.add("dish");
+
+                const titre = document.createElement("h4");
+                titre.textContent = plat.titre_plat;
+
+                article.appendChild(titre);
+                menuPlats.appendChild(article);
+            });
+        })
+
+        .catch(function (error) {
+
+            console.error(error);
+
+            menuPlats.textContent =
+                "Impossible de charger les plats de ce menu.";
+        });
+}
+
+
+/**
+ * Chargement des informations du menu.
+ */
 if (!menuId) {
 
     menuTitre.textContent = "Menu introuvable";
@@ -200,9 +209,8 @@ if (!menuId) {
                 "Commande.html?menu=" + menu.menu_id;
 
 
-            /*
-             * Si le menu possède les informations détaillées
-             * de nos anciens fichiers HTML.
+            /**
+             * Informations conservées des anciens menus.
              */
             if (detail) {
 
@@ -216,8 +224,7 @@ if (!menuId) {
                 // Galerie
                 detail.images.forEach(function (image) {
 
-                    const img =
-                        document.createElement("img");
+                    const img = document.createElement("img");
 
                     img.src = image.src;
                     img.alt = image.alt;
@@ -227,31 +234,10 @@ if (!menuId) {
                 });
 
 
-                // Plats
-                detail.plats.forEach(function (plat) {
-
-                    const article =
-                        document.createElement("article");
-
-                    article.classList.add("dish");
-
-                    article.innerHTML =
-                        "<h4>" + plat.type + "</h4>" +
-                        "<p>" + plat.nom + "</p>" +
-                        '<p class="muted small">' +
-                        "<strong>Allergènes :</strong> " +
-                        plat.allergenes +
-                        "</p>";
-
-                    menuPlats.appendChild(article);
-                });
-
-
                 // Conditions
                 detail.conditions.forEach(function (condition) {
 
-                    const li =
-                        document.createElement("li");
+                    const li = document.createElement("li");
 
                     li.textContent = condition;
 
@@ -260,24 +246,26 @@ if (!menuId) {
 
             } else {
 
-                /*
-                 * Pour un nouveau menu créé par l'admin,
-                 * comme Menu Anniversaire.
+                /**
+                 * Nouveau menu créé par l'administration.
                  */
-
                 menuInfos.textContent =
                     "Régime : " + menu.regime;
 
                 menuGallery.innerHTML =
                     '<p class="muted">Aucune photo disponible pour ce menu.</p>';
 
-                menuPlats.innerHTML =
-                    '<p class="muted">Les plats de ce menu seront prochainement détaillés.</p>';
-
                 menuConditions.innerHTML =
                     "<li>Commande à effectuer avant la date de prestation.</li>" +
                     "<li>Conservation au frais après livraison.</li>";
             }
+
+
+            /**
+             * Tous les menus utilisent désormais
+             * les plats enregistrés dans MySQL.
+             */
+            chargerPlatsMenu(menu.menu_id);
 
         })
 

@@ -37,12 +37,20 @@
           Menus
         </a>
 
+        <a href="AdminPlats.html">
+          Plats
+        </a>
+
         <a href="AdminUtilisateurs.html" class="active" aria-current="page">
           Utilisateurs
         </a>
 
         <a href="AdminMateriel.html">
           Matériel
+        </a>
+
+        <a href="AdminHoraires.html">
+          Gérer les horaires
         </a>
 
         <a href="AdminAvis.html">
@@ -71,11 +79,59 @@
       </h2>
 
       <p>
-        Consulter les comptes utilisateurs et administrateurs.
+        Consulter les comptes et créer des comptes employés.
       </p>
 
     </section>
 
+    <!-- CREATION D'UN EMPLOYE -->
+
+    <section class="admin-section" aria-labelledby="creation-employe-title">
+
+      <h2 id="creation-employe-title">
+        Créer un compte employé
+      </h2>
+
+      <form id="employeForm" class="filter-form">
+
+        <div class="form-row">
+
+          <div class="form-group">
+
+            <label for="employeEmail">
+              Adresse email
+            </label>
+
+            <input type="email" id="employeEmail" name="email" required autocomplete="email">
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="employePassword">
+              Mot de passe
+            </label>
+
+            <input type="password" id="employePassword" name="password" required minlength="10" autocomplete="new-password">
+
+          </div>
+
+        </div>
+
+        <p>
+          Le mot de passe doit contenir au moins 10 caractères,
+          une majuscule, une minuscule, un chiffre et un caractère spécial.
+        </p>
+
+        <button type="submit" class="btn-primary">
+          Créer le compte employé
+        </button>
+
+        <p id="messageEmploye" role="status" aria-live="polite"></p>
+
+      </form>
+
+    </section>
 
     <!-- FILTRES -->
 
@@ -103,6 +159,10 @@
 
               <option value="Utilisateur">
                 Utilisateur
+              </option>
+
+              <option value="Employé">
+                Employé
               </option>
 
               <option value="Administrateur">

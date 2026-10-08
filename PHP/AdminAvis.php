@@ -42,7 +42,7 @@ $sqlRole = "
            role.role_id
 
    WHERE possede_utilisateur_role.utilisateur_id = :utilisateur_id
-    AND role.libelle = 'Administrateur'
+    AND role.libelle IN ('Administrateur', 'Employé')
     LIMIT 1
 ";
 
@@ -59,16 +59,13 @@ $role =
     $stmtRole->fetch(PDO::FETCH_ASSOC);
 
 
-if (
-    !$role ||
-    $role["libelle"] !== "Administrateur"
-) {
+if (!$role) {
 
     http_response_code(403);
 
     echo json_encode([
         "success" => false,
-        "error" => "Accès administrateur refusé."
+        "error" => "Accès refusé."
     ], JSON_UNESCAPED_UNICODE);
 
     exit;

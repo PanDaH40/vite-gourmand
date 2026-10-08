@@ -37,6 +37,10 @@
           Menus
         </a>
 
+        <a href="AdminPlats.html">
+          Plats
+        </a>
+
         <a href="AdminUtilisateurs.html">
           Utilisateurs
         </a>
@@ -135,6 +139,65 @@
     </section>
 
 
+    <!-- STATISTIQUES MONGODB -->
+
+    <section class="admin-section" aria-labelledby="mongo-stats-title">
+
+      <h2 id="mongo-stats-title">
+        Statistiques des commandes par menu
+      </h2>
+
+      <h3>Nombre de commandes par menu</h3>
+
+      <div id="graphiqueCommandes" aria-live="polite">
+        Chargement du graphique...
+      </div>
+
+      <h3>Chiffre d'affaires par menu</h3>
+
+      <form id="filtresChiffreAffaires">
+
+        <label for="filtreMenu">Menu</label>
+        <select id="filtreMenu">
+          <option value="">Tous les menus</option>
+        </select>
+
+        <label for="dateDebut">Du</label>
+        <input type="date" id="dateDebut">
+
+        <label for="dateFin">Au</label>
+        <input type="date" id="dateFin">
+
+        <button type="submit" class="btn-primary">
+          Filtrer
+        </button>
+
+      </form>
+
+      <div class="table-wrapper">
+
+        <table>
+          <caption>Chiffre d'affaires calculé depuis MongoDB</caption>
+
+          <thead>
+            <tr>
+              <th scope="col">Menu</th>
+              <th scope="col">Nombre de commandes</th>
+              <th scope="col">Chiffre d'affaires</th>
+            </tr>
+          </thead>
+
+          <tbody id="tableauChiffreAffaires">
+            <tr>
+              <td colspan="3">Chargement des statistiques...</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </section>
+
     <!-- ACCÈS RAPIDES -->
 
     <section class="admin-section">
@@ -186,6 +249,17 @@
 
         </a>
 
+        <a href="AdminHoraires.html" class="action-card">
+
+          <h3>
+            Gérer les horaires
+          </h3>
+
+          <p>
+            Modifier les horaires d'ouverture
+            et de fermeture du restaurant.
+          </p>
+        </a>
 
       </div>
 
@@ -275,6 +349,7 @@
   <script src="asset/JS/SessionFront.js"></script>
   <script src="asset/JS/AdminAccess.js"></script>
   <script src="asset/JS/AdminDashboard.js"></script>
+  <script src="asset/JS/AdminMongoStats.js"></script>
 
 </body>
 

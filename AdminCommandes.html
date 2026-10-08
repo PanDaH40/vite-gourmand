@@ -37,12 +37,20 @@
           Menus
         </a>
 
+        <a href="AdminPlats.html">
+          Plats
+        </a>
+
         <a href="AdminUtilisateurs.html">
           Utilisateurs
         </a>
 
         <a href="AdminMateriel.html">
           Matériel
+        </a>
+
+        <a href="AdminHoraires.html">
+          Gérer les horaires
         </a>
 
         <a href="AdminAvis.html">
@@ -112,12 +120,32 @@
                 Acceptée
               </option>
 
-              <option value="refusée">
-                Refusée
+              <option value="en préparation">
+                En préparation
+              </option>
+
+              <option value="en cours de livraison">
+                En cours de livraison
+              </option>
+
+              <option value="livré">
+                Livré
+              </option>
+
+              <option value="en attente du retour de matériel">
+                En attente du retour de matériel
               </option>
 
               <option value="terminée">
                 Terminée
+              </option>
+
+              <option value="refusée">
+                Refusée
+              </option>
+
+              <option value="annulée">
+                Annulée
               </option>
 
             </select>
@@ -224,9 +252,9 @@
 
 
           <!--
-                        Les commandes provenant de MySQL
-                        sont ajoutées ici avec JavaScript.
-                    -->
+            Les commandes provenant de MySQL
+            sont ajoutées ici avec JavaScript.
+          -->
 
           <tbody id="commandesTableBody" aria-live="polite">
 
@@ -262,15 +290,9 @@
 
   </footer>
 
-
-  <!-- Scripts généraux -->
-
   <script src="asset/JS/Admin.js"></script>
   <script src="asset/JS/SessionFront.js"></script>
-  <script src="asset/JS/AdminAccess.js"></script>
-
-  <!-- Script spécifique aux commandes -->
-
+  <script src="asset/JS/EmployeAccess.js"></script>
   <script src="asset/JS/AdminCommandes.js"></script>
 
 </body>

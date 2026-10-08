@@ -7,6 +7,7 @@ services:
       - "8080:80"
     volumes:
       - .:/var/www/html
+      - /var/www/html/vendor
     environment:
       DB_HOST: mysql
       DB_NAME: vite_gourmand
@@ -16,6 +17,9 @@ services:
       MONGO_HOST: mongodb
       MONGO_PORT: 27017
       MONGO_DB: vite_gourmand_analytics
+
+      GMAIL_USER: ${GMAIL_USER}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
 
     depends_on:
       - mysql

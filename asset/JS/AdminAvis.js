@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (
                 !sessionResponse.ok ||
                 !sessionData.connecte ||
-                !sessionData.admin ||
+                (!sessionData.admin && !sessionData.employe) ||
                 !sessionData.csrf_token
             ) {
                 throw new Error(

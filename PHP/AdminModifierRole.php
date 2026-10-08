@@ -128,7 +128,7 @@ $nouveauRole = trim(
 
 $rolesAutorises = [
     "Utilisateur",
-    "Administrateur"
+    "Employé"
 ];
 
 
@@ -155,15 +155,14 @@ if (
 */
 
 if (
-    $utilisateurId === (int) $_SESSION["utilisateur_id"] &&
-    $nouveauRole !== "Administrateur"
+    $utilisateurId === (int) $_SESSION["utilisateur_id"]
 ) {
 
     http_response_code(400);
 
     echo json_encode([
         "success" => false,
-        "error" => "Vous ne pouvez pas retirer votre propre rôle administrateur."
+        "error" => "Vous ne pouvez pas modifier votre propre rôle administrateur."
     ], JSON_UNESCAPED_UNICODE);
 
     exit;

@@ -8,3 +8,6 @@ Thumbs.db
 
 .idea/
 .vscode/
+
+SQL/table_ancien.sql
+PHP/Test_Mail.php

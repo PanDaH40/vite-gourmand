@@ -33,10 +33,11 @@ try {
     $utilisateur_id = $_SESSION["utilisateur_id"];
 
     // Vérifier que l'utilisateur existe toujours
-    // et déterminer s'il possède le rôle administrateur
+    // et déterminer ses droits administrateur / employé
     $sql = "
         SELECT
             u.prenom,
+
             EXISTS (
                 SELECT 1
                 FROM possede_utilisateur_role pur
@@ -44,7 +45,17 @@ try {
                     ON pur.role_id = r.role_id
                 WHERE pur.utilisateur_id = u.utilisateur_id
                     AND r.libelle = 'Administrateur'
-            ) AS est_admin
+            ) AS est_admin,
+
+            EXISTS (
+                SELECT 1
+                FROM possede_utilisateur_role pur
+                INNER JOIN role r
+                    ON pur.role_id = r.role_id
+                WHERE pur.utilisateur_id = u.utilisateur_id
+                    AND r.libelle = 'Employé'
+            ) AS est_employe
+
         FROM utilisateur u
         WHERE u.utilisateur_id = :utilisateur_id
         LIMIT 1
@@ -72,11 +83,13 @@ try {
     }
 
     $estAdmin = (bool) $utilisateur["est_admin"];
+    $estEmploye = (bool) $utilisateur["est_employe"];
 
     $reponse = [
         "connecte" => true,
         "prenom" => $utilisateur["prenom"],
-        "admin" => $estAdmin
+        "admin" => $estAdmin,
+        "employe" => $estEmploye
     ];
 
     // Générer un jeton CSRF pour tous les utilisateurs connectés
@@ -85,7 +98,6 @@ try {
     }
 
     $reponse["csrf_token"] = $_SESSION["csrf_token"];
-    
 
     echo json_encode(
         $reponse,

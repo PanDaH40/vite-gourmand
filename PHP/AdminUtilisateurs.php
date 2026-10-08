@@ -81,6 +81,7 @@ try {
             utilisateur.ville,
             utilisateur.pays,
             utilisateur.adresse_postale,
+            utilisateur.actif,
             role.libelle AS role
 
         FROM utilisateur

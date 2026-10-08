@@ -40,6 +40,21 @@ fetch("PHP/Check_Session.php")
       nav.appendChild(adminLink);
     }
 
+    // Ajoute le lien Espace employé si nécessaire
+    const employeLinkExiste = nav.querySelector(
+      'a[href="EmployeDashboard.html"]'
+    );
+
+    if (data.employe && !employeLinkExiste) {
+      const employeLink = document.createElement("a");
+
+      employeLink.href = "EmployeDashboard.html";
+      employeLink.textContent = "Espace employé";
+
+      nav.appendChild(employeLink);
+    }
+
+    
     // Évite de créer plusieurs menus utilisateur
     if (document.querySelector(".user-menu")) {
       return;
